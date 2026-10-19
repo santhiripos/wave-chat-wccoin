@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WaveChat Slot - WCCoin Edition</title>
+<style>
+:root{
+  --bg:#0d021a;--container:#1e0a36;--text:#fff;--gold:#ffcc00;
+  --reel:#fff8e7;--reel-text:#333;--panel:#1a0b2e;--header:#2a0845;
+  --msg-bg:#000;--msg-text:#ffcc00;--cyan:#00ffcc;--pink:#ff00ff;
+  --red:#ff4444;--green:#00cc66;
+}
+body.day-mode{--bg:#e0e0e0;--container:#fff;--text:#000;--reel:#fff;--reel-text:#000;--panel:#fff;--header:#e0e0e0;--msg-bg:#fff;--msg-text:#000;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--text);overflow:hidden;user-select:none;transition:background .3s;}
+
+.wavechat-header{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(135deg,#00B4D8,#0077B6);border-radius:8px;margin-bottom:4px;color:#fff;}
+.wc-back-btn{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);color:#fff;padding:7px 14px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.wc-back-btn:hover{background:rgba(255,255,255,.35);transform:translateX(-3px);}
+.wc-back-btn:active{transform:scale(.95);}
+.wc-title{flex:1;text-align:center;font-size:15px;font-weight:900;text-shadow:0 1px 4px rgba(0,0,0,.4);}
+.wc-coin-badge{display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,#FFB800,#FF8C00);color:#fff;padding:6px 12px;border-radius:20px;font-weight:900;font-size:13px;box-shadow:0 2px 8px rgba(255,184,0,.4);white-space:nowrap;}
+.wc-coin-badge .wc-coin-icon{font-size:15px;}
+
+.maint-overlay{position:fixed;inset:0;background:radial-gradient(circle,#2a0845,#0d021a);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;flex-direction:column;gap:20px;}
+.maint-overlay.show{display:flex;}
+.maint-icon{font-size:80px;animation:spinSlow 4s linear infinite;}
+@keyframes spinSlow{100%{transform:rotate(360deg);}}
+.maint-title{color:#ffcc00;font-size:26px;font-weight:900;text-align:center;text-shadow:0 0 20px #ffcc00;}
+.maint-msg{color:#00ffcc;font-size:14px;text-align:center;max-width:400px;line-height:1.6;}
+.loading{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;flex-direction:column;gap:20px;z-index:999;}
+.loading.show{display:flex;}
+.spinner{width:56px;height:56px;border:5px solid var(--gold);border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;}
+@keyframes sp{100%{transform:rotate(360deg);}}
+.loading-text{color:var(--gold);font-size:16px;font-weight:bold;}
+
+.game-container{background:linear-gradient(145deg,#1e0a36,#0d021a);border:2px solid var(--gold);border-radius:12px;padding:6px;width:100%;max-width:750px;box-shadow:0 0 25px var(--gold),0 0 50px #ff00ff;display:flex;flex-direction:column;gap:4px;height:100vh;max-height:900px;}
+
+.top-bar{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--gold);border-radius:5px;padding:5px 10px;}
+.profile-section{display:flex;align-items:center;gap:6px;cursor:pointer;}
+.profile-av{width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);background:var(--pink);display:flex;justify-content:center;align-items:center;font-size:18px;}
+.profile-nm{font-size:14px;color:var(--gold);font-weight:bold;}
+.top-right{display:flex;align-items:center;gap:5px;}
+.online-status{display:flex;align-items:center;gap:3px;font-size:11px;color:#0f0;font-weight:bold;}
+.online-dot{width:8px;height:8px;border-radius:50%;background:#0f0;box-shadow:0 0 6px #0f0;}
+.online-dot.off{background:var(--red);}
+.icon-btn{background:var(--gold);color:#1a0b2e;border:none;border-radius:4px;width:30px;height:30px;font-weight:bold;cursor:pointer;font-size:15px;position:relative;}
+.icon-btn:active{transform:scale(.9);}
+.lang-btn{background:var(--panel);color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding:5px 8px;font-size:11px;font-weight:bold;cursor:pointer;}
+.notif-btn{position:relative;}
+.notif-btn .nbadge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;border-radius:10px;padding:1px 5px;font-size:9px;font-weight:bold;min-width:14px;text-align:center;}
+
+.title-3d{text-align:center;font-size:40px;font-weight:900;color:var(--gold);text-shadow:0 1px 0 #cc9900,0 2px 0 #cc9900,0 4px 10px rgba(0,0,0,.6),0 0 20px var(--gold),0 0 40px var(--pink);letter-spacing:5px;}
+.subtitle{text-align:center;font-size:12px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;border:1px solid var(--cyan);border-radius:3px;padding:3px;background:rgba(0,255,204,.1);font-weight:bold;}
+.tab-nav{display:flex;gap:3px;background:var(--panel);border:1px solid var(--gold);border-radius:5px;padding:4px;overflow-x:auto;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{flex:1;min-width:60px;padding:9px 4px;border-radius:3px;font-weight:bold;font-size:10px;cursor:pointer;background:#4a0000;color:var(--gold);text-transform:uppercase;border:1px solid var(--gold);white-space:nowrap;}
+.tab-btn.active{background:linear-gradient(180deg,var(--gold),#ff9900);color:#1a0b2e;}
+.tab-content{display:none;flex-direction:column;gap:4px;flex:1;overflow:hidden;}
+.tab-content.active{display:flex;}
+
+.credit-box{background:linear-gradient(135deg,#1a0b2e 0%,#2a0845 100%);border:3px solid var(--cyan);border-radius:10px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 0 20px rgba(0,255,204,.5);animation:cp 2s infinite alternate;}
+@keyframes cp{0%{box-shadow:0 0 15px rgba(0,255,204,.4);}100%{box-shadow:0 0 30px rgba(0,255,204,.8);}}
+.credit-box .lbl{font-size:12px;color:var(--gold);font-weight:bold;}
+.credit-box .val{font-size:24px;color:var(--cyan);font-weight:900;text-shadow:0 0 10px var(--cyan);}
+.vip-progress{background:linear-gradient(145deg,#1a0b2e,#2a0845);border:2px solid var(--gold);border-radius:8px;padding:8px 12px;}
+.vip-progress .vp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:11px;font-weight:bold;}
+.vip-progress .vp-level{color:var(--gold);}
+.vip-progress .vp-next{color:var(--cyan);}
+.vip-progress .vp-bar-bg{background:#0d021a;border-radius:5px;height:10px;overflow:hidden;border:1px solid #333;}
+.vip-progress .vp-bar-fill{background:linear-gradient(90deg,#ffcc00,#ff00ff,#00ffcc);height:100%;transition:width .5s ease;box-shadow:0 0 10px rgba(255,0,255,.5);}
+.vip-progress .vp-info{font-size:10px;color:#888;margin-top:4px;text-align:center;}
+.top-header{display:flex;justify-content:space-between;align-items:center;background:var(--header);border:2px solid var(--gold);border-radius:5px;padding:5px 8px;}
+.header-item{display:flex;flex-direction:column;align-items:center;min-width:65px;}
+.header-item .lbl{font-size:10px;color:var(--gold);font-weight:bold;text-transform:uppercase;}
+.header-item .val{font-size:17px;color:var(--text);font-weight:bold;}
+.header-item.vip .val{color:#ffaa00;}
+
+.main-body{display:flex;gap:5px;justify-content:center;align-items:stretch;flex:1;min-height:0;overflow:hidden;}
+.left-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;background:#4a0000;border:1px solid var(--gold);border-radius:5px;padding:3px;width:34px;flex-shrink:0;}
+.left-panel .ways{writing-mode:vertical-rl;color:var(--gold);font-weight:bold;font-size:10px;}
+.center-reels{flex:1;background:var(--reel);border:2px solid var(--gold);border-radius:5px;padding:4px;position:relative;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+
+.reels-table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; }
+.reels-table td { background: var(--reel); border-radius: 4px; border: 1px solid var(--gold); text-align: center; vertical-align: middle; width: 20%; height: 20%; padding: 0; position: relative; overflow: hidden; }
+.symbol { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; font-weight: bold; font-size: 32px; color: var(--reel-text); transition: transform .1s; }
+.symbol svg{width:100%;height:100%;max-width:38px;max-height:38px;display:block;margin:auto;}
+.symbol.bomb{font-size:30px;}
+.spinning .symbol{animation:spin .08s linear infinite;}
+@keyframes spin{0%{transform:translateY(-100%);}100%{transform:translateY(100%);}}
+
+.symbol.win{background:linear-gradient(135deg,rgba(0,255,204,.9),rgba(255,204,0,.8));border-radius:3px;animation:wf .4s infinite alternate;box-shadow:0 0 15px #00ffcc,0 0 30px #ffcc00;z-index:2;}
+.symbol.scatter{background:linear-gradient(135deg,rgba(255,0,255,.9),rgba(255,100,0,.8));border-radius:3px;animation:sf .4s infinite alternate;box-shadow:0 0 20px #ff00ff,0 0 40px #ff6600;z-index:2;}
+@keyframes wf{0%{background:rgba(0,255,204,.2);transform:scale(1);}100%{background:rgba(255,204,0,.8);transform:scale(1.05);}}
+@keyframes sf{0%{background:rgba(255,0,255,.2);transform:scale(1);}100%{background:rgba(255,100,0,.9);transform:scale(1.08);}}
+
+.payline-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:20;}
+.payline-svg line{stroke-width:4;stroke-linecap:round;filter:drop-shadow(0 0 4px currentColor);}
+.right-panel{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:88px;flex-shrink:0;}
+.btn-side{width:100%;border-radius:6px;font-weight:bold;cursor:pointer;text-transform:uppercase;border:2px solid rgba(255,255,255,.3);transition:transform .15s;font-family:inherit;}
+.btn-side:active{transform:scale(.95);}
+.btn-spin{background:linear-gradient(180deg,#00ffcc,#00cc99);color:#1a0b2e;font-size:20px;padding:16px 0;box-shadow:0 0 20px var(--cyan);font-weight:900;}
+.btn-spin:disabled{opacity:.5;box-shadow:none;}
+.btn-auto{background:linear-gradient(180deg,#ff00ff,#cc00cc);color:#fff;font-size:18px;padding:11px 0;}
+.btn-turbo{background:linear-gradient(180deg,#ffaa00,#cc8800);color:#1a0b2e;font-size:18px;padding:11px 0;}
+
+.bottom-controls{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:2px solid var(--gold);border-radius:5px;padding:6px 8px;flex-wrap:wrap;gap:5px;}
+.bet-control{display:flex;align-items:center;gap:4px;background:#4a0000;padding:4px 8px;border-radius:4px;border:1px solid var(--gold);}
+.bet-control button{background:var(--gold);border:none;width:30px;height:30px;border-radius:3px;font-weight:bold;cursor:pointer;font-size:16px;color:#1a0b2e;}
+.bet-control .bv{color:var(--text);font-weight:bold;font-size:16px;min-width:50px;text-align:center;}
+.bet-control .bl{color:var(--gold);font-size:10px;}
+.bet-input{width:70px;padding:5px;border-radius:3px;border:1px solid var(--gold);background:var(--panel);color:var(--cyan);text-align:center;font-weight:bold;font-size:14px;}
+.quick-bet{display:flex;gap:4px;}
+.quick-bet button{border:none;border-radius:6px;font-weight:900;cursor:pointer;color:#fff;font-size:16px;padding:9px 12px;min-width:48px;}
+.btn-2x{background:linear-gradient(180deg,#ffaa00,#cc8800);}
+.btn-3x{background:linear-gradient(180deg,#ff6600,#cc4400);}
+.btn-5x{background:linear-gradient(180deg,#ff0066,#cc0044);}
+.btn-daily{background:#0f0;color:#1a0b2e;padding:9px 12px;border:none;border-radius:6px;font-weight:900;cursor:pointer;font-size:15px;}
+
+.message-box{background:var(--msg-bg);border:1px solid var(--gold);border-radius:4px;padding:6px;color:var(--msg-text);font-size:12px;font-weight:bold;min-height:40px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.4;flex-wrap:wrap;gap:4px;}
+.message-box .win-line{background:rgba(255,204,0,.15);border:1px solid var(--gold);border-radius:3px;padding:2px 6px;margin:2px;display:inline-block;font-size:10px;}
+
+.effect-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:56px;font-weight:900;text-shadow:0 0 30px currentColor,0 0 60px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center;}
+.effect-overlay.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:bigWinPulse .5s infinite alternate;}
+@keyframes bigWinPulse{0%{transform:translate(-50%,-50%) scale(1);}100%{transform:translate(-50%,-50%) scale(1.1);}}
+
+.freespin-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(255,0,255,.2),rgba(255,204,0,.2));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:5px;}
+.freespin-overlay.show{opacity:1;}
+.freespin-overlay::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:32px;font-weight:900;color:#ff00ff;text-shadow:0 0 20px #ff00ff,0 0 40px #ff00ff;animation:fsFlash .5s infinite alternate;}
+@keyframes fsFlash{0%{opacity:.5;}100%{opacity:1;}}
+
+.gift-catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;padding:8px;flex:1;overflow-y:auto;align-content:start;}
+.gift-card{background:linear-gradient(145deg,#2a0845,#1a0b2e);border:2px solid var(--gold);border-radius:14px;padding:10px 8px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;min-height:160px;display:flex;flex-direction:column;justify-content:space-between;}
+.gift-card:hover{transform:translateY(-4px);box-shadow:0 0 25px var(--gold),0 0 40px rgba(255,204,0,.3);border-color:var(--cyan);}
+.gift-card.empty{border-style:dashed;border-color:#555;cursor:default;opacity:.6;}
+.gift-card.empty:hover{transform:none;box-shadow:none;border-color:#555;}
+.gift-card .gift-image{width:100%;height:70px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;overflow:hidden;border-radius:8px;background:rgba(0,0,0,.3);}
+.gift-card .gift-image img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
+.gift-card .gift-emoji{font-size:44px;line-height:1;display:flex;align-items:center;justify-content:center;}
+.gift-card .gift-name{font-size:12px;font-weight:bold;color:var(--gold);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:16px;}
+.gift-card .gift-price{display:inline-block;background:linear-gradient(135deg,#FFB800,#FF8C00);color:#fff;font-size:10px;font-weight:900;padding:3px 8px;border-radius:10px;}
+.gift-card.empty .gift-name{color:#555;font-size:11px;}
+.gift-card .empty-plus{font-size:32px;color:#555;opacity:.5;}
+
+.bonus-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px;flex:1;overflow-y:auto;align-content:start;}
+.bonus-card{background:linear-gradient(145deg,#2a0845,#1a0b2e);border:2px solid var(--gold);border-radius:16px;padding:22px 14px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.bonus-card:hover{transform:translateY(-6px);box-shadow:0 0 30px var(--gold);border-color:var(--cyan);}
+.bonus-card .bc-icon{font-size:56px;display:block;margin-bottom:10px;filter:drop-shadow(0 0 10px rgba(255,204,0,.5));}
+.bonus-card .bc-name{font-size:15px;font-weight:bold;color:var(--gold);margin-bottom:4px;}
+.bonus-card .bc-desc{font-size:11px;color:#aaa;margin-bottom:8px;}
+.bonus-card .bc-status{font-size:11px;font-weight:bold;padding:4px 10px;border-radius:10px;display:inline-block;}
+.bonus-card .bc-status.ready{background:#00cc66;color:#fff;animation:pulseReady 1.5s infinite alternate;}
+.bonus-card .bc-status.done{background:#555;color:#ccc;}
+@keyframes pulseReady{0%{box-shadow:0 0 10px #00cc66;}100%{box-shadow:0 0 20px #00cc66,0 0 30px #00cc66;}}
+
+.mission-card{background:linear-gradient(145deg,#2a0845,#0d021a);border:2px solid var(--gold);border-radius:8px;padding:12px;margin-bottom:8px;}
+.mission-card h4{color:var(--cyan);font-size:14px;margin-bottom:5px;}
+.mission-card p{font-size:12px;color:#ccc;margin-bottom:5px;}
+.mission-prog{background:#1a0b2e;border-radius:5px;height:10px;overflow:hidden;margin-bottom:5px;}
+.mission-bar{background:linear-gradient(90deg,var(--cyan),var(--gold));height:100%;}
+.mission-rew{color:var(--gold);font-size:12px;font-weight:bold;}
+.mission-claim{background:#0f0;color:#1a0b2e;border:none;padding:5px 10px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:11px;}
+.mission-claim:disabled{background:#666;color:#aaa;cursor:not-allowed;}
+.payment-rec{background:rgba(0,0,0,.3);border:1px solid var(--gold);border-radius:5px;padding:8px;margin-bottom:5px;font-size:12px;}
+
+.setting-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #333;}
+.toggle{position:relative;width:50px;height:26px;background:#555;border-radius:13px;cursor:pointer;transition:.3s;}
+.toggle.active{background:var(--cyan);}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle.active::after{left:26px;}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;justify-content:center;align-items:center;z-index:100;padding:15px;overflow-y:auto;}
+.modal.show{display:flex;}
+.modal-content{background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:15px;max-width:460px;width:100%;color:var(--text);max-height:85vh;overflow-y:auto;margin:auto;}
+.modal-content h3{color:var(--gold);text-align:center;margin-bottom:12px;font-size:18px;}
+.modal-content .close-btn{background:var(--red);color:#fff;border:none;padding:10px;border-radius:4px;cursor:pointer;width:100%;font-weight:bold;margin-top:8px;font-size:14px;}
+
+.daily-modal{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;justify-content:center;align-items:center;z-index:350;padding:15px;}
+.daily-modal.show{display:flex;}
+.daily-content{background:linear-gradient(145deg,#1e0a36,#0d021a);border:2px solid var(--gold);border-radius:14px;padding:18px;max-width:420px;width:100%;box-shadow:0 0 30px var(--gold);}
+.daily-content h3{color:var(--gold);text-align:center;margin-bottom:12px;font-size:18px;}
+.daily-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;}
+.daily-day{background:#1a0b2e;border:2px solid #333;border-radius:8px;padding:10px 6px;text-align:center;font-size:11px;transition:all .2s;}
+.daily-day.claimed{background:linear-gradient(145deg,#00cc66,#009944);border-color:#00ffcc;color:#fff;}
+.daily-day.today{border-color:var(--gold);background:rgba(255,204,0,.15);animation:pulseReady 1.5s infinite alternate;cursor:pointer;}
+.daily-day.locked{opacity:.5;}
+.daily-day .dd-num{font-size:9px;color:#888;margin-bottom:3px;}
+.daily-day.claimed .dd-num{color:#fff;}
+.daily-day .dd-ic{font-size:20px;display:block;}
+.daily-day .dd-rw{font-size:10px;font-weight:bold;color:var(--cyan);margin-top:3px;}
+.daily-day.claimed .dd-rw{color:#fff;}
+.daily-streak{text-align:center;font-size:14px;color:var(--gold);font-weight:bold;margin:8px 0;}
+
+.about-section{background:linear-gradient(145deg,#1a0b2e,#0d021a);border:2px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:10px;}
+.about-section h3{color:var(--cyan);font-size:15px;margin-bottom:8px;border-bottom:1px solid #333;padding-bottom:6px;display:flex;align-items:center;gap:6px;}
+.about-section p{font-size:12px;color:#ccc;line-height:1.7;margin-bottom:6px;}
+.about-section ul{list-style:none;padding-left:0;}
+.about-section ul li{font-size:12px;color:#ccc;line-height:1.8;padding-left:18px;position:relative;}
+.about-section ul li::before{content:'▸';position:absolute;left:0;color:var(--gold);font-weight:bold;}
+.about-section .contact-row{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,255,204,.1),rgba(255,204,0,.1));border:2px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:8px;text-decoration:none;color:var(--text);transition:all .2s;}
+.about-section .contact-row:hover{background:linear-gradient(135deg,rgba(0,255,204,.2),rgba(255,204,0,.2));transform:translateX(3px);box-shadow:0 0 20px rgba(255,204,0,.4);}
+.about-section .contact-row .cr-icon{font-size:28px;}
+.about-section .contact-row .cr-info{flex:1;}
+.about-section .contact-row .cr-name{font-size:14px;color:var(--gold);font-weight:bold;margin-bottom:3px;}
+.about-section .contact-row .cr-val{font-size:12px;color:var(--cyan);}
+.about-section .version{text-align:center;font-size:11px;color:#666;margin-top:10px;padding-top:10px;border-top:1px dashed #333;}
+
+.chat-fab{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(180deg,#00ffcc,#00cc99);border:none;cursor:pointer;font-size:26px;box-shadow:0 0 20px var(--cyan);z-index:300;display:none;align-items:center;justify-content:center;}
+.chat-panel{position:fixed;bottom:85px;right:20px;width:340px;max-width:calc(100vw - 40px);height:480px;max-height:calc(100vh - 120px);background:linear-gradient(145deg,#1e0a36,#0d021a);border:2px solid var(--gold);border-radius:12px;display:none;flex-direction:column;z-index:300;box-shadow:0 0 30px var(--gold);}
+.chat-panel.show{display:flex;}
+.chat-p-header{background:linear-gradient(90deg,#ff00ff,#ffcc00);color:#1a0b2e;padding:10px 14px;border-radius:10px 10px 0 0;font-weight:bold;display:flex;justify-content:space-between;align-items:center;font-size:14px;}
+.chat-p-close{background:transparent;border:none;color:#1a0b2e;font-size:20px;cursor:pointer;font-weight:bold;}
+.chat-p-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:6px;}
+.chat-p-msg{max-width:80%;padding:8px 12px;border-radius:12px;font-size:12px;line-height:1.4;word-wrap:break-word;}
+.chat-p-msg.me{align-self:flex-end;background:linear-gradient(180deg,#00ffcc,#00cc99);color:#1a0b2e;}
+.chat-p-msg.them{align-self:flex-start;background:#2a0845;color:#fff;border:1px solid var(--gold);}
+.chat-p-msg .msg-time{font-size:9px;opacity:.7;margin-top:2px;}
+.chat-p-input{display:flex;gap:6px;padding:10px;border-top:1px solid #333;}
+.chat-p-input input{flex:1;padding:9px;border-radius:6px;border:1px solid var(--gold);background:#0d021a;color:#fff;font-size:13px;outline:none;}
+.chat-p-input button{padding:9px 14px;border-radius:6px;border:none;background:linear-gradient(180deg,#00ffcc,#00cc99);color:#1a0b2e;font-weight:bold;cursor:pointer;font-size:12px;}
+.notif-panel{position:fixed;top:60px;right:10px;width:320px;max-width:calc(100vw - 20px);max-height:400px;background:linear-gradient(145deg,#1e0a36,#0d021a);border:2px solid var(--gold);border-radius:12px;display:none;flex-direction:column;z-index:400;box-shadow:0 0 30px var(--gold);overflow:hidden;}
+.notif-panel.show{display:flex;}
+.notif-p-header{background:linear-gradient(90deg,#00ffcc,#00cc99);color:#1a0b2e;padding:10px 14px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.notif-p-header button{background:transparent;border:none;color:#1a0b2e;font-size:16px;cursor:pointer;font-weight:bold;}
+.notif-p-list{overflow-y:auto;max-height:340px;}
+.notif-item-user{padding:10px 12px;border-bottom:1px solid #333;font-size:12px;}
+.notif-item-user.unread{background:rgba(0,255,204,.08);border-left:3px solid var(--cyan);}
+.notif-item-user .ni-title{color:var(--gold);font-weight:bold;margin-bottom:3px;}
+.notif-item-user .ni-msg{color:#ccc;line-height:1.4;font-size:11px;}
+.notif-item-user .ni-time{color:#666;font-size:9px;margin-top:4px;}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(200px);background:var(--gold);color:#1a0b2e;padding:11px 22px;border-radius:10px;font-weight:bold;z-index:1001;transition:transform .3s;box-shadow:0 0 20px var(--gold);font-size:13px;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--red);color:#fff;}
+.broadcast-banner{background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:5px;padding:7px 10px;color:#1a0b2e;font-weight:bold;font-size:12px;text-align:center;display:none;}
+.broadcast-banner.active{display:block;}
+
+@media(max-width:600px){
+  .game-container{padding:3px;border-radius:0;}
+  .title-3d{font-size:30px;}
+  .symbol{font-size:24px;}
+  .symbol svg{width:100%;height:100%;max-width:28px;max-height:28px;}
+  .symbol.bomb{font-size:22px;}
+  .left-panel{width:26px;}
+  .right-panel{width:76px;}
+  .btn-spin{font-size:16px;padding:12px 0;}
+  .btn-auto,.btn-turbo{font-size:15px;padding:9px 0;}
+  .quick-bet button{font-size:14px;padding:7px 9px;min-width:42px;}
+  .bet-control button{width:26px;height:26px;font-size:14px;}
+  .bet-control .bv{font-size:14px!important;}
+  .effect-overlay{font-size:38px;}
+  .tab-btn{font-size:9px;padding:7px 2px;}
+  .message-box{font-size:11px;min-height:32px;}
+  .credit-box .val{font-size:20px;}
+  .chat-panel{width:calc(100vw - 20px);right:10px;}
+  .notif-panel{right:5px;width:calc(100vw - 10px);}
+  .daily-grid{grid-template-columns:repeat(4,1fr);gap:5px;}
+  .daily-day{padding:7px 4px;}
+  .wavechat-header{padding:6px 8px;gap:5px;}
+  .wc-back-btn{padding:6px 10px;font-size:11px;}
+  .wc-title{font-size:13px;}
+  .wc-coin-badge{padding:5px 10px;font-size:12px;}
+  .gift-catalog-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body class="night-mode">
+
+<div class="maint-overlay" id="maintOverlay">
+  <div class="maint-icon">🚧</div>
+  <div class="maint-title">Under Maintenance</div>
+  <div class="maint-msg" id="maintMsg">We'll be back soon!</div>
+  <button class="icon-btn" style="background:var(--gold);padding:10px 20px;width:auto;height:auto;" onclick="location.reload()">🔄 Refresh</button>
+</div>
+
+<div class="loading" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Loading...</div>
+</div>
+
+<div class="game-container" id="gameContainer">
+  <div class="wavechat-header">
+    <button class="wc-back-btn" onclick="goBackHome()">← Back Home</button>
+    <div class="wc-title">🎰 WaveChat Slot</div>
+    <div class="wc-coin-badge">
+      <span class="wc-coin-icon">🪙</span>
+      <span id="wcCoinAmount">0</span>
+      <span style="font-size:10px;opacity:.85">WCC</span>
+    </div>
+  </div>
+
+  <div class="broadcast-banner" id="broadcastBanner"></div>
+
+  <div class="top-bar">
+    <div class="profile-section" onclick="switchTab('profile')">
+      <div class="profile-av" id="profileAvatar">👤</div>
+      <div class="profile-nm" id="profileNameDisplay">Player</div>
+    </div>
+    <div class="top-right">
+      <div class="online-status">
+        <div class="online-dot" id="onlineDot"></div>
+        <span id="onlineText">Online</span>
+      </div>
+      <button class="icon-btn notif-btn" onclick="toggleNotifPanel()">🔔<span class="nbadge" id="notifBadge" style="display:none;">0</span></button>
+      <button class="lang-btn" onclick="toggleLang()"><span id="langLabel">🇲🇲 MM</span></button>
+      <button class="icon-btn" onclick="refreshGame()">🔄</button>
+      <button class="icon-btn" onclick="switchTab('setting')">⚙️</button>
+    </div>
+  </div>
+
+  <div class="title-3d">SLOT</div>
+  <div class="subtitle">WCCoin · 5×5 · WIN 30%</div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('game')" id="tabBtnGame">🎰 GAME</button>
+    <button class="tab-btn" onclick="switchTab('bonus')" id="tabBtnBonus">🎁 BONUS</button>
+    <button class="tab-btn" onclick="switchTab('gifts')" id="tabBtnGifts">🎁 GIFTS</button>
+    <button class="tab-btn" onclick="switchTab('mission')" id="tabBtnMission">🎯 MISSION</button>
+    <button class="tab-btn" onclick="switchTab('profile')" id="tabBtnProfile">👤 PROFILE</button>
+    <button class="tab-btn" onclick="switchTab('history')" id="tabBtnHistory">📜 HISTORY</button>
+    <button class="tab-btn" onclick="switchTab('about')" id="tabBtnAbout">ℹ️ ABOUT</button>
+    <button class="tab-btn" onclick="switchTab('setting')" id="tabBtnSetting">⚙️ SET</button>
+  </div>
+
+  <div class="tab-content active" id="tab-game">
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;overflow:hidden;">
+      <div class="credit-box">
+        <div class="lbl">🪙 WCCoin</div>
+        <div class="val"><span id="credit">0</span></div>
+      </div>
+      <div class="vip-progress" id="vipProgress">
+        <div class="vp-head">
+          <span class="vp-level" id="vpLevel">🥉 Bronze</span>
+          <span class="vp-next" id="vpNext">Next: 🥈 Silver</span>
+        </div>
+        <div class="vp-bar-bg"><div class="vp-bar-fill" id="vpBarFill" style="width:0%;"></div></div>
+        <div class="vp-info" id="vpInfo">0 / 1,000 WCC</div>
+      </div>
+      <div class="top-header">
+        <div class="header-item"><div class="lbl">BET</div><div class="val"><span id="betDisplay">10</span> 🪙</div></div>
+        <div class="header-item"><div class="lbl">WIN</div><div class="val"><span id="winDisplay">0</span> 🪙</div></div>
+        <div class="header-item vip"><div class="lbl">VIP</div><div class="val" id="vipLevel">🥉</div></div>
+      </div>
+      <div class="main-body">
+        <div class="left-panel"><div class="ways">5×5</div></div>
+        <div class="center-reels" id="reelsArea">
+          <table class="reels-table">
+            <tbody id="reelsBody"></tbody>
+          </table>
+          <svg class="payline-svg" id="paylineSvg"></svg>
+          <div class="effect-overlay" id="effectOverlay"></div>
+          <div class="freespin-overlay" id="freespinOverlay"></div>
+        </div>
+        <div class="right-panel">
+          <button class="btn-side btn-spin" id="spinBtn" onclick="spin()">🎰<br>SPIN</button>
+          <button class="btn-side btn-auto" id="autoBtn" onclick="toggleAuto()">🔄<br>AUTO</button>
+          <button class="btn-side btn-turbo" id="turboBtn" onclick="toggleTurbo()">⚡<br>TURBO</button>
+        </div>
+      </div>
+      <div class="bottom-controls">
+        <div class="bet-control">
+          <button onclick="changeBet(-5)">-</button>
+          <div><div class="bl">BET</div><div class="bv" id="betValue">10</div></div>
+          <button onclick="changeBet(5)">+</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:3px;">
+          <input type="number" id="customBetInput" class="bet-input" placeholder="WCC" min="5" step="5">
+          <button onclick="setCustomBet()" style="background:var(--cyan);border:none;border-radius:3px;padding:6px 12px;font-weight:bold;cursor:pointer;font-size:12px;">SET</button>
+        </div>
+        <div class="quick-bet">
+          <button class="btn-2x" onclick="quickBet(2)">2×</button>
+          <button class="btn-3x" onclick="quickBet(3)">3×</button>
+          <button class="btn-5x" onclick="quickBet(5)">5×</button>
+        </div>
+        <button class="btn-daily" id="dailyBtn" onclick="dailyBonus()">🎁</button>
+      </div>
+      <div class="message-box" id="message">🎰 SPIN နှိပ်ပြီး ကစားပါ</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-bonus">
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;overflow:hidden;">
+      <div class="credit-box">
+        <div class="lbl">🪙 WCCoin</div>
+        <div class="val"><span id="creditBonus">0</span></div>
+      </div>
+      <div class="bonus-grid">
+        <div class="bonus-card" onclick="openDailyCheckin()">
+          <span class="bc-icon">🎁</span>
+          <div class="bc-name">Daily Check-in</div>
+          <div class="bc-desc">နေ့စဉ် WCCoin ယူ (10-100)</div>
+          <span class="bc-status" id="dailyBadge">Check</span>
+        </div>
+        <div class="bonus-card" onclick="showFreeSpinInfo()">
+          <span class="bc-icon">💣</span>
+          <div class="bc-name">Free Spin</div>
+          <div class="bc-desc">Bomb 3+ ရရင် Free Spin</div>
+          <span class="bc-status ready">Info</span>
+        </div>
+      </div>
+      <div class="message-box" id="messageBonus">🎁 Bonus ရွေးပါ</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-gifts">
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1;overflow:hidden;">
+      <div class="credit-box">
+        <div class="lbl">🪙 WCCoin</div>
+        <div class="val"><span id="creditGifts">0</span></div>
+      </div>
+      <div style="text-align:center;color:var(--gold);font-size:14px;font-weight:bold;padding:6px 0;background:var(--panel);border:1px solid var(--gold);border-radius:5px;">
+        🎁 WCCoin နဲ့ လဲလှယ်နိုင်တဲ့ ဆုများ
+      </div>
+      <div class="gift-catalog-grid" id="giftCatalogGrid"></div>
+      <div class="message-box" id="messageGifts">🎁 ဆုရွေးပြီး WCCoin နဲ့ လဲပါ</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-mission">
+    <div style="background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:12px;flex:1;overflow-y:auto;">
+      <div style="text-align:center;color:var(--gold);font-size:18px;font-weight:bold;margin-bottom:12px;border-bottom:1px solid var(--gold);padding-bottom:8px;">🎯 မစ်ရှင်များ</div>
+      <div id="missionList"></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-profile">
+    <div class="modal-content" style="max-width:100%;margin:0;">
+      <h3>👤 ပရိုဖိုင်</h3>
+      <div style="text-align:center;margin-bottom:12px;">
+        <div class="profile-av" id="profileAvatarLarge" style="width:80px;height:80px;font-size:40px;margin:0 auto;border:3px solid var(--gold);">👤</div>
+        <p style="font-size:15px;color:var(--gold);margin-top:6px;" id="profileNameLarge">Player</p>
+      </div>
+      <label style="font-size:13px;color:var(--gold);">Edit name:</label>
+      <input type="text" id="editName" placeholder="Name" style="width:100%;padding:9px;margin-bottom:8px;border-radius:4px;border:1px solid var(--gold);background:var(--panel);color:var(--text);font-size:14px;">
+      <p style="font-size:14px;margin-bottom:6px;">🆔 UID: <span style="color:var(--cyan);" id="profileUid">-</span></p>
+      <p style="font-size:14px;margin-bottom:6px;">🪙 WCCoin: <span style="color:var(--cyan);" id="profileCredit">0</span></p>
+      <p style="font-size:14px;margin-bottom:6px;">👑 VIP: <span style="color:#ffaa00;" id="profileVip">🥉</span></p>
+      <p style="font-size:14px;margin-bottom:6px;">🎰 Spins: <span style="color:var(--cyan);" id="profileSpins">0</span></p>
+      <p style="font-size:14px;margin-bottom:6px;">🏆 Wins: <span style="color:var(--cyan);" id="profileWins">0</span></p>
+      <p style="font-size:14px;margin-bottom:6px;">🔥 Streak: <span style="color:var(--cyan);" id="profileStreak">0 days</span></p>
+      <button class="close-btn" onclick="saveProfile()" style="background:#0c0;">💾 သိမ်း</button>
+      <button class="close-btn" onclick="switchTab('game')" style="background:var(--red);">❌ ပိတ်</button>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-history">
+    <div style="background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:12px;flex:1;overflow-y:auto;">
+      <div style="text-align:center;color:var(--gold);font-size:18px;font-weight:bold;margin-bottom:12px;border-bottom:1px solid var(--gold);padding-bottom:8px;">📜 မှတ်တမ်း</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-about">
+    <div style="background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:12px;flex:1;overflow-y:auto;">
+      <div class="about-section">
+        <h3>ℹ️ WaveChat Slot အကြောင်း</h3>
+        <p>WaveChat Slot ကို <b style="color:var(--gold)">WCCoin</b> နဲ့ ကစားရတဲ့ 5×5 Slot Game ပါ။</p>
+        <p><b style="color:var(--gold)">Version:</b> v1.0 WCCoin Edition</p>
+        <p><b style="color:var(--gold)">Win Rate:</b> 30%</p>
+        <p><b style="color:var(--gold)">Platform:</b> Web / Mobile</p>
+      </div>
+      <div class="about-section">
+        <h3>🪙 WCCoin ဆိုတာ ဘာလဲ?</h3>
+        <p><b style="color:var(--cyan)">WCCoin</b> ဆိုတာ WaveChat ရဲ့ <b>in-game currency</b> ပါ။</p>
+        <ul>
+          <li>🎁 Daily Check-in ကနေ ရနိုင်တယ်</li>
+          <li>🎯 Mission ပြီးရင် ရနိုင်တယ်</li>
+          <li>🎰 Slot ဆော့ပြီး နိုင်ရင် ရနိုင်တယ်</li>
+          <li>🎁 Admin က wave moneyဖြင့်ရောင်းချပေးနိုင်တယ်</li>
+        </ul>
+        <p style="color:var(--red);font-weight:bold;margin-top:8px;">⚠️ WCCoin ကို wavepay ဖြင့်ဝယ်ယူနိုင်ပါပီ ။ Wavepay ဖြင့် လဲလှယ်နိုင်ပါသည်။</p>
+      </div>
+      <div class="about-section">
+        <h3>🎮 ဘယ်လိုကစားရမလဲ</h3>
+        <ul>
+          <li>🎰 Slot: Symbol တူ ၃ လုံး+ ရရင် ဆုရမယ်</li>
+          <li>💣 Bomb 3+ ရရင် Free Spin ၅-၁၀ ခါ ရမယ်</li>
+          <li>⚡ Turbo = မြန်မြန် spin</li>
+          <li>🔄 Auto = အလိုအလျောက် spin ၁၀ ခါ</li>
+        </ul>
+      </div>
+      <div class="about-section">
+        <h3>🎁 ဆုလက်ဆောင်များ</h3>
+        <p>WCCoin နဲ့ <b style="color:var(--gold)">GIFTS Tab</b> မှာ ဆုတွေ လဲလှယ်နိုင်ပါတယ်။</p>
+      </div>
+      <div class="about-section" style="border-color:var(--cyan);background:linear-gradient(135deg,rgba(0,255,204,.08),rgba(255,204,0,.05));">
+        <h3>📞 WCCoin ဝယ်ယူလိုချင်ရင်</h3>
+        <p style="color:var(--gold);font-weight:bold;font-size:13px;">အောက်ပါ ဖုန်းနံပါတ်ကို ဆက်သွယ်ပါ</p>
+        <a class="contact-row" href="tel:09672124213">
+          <span class="cr-icon">📱</span>
+          <div class="cr-info">
+            <div class="cr-name">Admin ဆက်သွယ်ရန်</div>
+            <div class="cr-val" style="font-size:16px;font-weight:bold;">09672124213</div>
+          </div>
+        </a>
+        <p style="font-size:11px;color:#888;margin-top:6px;text-align:center;">☎️ ဖုန်းဆက်ပြီး WCCoin ဝယ်ယူနိုင်ပါတယ်</p>
+      </div>
+      <div class="about-section version" style="text-align:center;font-size:11px;color:#666;">
+        🎰 WaveChat Slot v1.0<br>© 2026 · Made with ❤️ for WaveChat players
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-setting">
+    <div class="modal-content" style="max-width:100%;margin:0;">
+      <h3>⚙️ ဆက်တင်</h3>
+      <div class="setting-item"><label>🌞 Day Mode</label><div class="toggle" id="dayModeToggle" onclick="toggleDayMode()"></div></div>
+      <div class="setting-item"><label>🌙 Night Mode</label><div class="toggle active" id="nightModeToggle" onclick="toggleNightMode()"></div></div>
+      <div class="setting-item"><label>🔊 အသံ</label><div class="toggle active" id="soundToggle" onclick="toggleSound()"></div></div>
+      <div class="setting-item"><label>📳 Vibrate</label><div class="toggle active" id="vibrateToggle" onclick="toggleVibrate()"></div></div>
+      <div class="setting-item"><label>🌐 Language</label><div style="display:flex;gap:5px;">
+        <button class="lang-btn" onclick="setLang('mm')" id="setLangMM">🇲🇲 MM</button>
+        <button class="lang-btn" onclick="setLang('en')" id="setLangEN">🇬🇧 EN</button>
+      </div></div>
+      <div class="setting-item"><label>📊 Status</label><span style="font-size:14px;color:#0f0;" id="settingOnlineStatus">Online</span></div>
+      <div class="setting-item"><label>🆔 UID</label><span style="font-size:12px;color:var(--cyan);" id="settingUserId">-</span></div>
+      <button class="close-btn" onclick="switchTab('game')" style="background:var(--red);">❌ ပိတ်</button>
+    </div>
+  </div>
+</div>
+
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" style="display:flex;">
+  💬<span class="badge" id="chatBadge" style="display:none;">0</span>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-p-header">
+    <span>💬 Live Support</span>
+    <button class="chat-p-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-p-messages" id="chatMessages"></div>
+  <div class="chat-p-input">
+    <input type="text" id="chatInput" placeholder="Type..." onkeypress="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()">📤</button>
+  </div>
+</div>
+
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-p-header">
+    <span>🔔 Notifications</span>
+    <button onclick="toggleNotifPanel()">✕</button>
+  </div>
+  <div class="notif-p-list" id="notifList"></div>
+</div>
+
+<div class="daily-modal" id="dailyModal">
+  <div class="daily-content">
+    <h3>🎁 Daily Check-in</h3>
+    <div class="daily-streak" id="dailyStreak">🔥 Streak: 0 days</div>
+    <div class="daily-grid" id="dailyGrid"></div>
+    <div style="text-align:center;font-size:12px;color:#ccc;margin:10px 0;" id="dailyInfo">နေ့စဉ် ဝင်ပြီး WCCoin ယူပါ</div>
+    <button class="close-btn" onclick="closeDailyModal()" style="background:var(--red);">❌ ပိတ်</button>
+  </div>
+</div>
+
+<div class="modal" id="giftConfirmModal">
+  <div class="modal-content" style="text-align:center;">
+    <h3 id="giftConfirmTitle">🎁 Gift Confirm</h3>
+    <div id="giftConfirmImage" style="width:120px;height:120px;margin:12px auto;border-radius:12px;overflow:hidden;background:#1a0b2e;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:48px;">🎁</div>
+    <div id="giftConfirmName" style="font-size:16px;font-weight:bold;color:var(--gold);margin-bottom:6px;"></div>
+    <div id="giftConfirmPrice" style="font-size:14px;color:var(--cyan);margin-bottom:12px;"></div>
+    <p style="font-size:12px;color:#ccc;margin-bottom:12px;">WCCoin နဲ့ လဲလှယ်မှာ သေချာလား?</p>
+    <button class="close-btn" style="background:#0c0;" onclick="confirmGiftExchange()">✅ လဲမည်</button>
+    <button class="close-btn" style="background:var(--red);" onclick="closeGiftConfirm()">❌ မလဲဘူး</button>
+  </div>
+</div>
+
+<div class="modal" id="resultModal">
+  <div class="modal-content" style="text-align:center;">
+    <h3 id="resultTitle">🎉</h3>
+    <div style="font-size:26px;color:var(--cyan);font-weight:900;margin:14px 0;" id="resultBig"></div>
+    <p id="resultText" style="font-size:13px;color:#ccc;"></p>
+    <button class="close-btn" style="background:#0c0;" onclick="closeResult()">✅ OK</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+'use strict';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBQJ4zzAxZ_aSuGBxwegTw_dtfaW8oLJnU",
+  authDomain: "wavechat-21.firebaseapp.com",
+  databaseURL: "https://wavechat-21-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "wavechat-21",
+  storageBucket: "wavechat-21.firebasestorage.app",
+  messagingSenderId: "974140621548",
+  appId: "1:974140621548:web:16566800329e43d05c5bc9"
+};
+
+let db = null, firebaseReady = false;
+let currentUid = null, currentName = 'Player';
+let credit = 0, currentBet = 10, baseBet = 10;
+let isSpinning = false, isAuto = false, isTurbo = false, autoSpinCount = 0;
+let totalSpins = 0, totalWins = 0, currentWinAmount = 0;
+let freeSpins = 0, isFreeSpin = false;
+let vipLevel = 1;
+let lastBonusDate = null;
+let checkinState = { streak: 0, lastCheckin: '', claimed: [] };
+let isSoundOn = true, isVibrateOn = true, audioCtx = null;
+let myNotifs = {};
+let notifPanelOpen = false;
+let currentChatOpen = false;
+let currentLang = 'mm';
+let creditListener = null, maintListener = null, broadcastListener = null;
+let missionsListener = null, notifListener = null, giftCatalogListener = null;
+let exchangeUpdatesListener = null, gameSettingsListener = null;
+let chatListener = null;
+let missions = [];
+let missionProgress = {};
+let gameSettings = { minBet: 5, maxBet: 10000, winRate: 30 };
+let giftCatalog = {};
+let selectedGiftId = null;
+let exchangeHistory = [];
+
+const SYMBOLS = ['cherry','lemon','orange','plum','watermelon','bell','seven','diamond','BAR','star','grapes','coin','crown','horseshoe','clover'];
+const SCATTER_SYMBOL = 'bomb';
+const PAYOUTS = {
+  'cherry':{3:2,4:5,5:10},'lemon':{3:2,4:8,5:15},'orange':{3:2,4:10,5:20},
+  'plum':{3:2,4:12,5:25},'watermelon':{3:2,4:15,5:30},'bell':{3:2,4:20,5:40},
+  'seven':{3:2,4:30,5:60},'diamond':{3:2,4:40,5:80},'BAR':{3:2,4:50,5:100},
+  'star':{3:2,4:60,5:120},'grapes':{3:2,4:70,5:140},'coin':{3:2,4:80,5:160},
+  'crown':{3:2,4:100,5:200},'horseshoe':{3:2,4:120,5:250},'clover':{3:2,4:160,5:300}
+};
+const PAYLINE_COLORS = ['#ff00ff','#00ffcc','#ffcc00','#ff4444','#00ff00','#00aaff','#ffaa00','#ffffff'];
+const DAILY_REWARDS = [10, 30, 50, 100];
+const VIP_LEVELS = [
+  {name:'🥉 Bronze', min:0},
+  {name:'🥈 Silver', min:1000},
+  {name:'🥇 Gold', min:5000},
+  {name:'👑 Platinum', min:20000},
+  {name:'💎 Diamond', min:100000}
+];
+
+const SVG_ICONS = {
+  'cherry':'<svg viewBox="0 0 24 24"><circle cx="8" cy="16" r="4" fill="#FF0000"/><circle cx="16" cy="16" r="4" fill="#FF0000"/><path d="M12 12V4" stroke="#00AA00" stroke-width="2"/></svg>',
+  'lemon':'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7" fill="#FFEB3B" stroke="#F9A825" stroke-width="1"/></svg>',
+  'orange':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#FFA500"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>',
+  'plum':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#8A2BE2"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>',
+  'watermelon':'<svg viewBox="0 0 24 24"><path d="M2 12A10 10 0 0 1 22 12z" fill="#FF4444"/><path d="M6 12h12" stroke="#00AA00" stroke-width="1"/></svg>',
+  'bell':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'seven':'<svg viewBox="0 0 24 24"><text x="12" y="18" font-size="18" text-anchor="middle" fill="#FF0000" font-weight="bold">7</text></svg>',
+  'diamond':'<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#00BFFF" stroke="#0066AA" stroke-width="1"/></svg>',
+  'BAR':'<svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="2" fill="#FFD700"/><text x="12" y="15" font-size="8" text-anchor="middle" fill="#8B4513" font-weight="bold">BAR</text></svg>',
+  'star':'<svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'grapes':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#8A2BE2"/><circle cx="16" cy="8" r="3" fill="#8A2BE2"/><circle cx="12" cy="12" r="3" fill="#8A2BE2"/><circle cx="8" cy="16" r="3" fill="#8A2BE2"/><circle cx="16" cy="16" r="3" fill="#8A2BE2"/></svg>',
+  'coin':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD700" stroke="#8B4513" stroke-width="1"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="#8B4513" font-weight="bold">W</text></svg>',
+  'crown':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'horseshoe':'<svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 3 2 5 5 6-3 1-5 3-5 6 0 4 3 7 7 7s7-3 7-7c0-3-2-5-5-6 3-1 5-3 5-6 0-4-3-7-7-7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'clover':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#00FF00"/><circle cx="16" cy="8" r="3" fill="#00FF00"/><circle cx="8" cy="16" r="3" fill="#00FF00"/><circle cx="16" cy="16" r="3" fill="#00FF00"/></svg>',
+  'bomb':'💣'
+};
+
+const $ = id => document.getElementById(id);
+const fmt = n => Math.floor(n||0).toLocaleString();
+const safeText = (el, txt) => { if (el) el.textContent = txt == null ? '' : String(txt); };
+const escHtml = s => {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+};
+
+function showLoading(txt){ safeText($('loadingText'), txt || 'Loading...'); $('loadingOverlay').classList.add('show'); }
+function hideLoading(){ $('loadingOverlay').classList.remove('show'); }
+function showToast(msg, isErr){
+  const el = $('toast'); if (!el) return;
+  el.textContent = msg;
+  el.className = 'toast show' + (isErr ? ' error' : '');
+  clearTimeout(el._t); el._t = setTimeout(()=>{ el.className = 'toast'; }, 2500);
+}
+function showResult(title, amount, text){
+  safeText($('resultTitle'), title);
+  const big = $('resultBig');
+  if (big){
+    big.textContent = amount > 0 ? '+' + fmt(amount) + ' WCC' : '';
+    big.style.color = amount > 0 ? 'var(--cyan)' : 'var(--red)';
+  }
+  safeText($('resultText'), text);
+  $('resultModal').classList.add('show');
+}
+function closeResult(){ $('resultModal').classList.remove('show'); }
+function vibrate(p){
+  if (!isVibrateOn) return;
+  try { if (navigator.vibrate) navigator.vibrate(p || 50); } catch(e){}
+}
+
+function initAudio(){
+  if (!audioCtx){ try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){ return; } }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function playSound(type){
+  if (!isSoundOn) return;
+  try {
+    initAudio(); if (!audioCtx) return;
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    if (type === 'spin'){ osc.type='sine'; osc.frequency.setValueAtTime(300,now); osc.frequency.exponentialRampToValueAtTime(600,now+.2); gain.gain.setValueAtTime(.1,now); gain.gain.exponentialRampToValueAtTime(.01,now+.2); osc.start(now); osc.stop(now+.2); }
+    else if (type === 'reelStop'){ osc.type='triangle'; osc.frequency.setValueAtTime(800,now); osc.frequency.exponentialRampToValueAtTime(200,now+.1); gain.gain.setValueAtTime(.15,now); gain.gain.exponentialRampToValueAtTime(.01,now+.1); osc.start(now); osc.stop(now+.1); }
+    else if (type === 'click'){ osc.type='triangle'; osc.frequency.setValueAtTime(500,now); gain.gain.setValueAtTime(.05,now); gain.gain.exponentialRampToValueAtTime(.01,now+.05); osc.start(now); osc.stop(now+.05); }
+    else if (type === 'win'){ osc.type='square'; osc.frequency.setValueAtTime(400,now); osc.frequency.setValueAtTime(600,now+.1); osc.frequency.setValueAtTime(800,now+.2); gain.gain.setValueAtTime(.15,now); gain.gain.exponentialRampToValueAtTime(.01,now+.4); osc.start(now); osc.stop(now+.4); }
+    else if (type === 'coin'){ osc.type='sine'; osc.frequency.setValueAtTime(1200,now); osc.frequency.exponentialRampToValueAtTime(2400,now+.1); gain.gain.setValueAtTime(.1,now); gain.gain.exponentialRampToValueAtTime(.01,now+.15); osc.start(now); osc.stop(now+.15); }
+    else if (type === 'lose'){ osc.type='sawtooth'; osc.frequency.setValueAtTime(300,now); osc.frequency.exponentialRampToValueAtTime(100,now+.3); gain.gain.setValueAtTime(.1,now); gain.gain.exponentialRampToValueAtTime(.01,now+.3); osc.start(now); osc.stop(now+.3); }
+  } catch(e){}
+}
+
+function initFirebase(){
+  try {
+    if (typeof firebase === 'undefined') return false;
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    firebaseReady = true;
+    return true;
+  } catch(e){ console.error('FB:', e.message); return false; }
+}
+
+function parseWaveChatParams(){
+  const params = new URLSearchParams(location.search);
+  const uid = params.get('uid');
+  const name = params.get('name');
+  const coins = params.get('coins');
+  return { uid, name, coins: coins ? parseInt(coins, 10) : null };
+}
+
+function goBackHome(){
+  playSound('click');
+  if (window.parent && window.parent !== window){
+    try {
+      window.parent.postMessage({ type: 'wavechat_game_exit', uid: currentUid, coins: credit }, '*');
+    } catch(e){}
+  }
+  try { window.close(); } catch(e){}
+  setTimeout(() => {
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = 'about:blank';
+  }, 300);
+}
+
+function startGameFromWaveChat(){
+  const { uid, name, coins } = parseWaveChatParams();
+
+  if (!uid){
+    currentUid = 'demo_' + Date.now();
+    currentName = 'Demo Player';
+    credit = 1000;
+    finishStart();
+    showToast('⚠️ WaveChat ကနေ ဖွင့်ပါ (Demo mode)', true);
+    return;
+  }
+
+  currentUid = uid;
+  currentName = name || 'Player';
+  credit = coins !== null ? coins : 0;
+
+  showLoading('Loading...');
+  if (!firebaseReady){
+    hideLoading();
+    finishStart();
+    showToast('⚠️ Firebase မချိတ်ဆက်ရ — offline mode', true);
+    return;
+  }
+
+  db.ref('users/' + currentUid).once('value').then(snap => {
+    const d = snap.val() || {};
+    // FIXED: Use correct field name 'coin_balance'
+    if (d.coin_balance !== undefined) credit = d.coin_balance;
+    if (d.name) currentName = d.name;
+    if (d.casino_data){
+      const cd = d.casino_data;
+      if (cd.totalSpins !== undefined) totalSpins = cd.totalSpins;
+      if (cd.totalWins !== undefined) totalWins = cd.totalWins;
+      if (cd.lastBonusDate) lastBonusDate = cd.lastBonusDate;
+      if (cd.checkin) checkinState = cd.checkin;
+      if (cd.missionProgress) missionProgress = cd.missionProgress;
+    }
+    hideLoading();
+    finishStart();
+    listenToCredit();
+    listenMaintenance();
+    listenBroadcast();
+    listenMissions();
+    listenUserNotifs();
+    listenGiftCatalog();
+    listenExchangeUpdates();
+    listenGameSettings();
+    loadMissions();
+    startPresence();
+  }).catch(e => {
+    hideLoading();
+    finishStart(); 
+    console.warn('DB read failed:', e.message);
+  });
+}
+
+function finishStart(){
+  safeText($('profileNameDisplay'), currentName);
+  safeText($('profileNameLarge'), currentName);
+  safeText($('profileUid'), currentUid ? currentUid.slice(0, 12) : '-');
+  safeText($('settingUserId'), currentUid ? currentUid.slice(0, 12) : '-');
+
+  generateReels();
+  updateUI();
+  updateVIPProgress();
+  updateProfileUI();
+  updateDailyBadge();
+  renderMissions();
+  renderHistory();
+  updateOnlineStatus();
+}
+
+function listenToCredit(){
+  if (!firebaseReady || !currentUid) return;
+  if (creditListener) creditListener.off();
+  // FIXED: Use correct field name 'coin_balance'
+  creditListener = db.ref('users/' + currentUid + '/coin_balance');
+  creditListener.on('value', snap => {
+    const v = snap.val();
+    if (v !== null && v !== undefined && !isSpinning){
+      credit = v;
+      updateUI();
+      updateProfileUI();
+    }
+  });
+}
+
+function listenMaintenance(){
+  if (!firebaseReady) return;
+  if (maintListener) maintListener.off();
+  maintListener = db.ref('maintenance').on('value', snap => {
+    const m = snap.val() || {};
+    const ov = $('maintOverlay');
+    if (m.enabled === true){
+      ov.classList.add('show');
+      safeText($('maintMsg'), m.message || 'Under maintenance...');
+    } else {
+      ov.classList.remove('show');
+    }
+  });
+}
+
+function listenBroadcast(){
+  if (!firebaseReady) return;
+  if (broadcastListener) broadcastListener.off();
+  broadcastListener = db.ref('broadcast').on('value', snap => {
+    const d = snap.val();
+    const b = $('broadcastBanner');
+    if (d && d.message){
+      b.textContent = '📢 ' + d.message;
+      b.classList.add('active');
+      setTimeout(()=>b.classList.remove('active'), 15000);
+    } else {
+      b.classList.remove('active');
+    }
+  });
+}
+
+function listenMissions(){
+  if (!firebaseReady){ return; }
+  if (missionsListener) missionsListener.off();
+  missionsListener = db.ref('slot_missions').on('value', snap => {
+    const d = snap.val();
+    if (d) missions = Object.values(d).filter(m => m.enabled !== false);
+    else missions = [
+      {id:"spin10",name:"🎰 Spin 10",desc:"၁၀ ခါ",target:10,reward:30,type:"spins"},
+      {id:"spin50",name:"🎰 Spin 50",desc:"၅၀ ခါ",target:50,reward:100,type:"spins"},
+      {id:"win100",name:"💰 Win 100",desc:"100 WCC",target:100,reward:50,type:"wins"}
+    ];
+    renderMissions();
+  });
+}
+
+function listenGameSettings(){
+  if (!firebaseReady) return;
+  if (gameSettingsListener) gameSettingsListener.off();
+  gameSettingsListener = db.ref('slot_game_settings').on('value', snap => {
+    const g = snap.val();
+    if (g){
+      if (g.minBet !== undefined) gameSettings.minBet = Math.max(1, g.minBet);
+      if (g.maxBet !== undefined) gameSettings.maxBet = g.maxBet;
+      if (g.winRate !== undefined) gameSettings.winRate = Math.max(0, Math.min(100, g.winRate));
+      if (currentBet < gameSettings.minBet) { currentBet = gameSettings.minBet; baseBet = gameSettings.minBet; updateUI(); }
+      if (currentBet > gameSettings.maxBet) { currentBet = gameSettings.maxBet; baseBet = gameSettings.maxBet; updateUI(); }
+    }
+  });
+}
+
+function listenExchangeUpdates(){
+  if (!firebaseReady || !currentUid) return;
+  if (exchangeUpdatesListener) exchangeUpdatesListener.off();
+  exchangeUpdatesListener = db.ref('users/' + currentUid + '/slot_exchanges').on('value', snap => {
+    const data = snap.val() || {};
+    exchangeHistory = Object.values(data).sort((a,b) => (b.ts || 0) - (a.ts || 0));
+    renderHistory();
+  });
+}
+
+function listenUserNotifs(){
+  if (!firebaseReady || !currentUid) return;
+  if (notifListener) notifListener.off();
+  notifListener = db.ref('users/' + currentUid + '/slot_notifications').limitToLast(30).on('value', snap => {
+    myNotifs = snap.val() || {};
+    renderUserNotifs();
+  });
+}
+
+function listenGiftCatalog(){
+  if (!firebaseReady) return;
+  if (giftCatalogListener) giftCatalogListener.off();
+  giftCatalogListener = db.ref('slot_gift_catalog').on('value', snap => {
+    giftCatalog = snap.val() || {};
+    renderGiftCatalog();
+  });
+}
+
+function renderGiftCatalog(){
+  const grid = $('giftCatalogGrid'); if (!grid) return;
+
+  let gifts = Object.entries(giftCatalog || {}).map(([id, g]) => Object.assign({id}, g));
+  gifts.sort((a,b) => (a.order || 999) - (b.order || 999));
+
+  const MIN_SLOTS = 8;
+  while (gifts.length < MIN_SLOTS) {
+    gifts.push({ id: '_empty_' + gifts.length, isEmpty: true });
+  }
+
+  grid.innerHTML = gifts.map(g => {
+    if (g.isEmpty) {
+      return '<div class="gift-card empty">' +
+        '<div class="empty-plus">＋</div>' +
+        '<div class="gift-name">နေရာလွတ်</div>' +
+        '<div class="gift-price" style="background:#333;color:#666;">—</div>' +
+        '</div>';
+    }
+
+    const safeEmoji = escHtml(g.emoji || '🎁');
+    const safeName = escHtml(g.name || 'Gift');
+    const safeImage = escHtml(g.image || '');
+
+    const img = g.image
+      ? '<div class="gift-image"><img src="' + safeImage + '" alt="' + safeName + '" onerror="this.style.display=\'none\';this.parentNode.innerHTML=\'<div class=&quot;gift-emoji&quot;>' + safeEmoji + '</div>\'"></div>'
+      : '<div class="gift-image"><div class="gift-emoji">' + safeEmoji + '</div></div>';
+
+    return '<div class="gift-card" onclick="openGiftConfirm(\'' + g.id + '\')" data-gift-id="' + g.id + '">' +
+      img +
+      '<div class="gift-name">' + safeName + '</div>' +
+      '<div class="gift-price">🪙 ' + (parseInt(g.price, 10) || 0) + ' WCC</div>' +
+      '</div>';
+  }).join('');
+}
+
+function openGiftConfirm(giftId){
+  playSound('click');
+  const gift = giftCatalog[giftId];
+  if (!gift) return showToast('Gift မတွေ့', true);
+
+  selectedGiftId = giftId;
+  const safeEmoji = escHtml(gift.emoji || '🎁');
+  const safeImage = escHtml(gift.image || '');
+
+  safeText($('giftConfirmTitle'), '🎁 ' + (gift.name || 'Gift'));
+  const imgEl = $('giftConfirmImage');
+  if (imgEl){
+    if (gift.image){
+      imgEl.innerHTML = '<img src="' + safeImage + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\';this.parentNode.textContent=\'' + safeEmoji + '\'">';
+    } else {
+      imgEl.textContent = gift.emoji || '🎁';
+    }
+  }
+  safeText($('giftConfirmName'), gift.name || 'Gift');
+  safeText($('giftConfirmPrice'), '🪙 ' + (parseInt(gift.price, 10) || 0) + ' WCCoin');
+  $('giftConfirmModal').classList.add('show');
+}
+
+function closeGiftConfirm(){
+  playSound('click');
+  $('giftConfirmModal').classList.remove('show');
+  selectedGiftId = null;
+}
+
+function confirmGiftExchange(){
+  if (!selectedGiftId) return;
+  const gift = giftCatalog[selectedGiftId];
+  if (!gift) return showToast('Gift မတွေ့', true);
+
+  const price = parseInt(gift.price, 10) || 0;
+  if (price > credit){
+    showToast('⚠️ WCCoin မလုံလောက်', true);
+    closeGiftConfirm();
+    return;
+  }
+  if (!firebaseReady || !currentUid){
+    showToast('⚠️ Firebase မချိတ်ဆက်ရ', true);
+    return;
+  }
+
+  showLoading('Exchanging...');
+  credit -= price;
+  updateUI();
+  updateProfileUI();
+
+  const exchangeId = 'ex_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+  const exchangeData = {
+    id: exchangeId,
+    giftId: selectedGiftId,
+    giftName: gift.name || 'Gift',
+    giftEmoji: gift.emoji || '🎁',
+    giftImage: gift.image || '',
+    price: price,
+    uid: currentUid,
+    name: currentName,
+    ts: Date.now(),
+    status: 'pending',
+    type: 'gift_exchange'
+  };
+
+  Promise.all([
+    // FIXED: Use correct field name 'coin_balance'
+    db.ref('users/' + currentUid + '/coin_balance').set(credit),
+    db.ref('slot_gift_exchanges/' + exchangeId).set(exchangeData),
+    db.ref('users/' + currentUid + '/slot_exchanges/' + exchangeId).set(exchangeData)
+  ]).then(() => {
+    hideLoading();
+    playSound('win');
+    vibrate([60, 30, 60]);
+    showToast('🎁 WCCoin နဲ့ လဲပြီး! Admin က ဆက်သွယ်ပါမယ်', false);
+    pushUserNotif('🎁 Gift Exchange', 'WCCoin ' + fmt(price) + ' နဲ့ "' + (gift.name || 'Gift') + '" လဲပြီး');
+    closeGiftConfirm();
+  }).catch(e => {
+    hideLoading();
+    credit += price;
+    updateUI();
+    updateProfileUI();
+    showToast('❌ Failed: ' + e.message, true);
+  });
+}
+
+function generateReels(){
+  const tbody = $('reelsBody'); if (!tbody) return;
+  tbody.innerHTML = '';
+  for (let r = 0; r < 5; r++){
+    const tr = document.createElement('tr');
+    for (let c = 0; c < 5; c++){
+      const td = document.createElement('td');
+      const s = document.createElement('div');
+      s.className = 'symbol';
+      s.innerHTML = SVG_ICONS['cherry'];
+      td.appendChild(s);
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+function spin(){
+  if (isSpinning) return;
+
+  if (!isFreeSpin && currentBet > credit){
+    showToast('⚠️ WCCoin မလုံလောက်', true);
+    stopAuto();
+    return;
+  }
+
+  if (!isFreeSpin){
+    credit -= currentBet;
+    updateUI();
+    syncCreditToDB();
+  }
+
+  $('winDisplay').textContent = '0';
+  currentWinAmount = 0;
+  isSpinning = true;
+  $('spinBtn').disabled = true;
+  $('autoBtn').disabled = true;
+  $('message').textContent = isFreeSpin ? `🎁 Free Spin! (${freeSpins})` : '🎰 လှည့်နေသည်...';
+  playSound('spin');
+  vibrate(30);
+  totalSpins++;
+  updateMissionProgress('spins');
+
+  $('effectOverlay').classList.remove('show');
+  $('freespinOverlay').classList.remove('show');
+  document.querySelectorAll('.symbol').forEach(el => {
+    el.classList.remove('win'); el.classList.remove('scatter');
+  });
+  $('paylineSvg').innerHTML = '';
+
+  const cols = [];
+  for (let c = 0; c < 5; c++) {
+    const col = [];
+    for (let r = 0; r < 5; r++) {
+      const td = document.querySelectorAll('#reelsBody tr')[r].querySelectorAll('td')[c];
+      td.classList.add('spinning');
+      col.push(td);
+    }
+    cols.push(col);
+  }
+
+  let results = [];
+  let bombCount = 0;
+  const winChance = Math.random() * 100 < gameSettings.winRate;
+
+  for (let i = 0; i < 5; i++){
+    const colRes = [];
+    for (let j = 0; j < 5; j++){
+      const rand = Math.random();
+      let sym;
+      if (rand < 0.03 && bombCount < 2){ sym = SCATTER_SYMBOL; bombCount++; }
+      else {
+        const wr = Math.random();
+        if (wr < 0.6) sym = SYMBOLS[Math.floor(Math.random()*5)];
+        else if (wr < 0.9) sym = SYMBOLS[Math.floor(Math.random()*10)];
+        else sym = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
+      }
+      colRes.push(sym);
+    }
+    results.push(colRes);
+  }
+
+  if (winChance && !isFreeSpin){
+    const low = ['cherry','lemon','orange','plum','watermelon'];
+    const rs = low[Math.floor(Math.random()*low.length)];
+    const row = Math.floor(Math.random() * 5);
+    results[0][row] = rs;
+    results[1][row] = rs;
+    results[2][row] = rs;
+  }
+
+  const spinDur = isTurbo ? 400 : 1200;
+  const stopDelay = isTurbo ? 80 : 200;
+
+  for (let c = 0; c < 5; c++) {
+    setTimeout(() => {
+      for (let r = 0; r < 5; r++) {
+        const td = cols[c][r];
+        td.classList.remove('spinning');
+        const s = td.querySelector('.symbol');
+        const key = results[c][r];
+        if (key === SCATTER_SYMBOL){ s.innerHTML = SVG_ICONS['bomb']; s.classList.add('bomb'); }
+        else { s.innerHTML = SVG_ICONS[key] || SVG_ICONS['cherry']; s.classList.remove('bomb'); }
+      }
+      
+      if (c === 4) {
+        playSound('reelStop');
+        vibrate(20);
+        setTimeout(() => {
+          checkWin(results);
+          isSpinning = false;
+          $('spinBtn').disabled = false;
+          $('autoBtn').disabled = false;
+          syncCreditToDB();
+
+          if (isFreeSpin){
+            freeSpins--;
+            if (freeSpins > 0) setTimeout(()=>spin(), isTurbo ? 400 : 1200);
+            else { isFreeSpin = false; $('freespinOverlay').classList.remove('show'); }
+          }
+
+          if (isAuto && autoSpinCount > 0){
+            autoSpinCount--;
+            $('autoBtn').innerHTML = `🔄<br>(${autoSpinCount})`;
+            if (autoSpinCount > 0) setTimeout(()=>spin(), isTurbo ? 400 : 1000);
+            else stopAuto();
+          }
+        }, 100);
+      }
+    }, spinDur + (c * stopDelay));
+  }
+}
+
+function stopAuto(){
+  isAuto = false; autoSpinCount = 0;
+  if ($('autoBtn')){
+    $('autoBtn').innerHTML = '🔄<br>AUTO';
+    $('autoBtn').style.background = 'linear-gradient(180deg, #ff00ff, #cc00cc)';
+  }
+}
+
+function checkLine(lineSymbols){
+  if (lineSymbols.length < 3) return null;
+  const firstSym = lineSymbols[0];
+  if (!firstSym || firstSym === SCATTER_SYMBOL) return null;
+  let count = 1, pos = [0];
+  for (let i = 1; i < lineSymbols.length; i++){
+    if (lineSymbols[i] === firstSym){ count++; pos.push(i); }
+    else break;
+  }
+  if (PAYOUTS[firstSym] && count >= 3){
+    const mult = PAYOUTS[firstSym][count];
+    if (mult) return { symbol:firstSym, count, multiplier:mult, amount:currentBet * mult, positions:pos };
+  }
+  return null;
+}
+
+function checkScatter(results){
+  const pos = [];
+  for (let c = 0; c < 5; c++) for (let r = 0; r < 5; r++) if (results[c][r] === SCATTER_SYMBOL) pos.push({col:c, row:r});
+  return { count:pos.length, positions:pos };
+}
+
+function checkWin(results){
+  let totalWin = 0, winPositions = [], winLines = [], hasJackpot = false;
+
+  const scatter = checkScatter(results);
+  let bombFreeSpinAwarded = 0;
+  if (scatter.count >= 3){
+    if (scatter.count === 3) bombFreeSpinAwarded = 5;
+    else if (scatter.count === 4) bombFreeSpinAwarded = 7;
+    else bombFreeSpinAwarded = 10;
+    freeSpins += bombFreeSpinAwarded;
+    isFreeSpin = true;
+    $('freespinOverlay').classList.add('show');
+    scatter.positions.forEach(p => {
+      winPositions.push(p);
+      const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
+      if (td) {
+        const s = td.querySelector('.symbol');
+        if (s) s.classList.add('scatter');
+      }
+    });
+  }
+
+  const allLines = [];
+  for (let row = 0; row < 5; row++){
+    allLines.push({ positions: Array.from({length:5},(_,c)=>({col:c, row})), direction:'➡️' });
+  }
+  for (let col = 0; col < 5; col++){
+    allLines.push({ positions: Array.from({length:5},(_,r)=>({col, row:r})), direction:'⬇️' });
+  }
+  allLines.push({ positions: [{col:0,row:0},{col:1,row:1},{col:2,row:2},{col:3,row:3},{col:4,row:4}], direction:'↘️' });
+  allLines.push({ positions: [{col:0,row:4},{col:1,row:3},{col:2,row:2},{col:3,row:1},{col:4,row:0}], direction:'↗️' });
+
+  allLines.forEach(line => {
+    const syms = line.positions.map(p => results[p.col][p.row]);
+    const wr = checkLine(syms);
+    if (wr){
+      totalWin += wr.amount;
+      if (wr.count >= 5) hasJackpot = true;
+      const mp = wr.positions.map(p => line.positions[p]);
+      winLines.push({
+        positions: mp, color: PAYLINE_COLORS[winLines.length % PAYLINE_COLORS.length],
+        symbol: wr.symbol, matchCount: wr.count, winAmount: wr.amount,
+        direction: line.direction, isJackpot: wr.count >= 5
+      });
+      mp.forEach(p => winPositions.push(p));
+    }
+  });
+
+  if (totalWin > 0){
+    credit += totalWin;
+    currentWinAmount = totalWin;
+    totalWins += totalWin;
+    updateUI();
+    $('winDisplay').textContent = totalWin.toLocaleString();
+    playSound('coin');
+    vibrate([60, 30, 60]);
+    updateMissionProgress('wins');
+
+    let wt = '', col = '#00ffcc';
+    if (hasJackpot){ wt = '🎰 JACKPOT!'; col = '#ff00ff'; }
+    else if (totalWin >= currentBet * 100){ wt = '💎 SUPER!'; col = '#ffcc00'; }
+    else if (totalWin >= currentBet * 30){ wt = '🌟 MEGA!'; col = '#00ffcc'; }
+    else { wt = '🎉 WIN!'; col = '#00ffcc'; }
+
+    const eff = $('effectOverlay');
+    eff.textContent = wt;
+    eff.style.color = col;
+    eff.classList.add('show');
+    setTimeout(() => eff.classList.remove('show'), 2500);
+
+    const linesHtml = winLines.map(l => `<span class="win-line" style="border-color:${l.color}; color:${l.color};">${l.direction} ${l.matchCount}=${l.winAmount.toLocaleString()} WCC</span>`).join('');
+    $('message').innerHTML = `<div style="width:100%; text-align:center; margin-bottom:4px;">${wt} = <span style="color:#ffcc00;">${totalWin.toLocaleString()} WCC</span></div><div style="width:100%; text-align:center;">${linesHtml}</div>`;
+
+    winPositions.forEach(p => {
+      const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
+      if (td) {
+        const s = td.querySelector('.symbol');
+        if (s && !s.classList.contains('scatter')) s.classList.add('win');
+      }
+    });
+    drawPaylines(winLines);
+
+    if (totalWin >= 5000){
+      pushUserNotif('🏆 Big Win', '+' + fmt(totalWin) + ' WCC');
+    }
+  }
+
+  if (bombFreeSpinAwarded > 0){
+    const eff = $('effectOverlay');
+    eff.textContent = '💣 FREE SPIN!';
+    eff.style.color = '#ff00ff';
+    eff.classList.add('show');
+    setTimeout(() => eff.classList.remove('show'), 2500);
+    const bombMsg = `💣 <span style="color:#ff00ff;">BOMB ${scatter.count}!</span> Free Spin ${bombFreeSpinAwarded} ခါ!`;
+    if (totalWin > 0) $('message').innerHTML += `<div style="width:100%; text-align:center; margin-top:3px;">${bombMsg}</div>`;
+    else $('message').innerHTML = bombMsg;
+    playSound('win');
+    vibrate([100, 50, 100]);
+  } else if (totalWin === 0){
+    const eff = $('effectOverlay');
+    eff.textContent = 'LOSE';
+    eff.style.color = '#ff4444';
+    eff.classList.add('show');
+    setTimeout(() => eff.classList.remove('show'), 1500);
+    $('message').innerHTML = `😢 <span style="color:#ff4444;">LOSE!</span> ထပ်ကြိုးစားပါ`;
+    playSound('lose');
+    vibrate(80);
+  }
+}
+
+function drawPaylines(lines){
+  const svg = $('paylineSvg'); if (!svg) return;
+  svg.innerHTML = '';
+  const area = $('reelsArea'); if (!area) return;
+  const rect = area.getBoundingClientRect();
+  const cw = rect.width / 5, rh = rect.height / 5;
+  lines.forEach(line => {
+    if (!line.positions || line.positions.length === 0) return;
+    const pts = line.positions.map(p => ({ x:(p.col * cw) + (cw/2), y:(p.row * rh) + (rh/2) }));
+    for (let i = 0; i < pts.length - 1; i++){
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      el.setAttribute('x1', pts[i].x); el.setAttribute('y1', pts[i].y);
+      el.setAttribute('x2', pts[i+1].x); el.setAttribute('y2', pts[i+1].y);
+      el.setAttribute('stroke', line.color);
+      svg.appendChild(el);
+    }
+  });
+  setTimeout(() => svg.innerHTML = '', 3000);
+}
+
+let _syncTimeout = null;
+function syncCreditToDB(){
+  if (!firebaseReady || !currentUid) return;
+  clearTimeout(_syncTimeout);
+  _syncTimeout = setTimeout(() => {
+    // FIXED: Use correct field name 'coin_balance'
+    db.ref('users/' + currentUid + '/coin_balance').set(credit).catch(e => console.warn('Sync:', e.message));
+    db.ref('users/' + currentUid + '/casino_data').update({
+      totalSpins, totalWins,
+      lastBonusDate,
+      checkin: checkinState,
+      missionProgress
+    }).catch(e => console.warn('Casino data:', e.message));
+  }, 500);
+}
+
+function changeBet(amt){
+  if (isSpinning) return;
+  playSound('click');
+  let nb = currentBet + amt;
+  if (nb < gameSettings.minBet) nb = gameSettings.minBet;
+  if (nb > gameSettings.maxBet){ $('message').textContent = `⚠️ Max ${gameSettings.maxBet.toLocaleString()} WCC`; return; }
+  if (nb > credit){ $('message').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
+  currentBet = nb; baseBet = nb; updateUI();
+}
+
+function setCustomBet(){
+  if (isSpinning) return;
+  const cb = parseInt($('customBetInput').value);
+  if (isNaN(cb) || cb < gameSettings.minBet){ $('message').textContent = `⚠️ Min ${gameSettings.minBet} WCC`; return; }
+  if (cb > gameSettings.maxBet){ $('message').textContent = `⚠️ Max ${gameSettings.maxBet.toLocaleString()}`; return; }
+  if (cb > credit){ $('message').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
+  currentBet = cb; baseBet = cb; updateUI();
+  $('message').textContent = `💰 ${cb.toLocaleString()} WCC`;
+  playSound('click');
+}
+
+function quickBet(m){
+  if (isSpinning) return;
+  playSound('click');
+  const nb = baseBet * m;
+  if (nb > gameSettings.maxBet){ $('message').textContent = `⚠️ Max ${gameSettings.maxBet.toLocaleString()}`; return; }
+  if (nb > credit){ $('message').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
+  currentBet = nb; updateUI();
+  $('message').textContent = `💰 ${nb.toLocaleString()} WCC (${m}×)`;
+}
+
+function toggleAuto(){
+  if (isSpinning) return;
+  playSound('click');
+  isAuto = !isAuto;
+  if (isAuto){
+    autoSpinCount = 10;
+    $('autoBtn').innerHTML = `🔄<br>(${autoSpinCount})`;
+    $('autoBtn').style.background = 'linear-gradient(180deg, #ff0000, #cc0000)';
+    $('message').textContent = '🔄 Auto Spin!';
+    setTimeout(() => { if (!isSpinning && isAuto) spin(); }, 300);
+  } else { stopAuto(); $('message').textContent = 'Auto ရပ်'; }
+}
+
+function toggleTurbo(){
+  playSound('click');
+  isTurbo = !isTurbo;
+  $('turboBtn').style.background = isTurbo ? 'linear-gradient(180deg, #ff0000, #cc0000)' : 'linear-gradient(180deg, #ffaa00, #cc8800)';
+  $('message').textContent = isTurbo ? '⚡ Turbo ON!' : 'Turbo OFF';
+}
+
+function dailyBonus(){
+  playSound('click');
+  openDailyCheckin();
+}
+
+function openDailyCheckin(){
+  playSound('click');
+  $('dailyModal').classList.add('show');
+  renderDailyGrid();
+}
+function closeDailyModal(){
+  playSound('click');
+  $('dailyModal').classList.remove('show');
+}
+
+function renderDailyGrid(){
+  const grid = $('dailyGrid'); if (!grid) return;
+  const today = new Date().toDateString();
+  const todayDate = new Date().getDay();
+  const claimed = checkinState.claimed || [];
+  const streak = checkinState.streak || 0;
+  const todayClaimed = checkinState.lastCheckin === today;
+
+  $('dailyStreak').textContent = '🔥 Streak: ' + streak + ' days';
+
+  grid.innerHTML = '';
+  DAILY_REWARDS.forEach((reward, i) => {
+    const isClaimed = claimed.includes(i);
+    const isToday = i === todayDate % 4 && !todayClaimed;
+    const cls = isClaimed ? 'claimed' : (isToday ? 'today' : (i > (todayDate % 4) ? 'locked' : ''));
+    const div = document.createElement('div');
+    div.className = 'daily-day ' + cls;
+    div.innerHTML = `<div class="dd-num">Day ${i+1}</div><span class="dd-ic">${isClaimed ? '✅' : '🎁'}</span><div class="dd-rw">${reward} WCC</div>`;
+    if (isToday){
+      div.style.cursor = 'pointer';
+      div.onclick = () => claimDaily(i);
+    }
+    grid.appendChild(div);
+  });
+  $('dailyInfo').textContent = todayClaimed ? '✅ ဒီနေ့ ယူပြီးပါပြီ' : `🎁 Day ${((todayDate % 4) + 1)} ကို နှိပ်ပါ`;
+}
+
+function claimDaily(dayIdx){
+  const today = new Date().toDateString();
+  if (checkinState.lastCheckin === today){ showToast('⚠️ ဒီနေ့ ယူပြီး', true); return; }
+  const reward = DAILY_REWARDS[dayIdx] || 10;
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+  if (checkinState.lastCheckin === yesterday.toDateString()) checkinState.streak = (checkinState.streak || 0) + 1;
+  else { checkinState.streak = 1; checkinState.claimed = []; }
+  checkinState.claimed = (checkinState.claimed || []).slice(0, 3);
+  checkinState.claimed.push(dayIdx);
+  checkinState.lastCheckin = today;
+  credit += reward;
+  updateUI(); updateVIPProgress(); updateDailyBadge(); updateProfileUI();
+  playSound('win'); vibrate([50, 30, 50]);
+  showToast('🎁 +' + fmt(reward) + ' WCC!');
+  pushUserNotif('🎁 Daily Check-in', '+' + fmt(reward) + ' WCC');
+  renderDailyGrid();
+  syncCreditToDB();
+  setTimeout(() => closeDailyModal(), 800);
+}
+
+function updateDailyBadge(){
+  const today = new Date().toDateString();
+  const badge = $('dailyBadge'); if (!badge) return;
+  if (checkinState.lastCheckin === today){ badge.textContent = '✅ Done'; badge.className = 'bc-status done'; }
+  else { badge.textContent = '🎁 Claim'; badge.className = 'bc-status ready'; }
+}
+
+function showFreeSpinInfo(){
+  showResult('💣 Free Spin', 0, 'Bomb 3+ ကို reel မှာ ရရင် Free Spin ၅-၁၀ ခါ ရပါမယ်။ Free Spin မှာ bet မကောက်ပါ။');
+}
+
+function renderMissions(){
+  const list = $('missionList'); if (!list) return;
+  if (missions.length === 0){
+    list.innerHTML = '<p style="text-align:center;color:#888;padding:20px;">🎯 မစ်ရှင် မရှိသေးပါ</p>';
+    return;
+  }
+  list.innerHTML = '';
+  missions.forEach(m => {
+    const p = missionProgress[m.id] || 0;
+    const pct = Math.min(100, (p / m.target) * 100);
+    const cl = missionProgress[m.id + '_claimed'] || false;
+    const c = document.createElement('div');
+    c.className = 'mission-card';
+    c.innerHTML = `<h4>${escHtml(m.name)}</h4><p>${escHtml(m.desc)}</p><div class="mission-prog"><div class="mission-bar" style="width:${pct}%"></div></div><div style="display:flex;justify-content:space-between;align-items:center;"><span class="mission-rew">🪙 ${(parseInt(m.reward, 10) || 0).toLocaleString()}</span><span style="font-size:11px;color:#888;">${p}/${m.target}</span><button class="mission-claim" ${pct >= 100 && !cl ? '' : 'disabled'} onclick="claimMission('${m.id}', ${parseInt(m.reward, 10) || 0})">${cl ? '✅' : (pct >= 100 ? '🎁' : '⏳')}</button></div>`;
+    list.appendChild(c);
+  });
+}
+
+function claimMission(id, reward){
+  if (missionProgress[id + '_claimed']) return;
+  const m = missions.find(x => x.id === id);
+  if (!m || (missionProgress[id] || 0) < m.target) return;
+  missionProgress[id + '_claimed'] = true;
+  credit += reward;
+  updateUI(); updateVIPProgress();
+  syncCreditToDB();
+  renderMissions();
+  $('message').textContent = `🎉 +${reward.toLocaleString()} WCC!`;
+  playSound('win');
+  vibrate([60, 30, 60]);
+  pushUserNotif('🎯 Mission Complete', '+' + fmt(reward) + ' WCC');
+}
+
+function updateMissionProgress(type){
+  missions.forEach(m => {
+    if (m.type === type){
+      if (m.id.includes('win')) missionProgress[m.id] = totalWins;
+      else if (m.id.includes('spin')) missionProgress[m.id] = totalSpins;
+    }
+  });
+  renderMissions();
+}
+
+function loadMissions(){ renderMissions(); }
+
+function updateProfileUI(){
+  if ($('profileCredit')) $('profileCredit').textContent = fmt(credit);
+  if ($('profileVip')) $('profileVip').textContent = $('vipLevel') ? $('vipLevel').textContent : '🥉';
+  if ($('profileSpins')) $('profileSpins').textContent = totalSpins;
+  if ($('profileWins')) $('profileWins').textContent = fmt(totalWins);
+  if ($('profileStreak')) $('profileStreak').textContent = (checkinState.streak || 0) + ' days';
+  if ($('editName')) $('editName').value = currentName;
+  if ($('profileNameLarge')) $('profileNameLarge').textContent = currentName;
+}
+
+function saveProfile(){
+  const nn = $('editName').value.trim();
+  if (nn && nn.length >= 2){
+    currentName = nn;
+    $('profileNameDisplay').textContent = currentName;
+    $('profileNameLarge').textContent = currentName;
+    $('message').textContent = '✅ Name updated';
+    if (firebaseReady && currentUid){
+      db.ref('users/' + currentUid).update({ name: nn }).catch(()=>{});
+    }
+  }
+  syncCreditToDB();
+  switchTab('game');
+  playSound('win');
+}
+
+function updateUI(){
+  const cs = fmt(credit);
+  if ($('credit')) $('credit').textContent = cs;
+  if ($('creditBonus')) $('creditBonus').textContent = cs;
+  if ($('creditGifts')) $('creditGifts').textContent = cs;
+  if ($('wcCoinAmount')) $('wcCoinAmount').textContent = cs;
+  if ($('betDisplay')) $('betDisplay').textContent = currentBet.toLocaleString();
+  if ($('betValue')) $('betValue').textContent = currentBet.toLocaleString();
+  if ($('winDisplay')) $('winDisplay').textContent = currentWinAmount.toLocaleString();
+  updateVIPProgress();
+}
+
+function updateVIPProgress(){
+  const c = credit || 0;
+  let current = VIP_LEVELS[0], next = VIP_LEVELS[1];
+  for (let i = 0; i < VIP_LEVELS.length; i++){
+    if (c >= VIP_LEVELS[i].min){ current = VIP_LEVELS[i]; next = VIP_LEVELS[i + 1] || null; }
+  }
+  const vpLevel = $('vpLevel'), vpNext = $('vpNext'), vpBar = $('vpBarFill'), vpInfo = $('vpInfo');
+  if (!vpLevel) return;
+  vpLevel.textContent = current.name;
+  if (next){
+    vpNext.textContent = 'Next: ' + next.name;
+    const range = next.min - current.min;
+    const progress = c - current.min;
+    const pct = Math.max(0, Math.min(100, (progress / range) * 100));
+    vpBar.style.width = pct + '%';
+    vpInfo.textContent = `${fmt(c)} / ${fmt(next.min)} WCC`;
+  } else {
+    vpNext.textContent = '👑 MAX LEVEL';
+    vpBar.style.width = '100%';
+    vpInfo.textContent = 'Max level reached!';
+  }
+  let vt = '🥉', v = 1;
+  if (c >= 100000){ vt = '💎'; v = 5; }
+  else if (c >= 20000){ vt = '👑'; v = 4; }
+  else if (c >= 5000){ vt = '🥇'; v = 3; }
+  else if (c >= 1000){ vt = '🥈'; v = 2; }
+  vipLevel = v;
+  if ($('vipLevel')) $('vipLevel').textContent = vt;
+}
+
+function switchTab(tabName){
+  playSound('click');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const te = $('tab-' + tabName);
+  if (te) te.classList.add('active');
+  const btn = $('tabBtn' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+  if (btn) btn.classList.add('active');
+  if (tabName === 'profile') updateProfileUI();
+  if (tabName === 'mission') renderMissions();
+  if (tabName === 'history') renderHistory();
+  if (tabName === 'bonus'){ updateDailyBadge(); }
+  if (tabName === 'gifts'){ renderGiftCatalog(); }
+}
+
+function refreshGame(){
+  playSound('click');
+  updateOnlineStatus();
+  updateUI();
+  updateProfileUI();
+  $('message').textContent = '🔄 Refreshed!';
+}
+
+function toggleDayMode(){
+  document.body.classList.remove('night-mode');
+  document.body.classList.add('day-mode');
+  $('dayModeToggle').classList.add('active');
+  $('nightModeToggle').classList.remove('active');
+  playSound('click');
+}
+function toggleNightMode(){
+  document.body.classList.remove('day-mode');
+  document.body.classList.add('night-mode');
+  $('nightModeToggle').classList.add('active');
+  $('dayModeToggle').classList.remove('active');
+  playSound('click');
+}
+function toggleSound(){
+  isSoundOn = !isSoundOn;
+  $('soundToggle').classList.toggle('active', isSoundOn);
+  playSound('click');
+  $('message').textContent = isSoundOn ? '🔊 ON' : '🔇 OFF';
+}
+function toggleVibrate(){
+  isVibrateOn = !isVibrateOn;
+  $('vibrateToggle').classList.toggle('active', isVibrateOn);
+  playSound('click');
+  vibrate(30);
+}
+
+function updateOnlineStatus(){
+  const on = navigator.onLine;
+  const dot = $('onlineDot');
+  if (dot){
+    if (on){ dot.classList.remove('off'); $('onlineText').textContent = 'Online'; if ($('settingOnlineStatus')){ $('settingOnlineStatus').textContent = 'Online'; $('settingOnlineStatus').style.color = '#0f0'; } }
+    else { dot.classList.add('off'); $('onlineText').textContent = 'Offline'; if ($('settingOnlineStatus')){ $('settingOnlineStatus').textContent = 'Offline'; $('settingOnlineStatus').style.color = 'var(--red)'; } }
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+function renderHistory(){
+  const list = $('historyList'); if (!list) return;
+  list.innerHTML = '';
+  if (exchangeHistory.length === 0){
+    list.innerHTML = '<p style="text-align:center;color:#888;padding:20px;">📜 မှတ်တမ်း မရှိ</p>';
+    return;
+  }
+  exchangeHistory.forEach(e => {
+    const d = document.createElement('div');
+    d.className = 'payment-rec';
+    const st = e.status === 'pending' ? '⏳ Pending' : e.status === 'approved' ? '✅ Approved' : '❌ ' + e.status;
+    const dateStr = e.ts ? new Date(e.ts).toLocaleString('en-GB') : '';
+    d.innerHTML = `<div style="display:flex;justify-content:space-between;"><span style="color:var(--red);font-weight:bold;">🎁 ${escHtml(e.giftName || 'Gift')}</span><span style="color:var(--gold);font-weight:bold;">-${fmt(e.price || 0)} WCC</span></div><div style="display:flex;justify-content:space-between;margin-top:3px;font-size:10px;color:#888;"><span>${escHtml(e.giftEmoji || '🎁')} ${escHtml(e.giftName || '')}</span><span>${dateStr}</span></div><div style="margin-top:3px;font-size:10px;color:#888;">${st}</div>`;
+    list.appendChild(d);
+  });
+}
+
+function toggleChat(){
+  currentChatOpen = !currentChatOpen;
+  $('chatPanel').classList.toggle('show', currentChatOpen);
+  if (currentChatOpen){
+    if ($('chatBadge')) $('chatBadge').style.display = 'none';
+    initChatWidget();
+  }
+}
+
+function initChatWidget(){
+  if (!firebaseReady || !currentUid) return;
+  if (chatListener) chatListener.off();
+  chatListener = db.ref('slot_chats/' + currentUid).limitToLast(100).on('value', snap => {
+    const data = snap.val() || {};
+    const arr = Object.values(data).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+    const msgs = $('chatMessages'); if (!msgs) return;
+    msgs.innerHTML = '';
+    arr.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'chat-p-msg ' + (m.from === 'user' ? 'me' : 'them');
+      const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString() : '';
+      div.innerHTML = `${escHtml(m.text||'')}<div class="msg-time">${time}</div>`;
+      msgs.appendChild(div);
+    });
+    msgs.scrollTop = msgs.scrollHeight;
+  });
+}
+
+function sendChat(){
+  if (!firebaseReady || !currentUid) return;
+  const input = $('chatInput');
+  const txt = input.value.trim();
+  if (!txt) return;
+  db.ref('slot_chats/' + currentUid).push({
+    from: 'user', text: txt, timestamp: Date.now()
+  }).then(() => { input.value = ''; }).catch(e => showToast('❌ ' + e.message, true));
+}
+
+function toggleNotifPanel(){
+  notifPanelOpen = !notifPanelOpen;
+  $('notifPanel').classList.toggle('show', notifPanelOpen);
+  if (notifPanelOpen){
+    if (firebaseReady && currentUid){
+      const updates = {};
+      Object.keys(myNotifs).forEach(k => { updates[k + '/read'] = true; });
+      if (Object.keys(updates).length > 0){
+        db.ref('users/' + currentUid + '/slot_notifications').update(updates).catch(()=>{});
+      }
+    }
+    const b = $('notifBadge'); if (b) b.style.display = 'none'; // ချက်ချင်းပျောက်မယ်
+  }
+  playSound('click');
+}
+
+function renderUserNotifs(){
+  const list = $('notifList'); if (!list) return;
+  list.innerHTML = '';
+  const keys = Object.keys(myNotifs).sort((a,b)=>(myNotifs[b].timestamp||0)-(myNotifs[a].timestamp||0));
+  let unread = 0;
+  keys.forEach(k => { if (!myNotifs[k].read) unread++; });
+  const badge = $('notifBadge');
+  if (badge){ badge.textContent = unread; badge.style.display = unread > 0 ? 'inline-block' : 'none'; }
+  if (keys.length === 0){
+    list.innerHTML = '<p style="text-align:center;color:#888;padding:20px;font-size:12px;">🔔 Notification မရှိ</p>';
+    return;
+  }
+  keys.slice(0, 30).forEach(id => {
+    const n = myNotifs[id];
+    const time = n.timestamp ? new Date(n.timestamp).toLocaleString() : '';
+    const div = document.createElement('div');
+    div.className = 'notif-item-user' + (n.read ? '' : ' unread');
+    div.innerHTML = `<div class="ni-title">${escHtml(n.title||'')}</div><div class="ni-msg">${escHtml(n.msg||'')}</div><div class="ni-time">${time}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function pushUserNotif(title, msg){
+  if (!firebaseReady || !currentUid) return;
+  db.ref('users/' + currentUid + '/slot_notifications').push({
+    title, msg, timestamp: Date.now(), read: false
+  }).catch(()=>{});
+}
+
+function startPresence(){
+  if (!firebaseReady || !currentUid) return;
+  db.ref('users/' + currentUid).update({ online: true, lastSeen: Date.now() }).catch(()=>{});
+  setInterval(() => {
+    if (firebaseReady && currentUid){
+      db.ref('users/' + currentUid).update({ online: true, lastSeen: Date.now() }).catch(()=>{});
+    }
+  }, 30000);
+}
+
+function applyLangUI(){
+  const lbl = $('langLabel');
+  if (lbl) lbl.textContent = currentLang === 'mm' ? '🇲🇲 MM' : '🇬🇧 EN';
+  const mm = $('setLangMM'), en = $('setLangEN');
+  if (mm){ mm.style.background = currentLang === 'mm' ? 'var(--gold)' : 'var(--panel)'; mm.style.color = currentLang === 'mm' ? '#1a0b2e' : 'var(--gold)'; }
+  if (en){ en.style.background = currentLang === 'en' ? 'var(--gold)' : 'var(--panel)'; en.style.color = currentLang === 'en' ? '#1a0b2e' : 'var(--gold)'; }
+  try { localStorage.setItem('slot_lang', currentLang); } catch(e){}
+}
+function toggleLang(){ setLang(currentLang === 'mm' ? 'en' : 'mm'); }
+function setLang(l){ currentLang = l; applyLangUI(); playSound('click'); }
+
+window.addEventListener('load', () => {
+  try {
+    const sl = localStorage.getItem('slot_lang');
+    if (sl === 'mm' || sl === 'en') currentLang = sl;
+  } catch(e){}
+  applyLangUI();
+
+  try {
+    const vp = localStorage.getItem('slot_vibrate');
+    if (vp === '0') isVibrateOn = false;
+  } catch(e){}
+  if ($('vibrateToggle')) $('vibrateToggle').classList.toggle('active', isVibrateOn);
+
+  if (!initFirebase()){
+    setTimeout(() => showToast('⚠️ Firebase မချိတ်ဆက်ရ — offline mode', true), 500);
+  }
+
+  updateOnlineStatus();
+  startGameFromWaveChat();
+
+  const cbi = $('customBetInput');
+  if (cbi) cbi.addEventListener('keypress', e => { if (e.key === 'Enter') setCustomBet(); });
+});
+
+document.addEventListener('gesturestart', e => e.preventDefault());
+</script>
+</body>
+</html>

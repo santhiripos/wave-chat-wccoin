@@ -4980,19 +4980,40 @@ console.log('🔧 Debug: WaveChatDebug.state()');
 console.log('✅ WaveChat Ultra v12.0.0 — PART 2C loaded (ALL SCRIPTS)');
 </script>
 <script>
-// Slot ဂိမ်းကို နှိပ်လိုက်တဲ့အခါ အကောင့်အချက်အလက်တွေ ပါသွားအောင် လုပ်ခြင်း
+<script>
+// Slot Game ကို WaveChat အတွင်းမှာပဲ (Iframe နဲ့) ဖွင့်ပြီး Coin ကို Sync လုပ်မယ့် ကုဒ်
 document.addEventListener('click', function(e) {
   const gameCard = e.target.closest('.game-card');
   if (gameCard) {
     const title = gameCard.querySelector('.game-card-title');
+    // Slot ဂိမ်း ဟုတ်မဟုတ် စစ်ဆေးခြင်း
     if (title && title.textContent.includes('Slot')) {
       e.preventDefault();
       e.stopPropagation();
       
       if (typeof currentUser === 'undefined' || !currentUser) {
-        alert('အကောင့်ဝင်ရောက်ထားခြင်း မရှိပါ။ WaveChat မှာ အရင်ဝင်ပါ။');
+        alert('ကျေးဇူးပြုပြီး အရင် WaveChat ကို ဝင်ရောက်ပါ');
         return;
       }
+
+      // Slot Game ရဲ့ Link
+      const url = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
+      const sep = url.includes('?') ? '&' : '?';
+      
+      // UID, Name နဲ့ Coin ပမာဏကို Link မှာ ထည့်ပို့ခြင်း
+      const finalUrl = url + sep + 'uid=' + currentUser.uid + '&name=' + encodeURIComponent(currentUser.name || 'Player');
+
+      // WaveChat အတွင်းမှာ Iframe နဲ့ ဖွင့်ဖို့ Function ကို ခေါ်ခြင်း
+      if (typeof openGameInIframe === 'function') {
+        openGameInIframe(finalUrl, 'WaveChat Slot', 'slot_game');
+      } else {
+        // တကယ်လို့ Function မရှိသေးရင် အရင် Tab အတိုင်း ဖွင့်မယ်
+        window.open(finalUrl, '_blank');
+      }
+    }
+  }
+}, true);
+</script>
       
       const url = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
       const sep = url.includes('?') ? '&' : '?';

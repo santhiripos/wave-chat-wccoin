@@ -4995,7 +4995,7 @@ document.addEventListener('click', function(e) {
       const sep = url.includes('?') ? '&' : '?';
       const finalUrl = url + sep + 'uid=' + currentUser.uid + '&name=' + encodeURIComponent(currentUser.name) + '&coins=' + (typeof coinState !== 'undefined' ? coinState.coins : 0);
       
-      window.open(finalUrl, '_blank');
+      window.location.href = finalUrl;
     }
   }
 }, true);

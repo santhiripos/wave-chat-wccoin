@@ -5391,5 +5391,262 @@ function openWalletModal() {
   document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 </script>
+<!-- ========================================================= -->
+<!--  WALLET INTEGRATION (WaveChat + TriPay) -->
+<!-- ========================================================= -->
+<style>
+  /* Wallet Popup CSS */
+  .wallet-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:999999; display:none; align-items:center; justify-content:center; padding:20px; font-family:'Manrope','Padauk',sans-serif; }
+  .wallet-overlay.show { display:flex; }
+  .wallet-box { background:linear-gradient(165deg,#141722,#0B0D14); border:1px solid rgba(255,255,255,0.1); border-radius:24px; width:100%; max-width:400px; max-height:90vh; overflow-y:auto; padding:24px; color:#fff; position:relative; box-shadow:0 30px 80px rgba(0,0,0,0.8); animation:walletPopIn 0.3s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes walletPopIn { from { transform:scale(0.9); opacity:0; } to { transform:scale(1); opacity:1; } }
+  
+  .wallet-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+  .wallet-logo { width:44px; height:44px; border-radius:14px; background:linear-gradient(135deg,#FFC20E,#0066FF,#8A2BE2); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px; color:#fff; }
+  .wallet-title h2 { font-size:18px; font-weight:800; margin:0; color:#fff; }
+  .wallet-title p { font-size:10px; color:#7C8398; margin:0; text-transform:uppercase; letter-spacing:0.5px; }
+  .wallet-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .wallet-close:hover { background:rgba(255,255,255,0.2); }
+
+  .wallet-balance { background:linear-gradient(135deg,#1B1F2E,#12141C); border-radius:20px; padding:20px; border:1px solid rgba(255,255,255,0.07); margin-bottom:20px; position:relative; overflow:hidden; }
+  .wallet-balance::before { content:''; position:absolute; top:-50%; right:-20%; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(255,194,14,0.15), transparent); }
+  .wallet-bal-label { font-size:12px; color:#7C8398; font-weight:600; margin-bottom:6px; position:relative; z-index:2; }
+  .wallet-bal-amount { font-size:32px; font-weight:900; letter-spacing:-1px; position:relative; z-index:2; }
+  .wallet-bal-amount small { font-size:16px; color:#7C8398; }
+  .wallet-bal-foot { margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; font-size:12px; color:#7C8398; font-weight:600; position:relative; z-index:2; }
+
+  .wallet-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .wallet-btn { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:0.2s; }
+  .wallet-btn:hover { background:rgba(255,255,255,0.08); }
+  .wallet-btn .ico { font-size:24px; }
+  .wallet-btn span { font-size:12px; font-weight:700; }
+
+  /* Input Forms for Transfer */
+  .wallet-form-group { margin-bottom:14px; }
+  .wallet-form-group label { display:block; font-size:11px; font-weight:700; color:#7C8398; margin-bottom:6px; text-transform:uppercase; }
+  .wallet-form-group input, .wallet-form-group select { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; font-size:14px; font-family:inherit; outline:none; }
+  .wallet-form-group input:focus { border-color:#FFC20E; }
+  .wallet-submit { width:100%; padding:14px; border:none; border-radius:12px; font-size:14px; font-weight:800; cursor:pointer; color:#000; background:linear-gradient(135deg,#FFC20E,#FF8C00); }
+</style>
+
+<div id="triPayWalletModal" class="wallet-overlay">
+  <div class="wallet-box">
+    <!-- Close Button -->
+    <button class="wallet-close" onclick="closeTriPayWallet()"></button>
+
+    <!-- Header -->
+    <div class="wallet-header">
+      <div class="wallet-logo">3P</div>
+      <div class="wallet-title">
+        <h2>TriPay Wallet</h2>
+        <p>Wave  KBZ  WCCoin</p>
+      </div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="wallet-balance">
+      <div class="wallet-bal-label">Total Balance</div>
+      <div class="wallet-bal-amount" id="wp_balance">1,250,000 <small>Ks</small></div>
+      <div class="wallet-bal-foot">
+        <div id="wp_acc">ACC  3 Wallets Synced</div>
+        <div id="wp_cur">MMK / WC</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="wallet-actions">
+      <div class="wallet-btn" style="color:#FFC20E" onclick="wp_showTransfer()">
+        <div class="ico"></div><span>လွှဲသည် (Send)</span>
+      </div>
+      <div class="wallet-btn" style="color:#c084fc" onclick="wp_showReceive()">
+        <div class="ico"></div><span>လက်ခံသည် (Receive)</span>
+      </div>
+    </div>
+
+    <!-- Dynamic Content Area (Forms / Wallets List) -->
+    <div id="wp_contentArea">
+      <!-- Default: Wallets List -->
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
+        <div style="width:40px; height:40px; border-radius:10px; background:rgba(255,194,14,0.15); color:#FFC20E; display:flex; align-items:center; justify-content:center; font-weight:900;">W</div>
+        <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveMoney</div><div style="font-size:11px; color:#7C8398;">09 7xx xxx 890</div></div>
+        <div style="font-weight:800; color:#FFC20E;">620,000 Ks</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
+        <div style="width:40px; height:40px; border-radius:10px; background:rgba(0,102,255,0.15); color:#4d94ff; display:flex; align-items:center; justify-content:center; font-weight:900;">K</div>
+        <div style="flex:1;"><div style="font-weight:700; font-size:14px;">KBZPay</div><div style="font-size:11px; color:#7C8398;">09 9xx xxx 123</div></div>
+        <div style="font-weight:800; color:#4d94ff;">575,000 Ks</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; display:flex; align-items:center; gap:14px;">
+        <div style="width:40px; height:40px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #b066ff, #7a1bd6); display:flex; align-items:center; justify-content:center; font-weight:900; color:#fff;">W</div>
+        <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveCoin (WC)</div><div style="font-size:11px; color:#7C8398;">0x7A8c...5C9d</div></div>
+        <div style="font-weight:800; color:#c084fc;">1,420 WC</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =========================================================
+//  TRIPAY WALLET LOGIC & BINDING
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    // ၁။ Wallet ခလုတ်ကို Header မှာ ထည့်မယ် (Coin ခလုတ်ရဲ့ ဘေးမှာ)
+    const headerActions = document.querySelector('.header-actions');
+    if (headerActions && !document.getElementById('triPayBtn')) {
+      const walletBtn = document.createElement('button');
+      walletBtn.type = 'button';
+      walletBtn.id = 'triPayBtn';
+      walletBtn.className = 'hdr-btn'; // WaveChat ရဲ့ မူရင်း Class ကို သုံးမယ်
+      walletBtn.style.cssText = 'background:linear-gradient(135deg,#FFB800,#FF8C00); color:#fff; font-size:16px;';
+      walletBtn.innerHTML = '';
+      walletBtn.title = 'TriPay Wallet';
+      
+      walletBtn.onclick = () => {
+        if (typeof haptic === 'function') haptic(20);
+        if (typeof SoundFX !== 'undefined') SoundFX.click();
+        
+        // Modal ကို ဖွင့်မယ်
+        document.getElementById('triPayWalletModal').classList.add('show');
+        wp_resetView(); // ပွင့်တိုင်း Main Page ပြမယ်
+      };
+      
+      // Coin ခလုတ်ရှိတဲ့ နေရာမှာ ထည့်မယ် (မရှိရင် အစမှာထည့်မယ်)
+      const coinChip = document.getElementById('coinChip');
+      if (coinChip) {
+        headerActions.insertBefore(walletBtn, coinChip.nextSibling);
+      } else {
+        headerActions.insertBefore(walletBtn, headerActions.firstChild);
+      }
+    }
+  }, 1500); // App စပွင့်ပြီး ၁.၅ စက္ကန့်နေမှ ခလုတ်ထည့်မယ်
+});
+
+// Modal ပိတ်တဲ့ Function
+function closeTriPayWallet() {
+  document.getElementById('triPayWalletModal').classList.remove('show');
+}
+
+// နောက်ကျောကို နှိပ်ရင် ပိတ်မယ်
+document.getElementById('triPayWalletModal').addEventListener('click', function(e) {
+  if (e.target === this) closeTriPayWallet();
+});
+
+// Content Area ကို မူလအတိုင်း ပြန်ထားမယ်
+function wp_resetView() {
+  document.getElementById('wp_balance').innerHTML = '1,250,000 <small>Ks</small>';
+  document.getElementById('wp_acc').innerText = 'ACC  3 Wallets Synced';
+  document.getElementById('wp_contentArea').innerHTML = `
+    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
+      <div style="width:40px; height:40px; border-radius:10px; background:rgba(255,194,14,0.15); color:#FFC20E; display:flex; align-items:center; justify-content:center; font-weight:900;">W</div>
+      <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveMoney</div><div style="font-size:11px; color:#7C8398;">09 7xx xxx 890</div></div>
+      <div style="font-weight:800; color:#FFC20E;">620,000 Ks</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
+      <div style="width:40px; height:40px; border-radius:10px; background:rgba(0,102,255,0.15); color:#4d94ff; display:flex; align-items:center; justify-content:center; font-weight:900;">K</div>
+      <div style="flex:1;"><div style="font-weight:700; font-size:14px;">KBZPay</div><div style="font-size:11px; color:#7C8398;">09 9xx xxx 123</div></div>
+      <div style="font-weight:800; color:#4d94ff;">575,000 Ks</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; display:flex; align-items:center; gap:14px;">
+      <div style="width:40px; height:40px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #b066ff, #7a1bd6); display:flex; align-items:center; justify-content:center; font-weight:900; color:#fff;">W</div>
+      <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveCoin (WC)</div><div style="font-size:11px; color:#7C8398;">0x7A8c...5C9d</div></div>
+      <div style="font-weight:800; color:#c084fc;">1,420 WC</div>
+    </div>
+  `;
+}
+
+// ငွေလွှဲ Form ပြမယ်
+function wp_showTransfer() {
+  document.getElementById('wp_contentArea').innerHTML = `
+    <div class="wallet-form-group">
+      <label>ပို့မည့် Wallet</label>
+      <select id="wp_fromWallet" onchange="wp_updateForm()">
+        <option value="wave"> WaveMoney (Fiat)</option>
+        <option value="kpay"> KBZPay (Fiat)</option>
+        <option value="wc"> WaveCoin (Crypto)</option>
+      </select>
+    </div>
+    <div class="wallet-form-group">
+      <label id="wp_toLabel">လက်ခံမည့်သူ ဖုန်းနံပါတ်</label>
+      <input type="text" id="wp_toAccount" placeholder="09xxxxxxxxx">
+    </div>
+    <div class="wallet-form-group">
+      <label>ပမာဏ</label>
+      <input type="number" id="wp_amount" placeholder="0">
+    </div>
+    <button class="wallet-submit" onclick="wp_doTransfer()">လွှဲမည် </button>
+    <button onclick="wp_resetView()" style="width:100%; background:transparent; border:none; color:#7C8398; margin-top:12px; font-size:13px; cursor:pointer;"> နောက်သို့</button>
+  `;
+  wp_updateForm();
+}
+
+// Form ပြောင်းလဲမှုကို စစ်မယ်
+function wp_updateForm() {
+  const w = document.getElementById('wp_fromWallet').value;
+  const label = document.getElementById('wp_toLabel');
+  const input = document.getElementById('wp_toAccount');
+  if (w === 'wc') {
+    label.innerText = 'Crypto Address (0x...)';
+    input.placeholder = '0x...';
+  } else {
+    label.innerText = 'ဖုန်းနံပါတ်';
+    input.placeholder = '09xxxxxxxxx';
+  }
+}
+
+// ငွေလွှဲခြင်း (Simulation)
+function wp_doTransfer() {
+  const to = document.getElementById('wp_toAccount').value;
+  const amt = document.getElementById('wp_amount').value;
+  if(!to || !amt) {
+    if (typeof toast === 'function') toast(' အချက်အလက်များ ဖြည့်ပါ', 'warn');
+    else alert('အချက်အလက်များ ဖြည့်ပါ');
+    return;
+  }
+  
+  if (typeof SoundFX !== 'undefined') SoundFX.success();
+  if (typeof toast === 'function') toast(' ငွေလွှဲပြီးပါပြီ', 'success');
+  
+  setTimeout(() => {
+    wp_resetView();
+  }, 1000);
+}
+
+// ငွေလက်ခံ Form ပြမယ်
+function wp_showReceive() {
+  document.getElementById('wp_contentArea').innerHTML = `
+    <div class="wallet-form-group">
+      <label>လက်ခံမည့် Wallet</label>
+      <select id="wp_recvWallet" onchange="wp_updateRecvForm()">
+        <option value="wave"> WaveMoney (Fiat)</option>
+        <option value="kpay"> KBZPay (Fiat)</option>
+        <option value="wc"> WaveCoin (Crypto)</option>
+      </select>
+    </div>
+    <div class="wallet-form-group">
+      <label>သင့် Account / Address</label>
+      <input type="text" id="wp_myAccount" readonly style="background:rgba(255,255,255,0.02); color:#7C8398;">
+    </div>
+    <button class="wallet-submit" style="background:linear-gradient(135deg,#a855f7,#7a1bd6); color:#fff;" onclick="wp_doReceive()">တောင်းခံမည် </button>
+    <button onclick="wp_resetView()" style="width:100%; background:transparent; border:none; color:#7C8398; margin-top:12px; font-size:13px; cursor:pointer;"> နောက်သို့</button>
+  `;
+  wp_updateRecvForm();
+}
+
+function wp_updateRecvForm() {
+  const w = document.getElementById('wp_recvWallet').value;
+  const acc = document.getElementById('wp_myAccount');
+  if (w === 'wc') acc.value = '0x7A8c9E4f2B1d5C3a8F6b0E9d2A4c7B1f8E2a5C9d';
+  else if (w === 'wave') acc.value = '09 7xx xxx 890';
+  else acc.value = '09 9xx xxx 123';
+}
+
+function wp_doReceive() {
+  if (typeof SoundFX !== 'undefined') SoundFX.success();
+  if (typeof toast === 'function') toast(' တောင်းခံပြီးပါပြီ', 'success');
+  setTimeout(() => wp_resetView(), 1000);
+}
+</script>
+<!-- ========================================================= -->
 </body>
 </html>

@@ -766,7 +766,6 @@ function startGameFromWaveChat(){
 
   db.ref('users/' + currentUid).once('value').then(snap => {
     const d = snap.val() || {};
-    // FIXED: Use correct field name 'coin_balance'
     if (d.coin_balance !== undefined) credit = d.coin_balance;
     if (d.name) currentName = d.name;
     if (d.casino_data){
@@ -815,7 +814,6 @@ function finishStart(){
 function listenToCredit(){
   if (!firebaseReady || !currentUid) return;
   if (creditListener) creditListener.off();
-  // FIXED: Use correct field name 'coin_balance'
   creditListener = db.ref('users/' + currentUid + '/coin_balance');
   creditListener.on('value', snap => {
     const v = snap.val();
@@ -918,15 +916,12 @@ function listenGiftCatalog(){
 
 function renderGiftCatalog(){
   const grid = $('giftCatalogGrid'); if (!grid) return;
-
   let gifts = Object.entries(giftCatalog || {}).map(([id, g]) => Object.assign({id}, g));
   gifts.sort((a,b) => (a.order || 999) - (b.order || 999));
-
   const MIN_SLOTS = 8;
   while (gifts.length < MIN_SLOTS) {
     gifts.push({ id: '_empty_' + gifts.length, isEmpty: true });
   }
-
   grid.innerHTML = gifts.map(g => {
     if (g.isEmpty) {
       return '<div class="gift-card empty">' +
@@ -935,15 +930,12 @@ function renderGiftCatalog(){
         '<div class="gift-price" style="background:#333;color:#666;">—</div>' +
         '</div>';
     }
-
     const safeEmoji = escHtml(g.emoji || '🎁');
     const safeName = escHtml(g.name || 'Gift');
     const safeImage = escHtml(g.image || '');
-
     const img = g.image
       ? '<div class="gift-image"><img src="' + safeImage + '" alt="' + safeName + '" onerror="this.style.display=\'none\';this.parentNode.innerHTML=\'<div class=&quot;gift-emoji&quot;>' + safeEmoji + '</div>\'"></div>'
       : '<div class="gift-image"><div class="gift-emoji">' + safeEmoji + '</div></div>';
-
     return '<div class="gift-card" onclick="openGiftConfirm(\'' + g.id + '\')" data-gift-id="' + g.id + '">' +
       img +
       '<div class="gift-name">' + safeName + '</div>' +
@@ -956,11 +948,9 @@ function openGiftConfirm(giftId){
   playSound('click');
   const gift = giftCatalog[giftId];
   if (!gift) return showToast('Gift မတွေ့', true);
-
   selectedGiftId = giftId;
   const safeEmoji = escHtml(gift.emoji || '🎁');
   const safeImage = escHtml(gift.image || '');
-
   safeText($('giftConfirmTitle'), '🎁 ' + (gift.name || 'Gift'));
   const imgEl = $('giftConfirmImage');
   if (imgEl){
@@ -985,7 +975,6 @@ function confirmGiftExchange(){
   if (!selectedGiftId) return;
   const gift = giftCatalog[selectedGiftId];
   if (!gift) return showToast('Gift မတွေ့', true);
-
   const price = parseInt(gift.price, 10) || 0;
   if (price > credit){
     showToast('⚠️ WCCoin မလုံလောက်', true);
@@ -996,29 +985,18 @@ function confirmGiftExchange(){
     showToast('⚠️ Firebase မချိတ်ဆက်ရ', true);
     return;
   }
-
   showLoading('Exchanging...');
   credit -= price;
   updateUI();
   updateProfileUI();
-
   const exchangeId = 'ex_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
   const exchangeData = {
-    id: exchangeId,
-    giftId: selectedGiftId,
-    giftName: gift.name || 'Gift',
-    giftEmoji: gift.emoji || '🎁',
-    giftImage: gift.image || '',
-    price: price,
-    uid: currentUid,
-    name: currentName,
-    ts: Date.now(),
-    status: 'pending',
-    type: 'gift_exchange'
+    id: exchangeId, giftId: selectedGiftId, giftName: gift.name || 'Gift',
+    giftEmoji: gift.emoji || '🎁', giftImage: gift.image || '',
+    price: price, uid: currentUid, name: currentName,
+    ts: Date.now(), status: 'pending', type: 'gift_exchange'
   };
-
   Promise.all([
-    // FIXED: Use correct field name 'coin_balance'
     db.ref('users/' + currentUid + '/coin_balance').set(credit),
     db.ref('slot_gift_exchanges/' + exchangeId).set(exchangeData),
     db.ref('users/' + currentUid + '/slot_exchanges/' + exchangeId).set(exchangeData)
@@ -1057,19 +1035,26 @@ function generateReels(){
 
 function spin(){
   if (isSpinning) return;
-
   if (!isFreeSpin && currentBet > credit){
     showToast('⚠️ WCCoin မလုံလောက်', true);
     stopAuto();
     return;
   }
-
   if (!isFreeSpin){
     credit -= currentBet;
     updateUI();
     syncCreditToDB();
+    // ✅ Bet ဖြတ်ပြီးတာကို WaveChat ဆီ အသိပေး
+    if (window.parent && window.parent !== window) {
+      try {
+        window.parent.postMessage({
+          type: 'wavechat_sync_credit',
+          balance: credit,
+          uid: currentUid
+        }, '*');
+      } catch(e){}
+    }
   }
-
   $('winDisplay').textContent = '0';
   currentWinAmount = 0;
   isSpinning = true;
@@ -1080,14 +1065,12 @@ function spin(){
   vibrate(30);
   totalSpins++;
   updateMissionProgress('spins');
-
   $('effectOverlay').classList.remove('show');
   $('freespinOverlay').classList.remove('show');
   document.querySelectorAll('.symbol').forEach(el => {
     el.classList.remove('win'); el.classList.remove('scatter');
   });
   $('paylineSvg').innerHTML = '';
-
   const cols = [];
   for (let c = 0; c < 5; c++) {
     const col = [];
@@ -1098,11 +1081,9 @@ function spin(){
     }
     cols.push(col);
   }
-
   let results = [];
   let bombCount = 0;
   const winChance = Math.random() * 100 < gameSettings.winRate;
-
   for (let i = 0; i < 5; i++){
     const colRes = [];
     for (let j = 0; j < 5; j++){
@@ -1119,7 +1100,6 @@ function spin(){
     }
     results.push(colRes);
   }
-
   if (winChance && !isFreeSpin){
     const low = ['cherry','lemon','orange','plum','watermelon'];
     const rs = low[Math.floor(Math.random()*low.length)];
@@ -1128,10 +1108,8 @@ function spin(){
     results[1][row] = rs;
     results[2][row] = rs;
   }
-
   const spinDur = isTurbo ? 400 : 1200;
   const stopDelay = isTurbo ? 80 : 200;
-
   for (let c = 0; c < 5; c++) {
     setTimeout(() => {
       for (let r = 0; r < 5; r++) {
@@ -1142,7 +1120,6 @@ function spin(){
         if (key === SCATTER_SYMBOL){ s.innerHTML = SVG_ICONS['bomb']; s.classList.add('bomb'); }
         else { s.innerHTML = SVG_ICONS[key] || SVG_ICONS['cherry']; s.classList.remove('bomb'); }
       }
-      
       if (c === 4) {
         playSound('reelStop');
         vibrate(20);
@@ -1152,13 +1129,11 @@ function spin(){
           $('spinBtn').disabled = false;
           $('autoBtn').disabled = false;
           syncCreditToDB();
-
           if (isFreeSpin){
             freeSpins--;
             if (freeSpins > 0) setTimeout(()=>spin(), isTurbo ? 400 : 1200);
             else { isFreeSpin = false; $('freespinOverlay').classList.remove('show'); }
           }
-
           if (isAuto && autoSpinCount > 0){
             autoSpinCount--;
             $('autoBtn').innerHTML = `🔄<br>(${autoSpinCount})`;
@@ -1203,7 +1178,6 @@ function checkScatter(results){
 
 function checkWin(results){
   let totalWin = 0, winPositions = [], winLines = [], hasJackpot = false;
-
   const scatter = checkScatter(results);
   let bombFreeSpinAwarded = 0;
   if (scatter.count >= 3){
@@ -1222,7 +1196,6 @@ function checkWin(results){
       }
     });
   }
-
   const allLines = [];
   for (let row = 0; row < 5; row++){
     allLines.push({ positions: Array.from({length:5},(_,c)=>({col:c, row})), direction:'➡️' });
@@ -1232,7 +1205,6 @@ function checkWin(results){
   }
   allLines.push({ positions: [{col:0,row:0},{col:1,row:1},{col:2,row:2},{col:3,row:3},{col:4,row:4}], direction:'↘️' });
   allLines.push({ positions: [{col:0,row:4},{col:1,row:3},{col:2,row:2},{col:3,row:1},{col:4,row:0}], direction:'↗️' });
-
   allLines.forEach(line => {
     const syms = line.positions.map(p => results[p.col][p.row]);
     const wr = checkLine(syms);
@@ -1248,7 +1220,6 @@ function checkWin(results){
       mp.forEach(p => winPositions.push(p));
     }
   });
-
   if (totalWin > 0){
     credit += totalWin;
     currentWinAmount = totalWin;
@@ -1258,22 +1229,18 @@ function checkWin(results){
     playSound('coin');
     vibrate([60, 30, 60]);
     updateMissionProgress('wins');
-
     let wt = '', col = '#00ffcc';
     if (hasJackpot){ wt = '🎰 JACKPOT!'; col = '#ff00ff'; }
     else if (totalWin >= currentBet * 100){ wt = '💎 SUPER!'; col = '#ffcc00'; }
     else if (totalWin >= currentBet * 30){ wt = '🌟 MEGA!'; col = '#00ffcc'; }
     else { wt = '🎉 WIN!'; col = '#00ffcc'; }
-
     const eff = $('effectOverlay');
     eff.textContent = wt;
     eff.style.color = col;
     eff.classList.add('show');
     setTimeout(() => eff.classList.remove('show'), 2500);
-
     const linesHtml = winLines.map(l => `<span class="win-line" style="border-color:${l.color}; color:${l.color};">${l.direction} ${l.matchCount}=${l.winAmount.toLocaleString()} WCC</span>`).join('');
     $('message').innerHTML = `<div style="width:100%; text-align:center; margin-bottom:4px;">${wt} = <span style="color:#ffcc00;">${totalWin.toLocaleString()} WCC</span></div><div style="width:100%; text-align:center;">${linesHtml}</div>`;
-
     winPositions.forEach(p => {
       const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
       if (td) {
@@ -1282,12 +1249,10 @@ function checkWin(results){
       }
     });
     drawPaylines(winLines);
-
     if (totalWin >= 5000){
       pushUserNotif('🏆 Big Win', '+' + fmt(totalWin) + ' WCC');
     }
   }
-
   if (bombFreeSpinAwarded > 0){
     const eff = $('effectOverlay');
     eff.textContent = '💣 FREE SPIN!';
@@ -1308,6 +1273,18 @@ function checkWin(results){
     $('message').innerHTML = `😢 <span style="color:#ff4444;">LOSE!</span> ထပ်ကြိုးစားပါ`;
     playSound('lose');
     vibrate(80);
+  }
+
+  // ✅ WaveChat ဆီ credit အသစ်ကို sync လုပ်ပါ
+  if (window.parent && window.parent !== window) {
+    try {
+      window.parent.postMessage({
+        type: 'wavechat_sync_credit',
+        balance: credit,
+        win: totalWin,
+        uid: currentUid
+      }, '*');
+    } catch(e){}
   }
 }
 
@@ -1336,7 +1313,6 @@ function syncCreditToDB(){
   if (!firebaseReady || !currentUid) return;
   clearTimeout(_syncTimeout);
   _syncTimeout = setTimeout(() => {
-    // FIXED: Use correct field name 'coin_balance'
     db.ref('users/' + currentUid + '/coin_balance').set(credit).catch(e => console.warn('Sync:', e.message));
     db.ref('users/' + currentUid + '/casino_data').update({
       totalSpins, totalWins,
@@ -1420,9 +1396,7 @@ function renderDailyGrid(){
   const claimed = checkinState.claimed || [];
   const streak = checkinState.streak || 0;
   const todayClaimed = checkinState.lastCheckin === today;
-
   $('dailyStreak').textContent = '🔥 Streak: ' + streak + ' days';
-
   grid.innerHTML = '';
   DAILY_REWARDS.forEach((reward, i) => {
     const isClaimed = claimed.includes(i);
@@ -1711,7 +1685,7 @@ function toggleNotifPanel(){
         db.ref('users/' + currentUid + '/slot_notifications').update(updates).catch(()=>{});
       }
     }
-    const b = $('notifBadge'); if (b) b.style.display = 'none'; // ချက်ချင်းပျောက်မယ်
+    const b = $('notifBadge'); if (b) b.style.display = 'none';
   }
   playSound('click');
 }
@@ -1772,48 +1746,21 @@ window.addEventListener('load', () => {
     if (sl === 'mm' || sl === 'en') currentLang = sl;
   } catch(e){}
   applyLangUI();
-
   try {
     const vp = localStorage.getItem('slot_vibrate');
     if (vp === '0') isVibrateOn = false;
   } catch(e){}
   if ($('vibrateToggle')) $('vibrateToggle').classList.toggle('active', isVibrateOn);
-
   if (!initFirebase()){
     setTimeout(() => showToast('⚠️ Firebase မချိတ်ဆက်ရ — offline mode', true), 500);
   }
-
   updateOnlineStatus();
   startGameFromWaveChat();
-
   const cbi = $('customBetInput');
   if (cbi) cbi.addEventListener('keypress', e => { if (e.key === 'Enter') setCustomBet(); });
 });
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 </script>
-  <script>
-  // ======================================================
-// SLOT GAME CONNECTION (အလွယ်ဆုံးနည်းလမ်း)
-// ======================================================
-window.openGameWithUser = function(url) {
-  if (!currentUser) return alert('Login ဝင်ပါ');
-  const sep = url.includes('?') ? '&' : '?';
-  const finalUrl = url + sep + 'uid=' + currentUser.uid + '&name=' + encodeURIComponent(currentUser.name) + '&coins=' + (typeof coinState !== 'undefined' ? coinState.coins : 0);
-  window.open(finalUrl, '_blank');
-};
-
-document.addEventListener('click', function(e) {
-  const gameCard = e.target.closest('.game-card');
-  if (gameCard) {
-    const title = gameCard.querySelector('.game-card-title');
-    if (title && title.textContent.includes('Slot')) {
-      e.preventDefault();
-      e.stopPropagation();
-      const url = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
-      window.openGameWithUser(url);
-    }
-  }
-}, true);
 </body>
 </html>

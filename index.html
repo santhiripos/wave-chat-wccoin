@@ -4990,6 +4990,39 @@ window.WaveChatDebug = {
 };
 console.log('🔧 Debug: WaveChatDebug.state()');
 console.log('✅ WaveChat Ultra v12.0.0 — PART 2C loaded (ALL SCRIPTS)');
+  /* ==========================================
+    WALLET BUTTON (NEW TAB FIX)
+   ========================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const headerActions = document.querySelector('.header-actions');
+    if (!headerActions) return;
+    
+    const oldChip = document.getElementById('coinChip');
+    if (oldChip) oldChip.remove();
+
+    const walletBtn = document.createElement('button');
+    walletBtn.type = 'button';
+    walletBtn.id = 'walletNewTabBtn';
+    walletBtn.className = 'coin-chip';
+    walletBtn.style.cssText = 'background: linear-gradient(135deg, #00B4D8, #0077B6); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 6px; box-shadow: 0 2px 8px rgba(0,180,216,0.4);';
+    walletBtn.innerHTML = ' Wallet';
+    
+    walletBtn.onclick = () => {
+      if (typeof haptic === 'function') haptic(20);
+      if (typeof SoundFX !== 'undefined') SoundFX.click();
+      
+      const win = window.open('wallet.html', '_blank', 'noopener,noreferrer');
+      if (!win) {
+        if (typeof toast === 'function') toast(' Popup Blocked! Wallet ကို ဖွင့်ခွင့်ပြုပါ', 'warn');
+      } else {
+        win.opener = null;
+      }
+    };
+
+    headerActions.insertBefore(walletBtn, headerActions.firstChild);
+  }, 1000);
+});
 </script>
 </body>
 </html>

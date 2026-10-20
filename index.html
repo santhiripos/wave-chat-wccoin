@@ -5006,7 +5006,7 @@ document.addEventListener('DOMContentLoaded', () => {
     walletBtn.id = 'walletNewTabBtn';
     walletBtn.className = 'coin-chip';
     walletBtn.style.cssText = 'background: linear-gradient(135deg, #00B4D8, #0077B6); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 6px; box-shadow: 0 2px 8px rgba(0,180,216,0.4);';
-    walletBtn.innerHTML = ' Wallet';
+    walletBtn.innerHTML = ' 💳Wallet';
     
     walletBtn.onclick = () => {
       if (typeof haptic === 'function') haptic(20);
@@ -5023,6 +5023,307 @@ document.addEventListener('DOMContentLoaded', () => {
     headerActions.insertBefore(walletBtn, headerActions.firstChild);
   }, 1000);
 });
+</script>
+  <script>
+// =========================================================
+// 🚀 TRIPAY WALLET (NEW TAB INTEGRATION)
+// =========================================================
+
+// ၁။ Wallet ခလုတ် ထည့်ခြင်း
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const headerActions = document.querySelector('.header-actions');
+    if (!headerActions) return;
+    
+    // အရင်က Coin ခလုတ်ရှိရင် ဖျက်မယ်
+    const oldChip = document.getElementById('coinChip');
+    if (oldChip) oldChip.remove();
+
+    // Wallet ခလုတ်အသစ်
+    const walletBtn = document.createElement('button');
+    walletBtn.type = 'button';
+    walletBtn.id = 'walletNewTabBtn';
+    walletBtn.className = 'coin-chip';
+    walletBtn.style.cssText = 'background: linear-gradient(135deg, #FFB800, #FF8C00); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-right: 6px; box-shadow: 0 2px 8px rgba(255,184,0,0.4);';
+    walletBtn.innerHTML = '💳 Wallet';
+    
+    // နှိပ်ရင် New Tab ဖွင့်မယ်
+    walletBtn.onclick = () => {
+      if (typeof haptic === 'function') haptic(20);
+      if (typeof SoundFX !== 'undefined') SoundFX.click();
+      
+      // Blob နည်းလမ်းနဲ့ ဖွင့်ခြင်း (404 မတက်အောင်)
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(TRIPAY_WALLET_HTML);
+        win.document.close();
+      } else {
+        if (typeof toast === 'function') toast('⚠️ Popup Blocked! ဖွင့်ခွင့်ပြုပါ', 'warn');
+      }
+    };
+
+    headerActions.insertBefore(walletBtn, headerActions.firstChild);
+  }, 1000);
+});
+
+// ၂။ TriPay Wallet ရဲ့ HTML ကုဒ် (ဒီထဲမှာ အကုန်ပါပြီး)
+const TRIPAY_WALLET_HTML = `
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TriPay Ultra — Wave + KBZ + WC</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{
+    --wave:#FFC20E; --kpay:#0066FF; --wc:#8A2BE2; --wc-glow:rgba(138,43,226,0.25);
+    --bg:#0A0B10; --card:#141720; --card-hover:#1B1F2B; --border:rgba(255,255,255,0.07);
+    --txt:#F5F7FA; --muted:#7C8398; --green:#4ade80; --red:#f87171;
+  }
+  body { font-family:'Inter','Padauk',sans-serif; background:var(--bg); color:var(--txt); min-height:100vh; padding:20px; display:flex; justify-content:center; }
+  .wallet-container { width:100%; max-width:440px; background:linear-gradient(165deg,#141722,#0B0D14); border-radius:30px; border:1px solid rgba(255,255,255,0.08); padding:24px; box-shadow:0 30px 80px rgba(0,0,0,0.8); }
+  
+  /* Header */
+  .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .logo { width:44px; height:44px; border-radius:14px; background:linear-gradient(135deg,var(--wave),var(--kpay),var(--wc)); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px; color:#fff; }
+  .brand h1 { font-size:18px; font-weight:800; }
+  .brand p { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+  
+  /* Wallet Select */
+  .wallet-select { margin-bottom:20px; position:relative; }
+  .wallet-trigger { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:16px; padding:14px 16px; cursor:pointer; }
+  .wallet-menu { position:absolute; top:110%; left:0; right:0; background:#171A24; border:1px solid var(--border); border-radius:16px; padding:8px; display:none; z-index:50; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+  .wallet-menu.show { display:block; }
+  .wallet-option { display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; transition:0.2s; }
+  .wallet-option:hover { background:rgba(255,255,255,0.06); }
+  .wallet-option.active { background:rgba(255,194,14,0.1); }
+  
+  /* Badges */
+  .badge { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; }
+  .badge.w-all { background:linear-gradient(135deg,#ffc20e,#0066ff,#8a2be2); color:#fff; }
+  .badge.w-wave { background:rgba(255,194,14,0.15); color:var(--wave); }
+  .badge.w-kpay { background:rgba(0,102,255,0.15); color:#4d94ff; }
+  .badge.w-wc { background:radial-gradient(circle at 30% 30%, #b066ff, #7a1bd6); color:#fff; }
+  
+  /* Balance */
+  .balance-card { background:linear-gradient(135deg,#1B1F2E,#12141C); border-radius:24px; padding:24px; border:1px solid var(--border); margin-bottom:20px; position:relative; overflow:hidden; }
+  .balance-card::before { content:''; position:absolute; top:-50%; right:-20%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle, rgba(255,194,14,0.15), transparent); }
+  .bal-label { font-size:12px; color:var(--muted); font-weight:600; margin-bottom:8px; }
+  .bal-amount { font-size:36px; font-weight:900; letter-spacing:-1px; }
+  .bal-amount small { font-size:16px; color:var(--muted); }
+  .bal-foot { margin-top:16px; padding-top:16px; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-weight:600; }
+  
+  /* Actions */
+  .actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+  .act-btn { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:16px; padding:16px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; }
+  .act-btn .ico { font-size:24px; }
+  .act-btn span { font-size:12px; font-weight:700; color:var(--txt); }
+  .act-btn.a1:hover { background:rgba(255,194,14,0.1); border-color:var(--wave); }
+  .act-btn.a2:hover { background:rgba(138,43,226,0.1); border-color:var(--wc); }
+  
+  /* Modals */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; padding:20px; z-index:100; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:linear-gradient(165deg,#1A1D28,#101219); border:1px solid var(--border); border-radius:24px; padding:24px; width:100%; max-width:400px; }
+  .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+  .modal-head h3 { font-size:18px; font-weight:800; }
+  .modal-close { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; }
+  
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; }
+  .form-group input, .form-group select { width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:12px; padding:14px; color:#fff; font-size:14px; font-family:inherit; outline:none; }
+  .form-group input:focus, .form-group select:focus { border-color:var(--wave); }
+  
+  .btn-submit { width:100%; padding:16px; border:none; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; color:#07080D; margin-top:10px; }
+  .btn-wave { background:linear-gradient(135deg,var(--wave),#ff9a00); }
+  .btn-wc { background:linear-gradient(135deg,#a855f7,#7a1bd6); color:#fff; }
+  
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--wave); color:#000; padding:14px 24px; border-radius:30px; font-weight:800; font-size:13px; opacity:0; transition:0.3s; z-index:200; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="wallet-container">
+  <div class="header">
+    <div class="brand">
+      <div class="logo">3P</div>
+      <div><h1>TriPay Wallet</h1><p>Wave · KBZ · WCCoin</p></div>
+    </div>
+    <div style="font-size:24px; cursor:pointer;" onclick="window.close()">✕</div>
+  </div>
+
+  <!-- Selector -->
+  <div class="wallet-select">
+    <div class="wallet-trigger" onclick="toggleMenu()">
+      <div class="badge w-all" id="mainBadge">Σ</div>
+      <div style="flex:1;">
+        <div style="font-size:14px; font-weight:700;" id="mainName">All Wallets</div>
+        <div style="font-size:11px; color:var(--muted);" id="mainDesc">ပေါင်းစပ်ထားသည်</div>
+      </div>
+      <div style="font-size:12px; color:var(--muted);">▼</div>
+    </div>
+    <div class="wallet-menu" id="walletMenu">
+      <div class="wallet-option active" onclick="selectW('all')">
+        <div class="badge w-all">Σ</div><div><h4 style="font-size:13px;">All Wallets</h4></div>
+      </div>
+      <div class="wallet-option" onclick="selectW('wave')">
+        <div class="badge w-wave">W</div><div><h4 style="font-size:13px;">WaveMoney</h4><p style="font-size:10px; color:var(--muted);">09 7xx xxx 890</p></div>
+      </div>
+      <div class="wallet-option" onclick="selectW('kpay')">
+        <div class="badge w-kpay">K</div><div><h4 style="font-size:13px;">KBZPay</h4><p style="font-size:10px; color:var(--muted);">09 9xx xxx 123</p></div>
+      </div>
+      <div class="wallet-option" onclick="selectW('wc')">
+        <div class="badge w-wc">W</div><div><h4 style="font-size:13px;">WaveCoin (WC)</h4><p style="font-size:10px; color:var(--muted);">0x7A8c...5C9d</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Balance -->
+  <div class="balance-card">
+    <div class="bal-label" id="balLabel">Total Balance</div>
+    <div class="bal-amount" id="balAmount">1,250,000 <small>Ks</small></div>
+    <div class="bal-foot">
+      <div id="balAcc">ACC · <b>3 Wallets Synced</b></div>
+      <div id="balCur">MMK / WC</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <div class="act-btn a1" onclick="openTransfer()">
+      <div class="ico">📤</div><span>လွဲသည် (Send)</span>
+    </div>
+    <div class="act-btn a2" onclick="openReceive()">
+      <div class="ico">📥</div><span>လက်ခံသည် (Receive)</span>
+    </div>
+  </div>
+</div>
+
+<!-- Transfer Modal -->
+<div class="modal-overlay" id="transferModal">
+  <div class="modal">
+    <div class="modal-head"><h3>📤 ငွေလွှဲသည်</h3><button class="modal-close" onclick="closeM('transferModal')">✕</button></div>
+    <div class="form-group">
+      <label>ပို့မည့် Wallet</label>
+      <select id="fromWallet" onchange="updateForm()">
+        <option value="wave">💛 WaveMoney (Fiat)</option>
+        <option value="kpay">💙 KBZPay (Fiat)</option>
+        <option value="wc">🟣 WaveCoin (Crypto)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label id="toLabel">လက်ခံမည့်သူ ဖုန်းနံပါတ်</label>
+      <input type="text" id="toAccount" placeholder="09xxxxxxxxx">
+    </div>
+    <div class="form-group">
+      <label>ပမာဏ</label>
+      <input type="number" id="amount" placeholder="0">
+    </div>
+    <div class="fee-box" id="feeBox" style="display:none; background:rgba(138,43,226,0.1); border:1px solid rgba(138,43,226,0.2); border-radius:10px; padding:10px; font-size:12px; color:#d8b4fe; margin-bottom:10px; justify-content:space-between;">
+      <span>Network Fee (Gas)</span><b>0.5 WC</b>
+    </div>
+    <button class="btn-submit btn-wave" id="btnTransfer" onclick="doTransfer()">လွှဲမည် →</button>
+  </div>
+</div>
+
+<!-- Receive Modal -->
+<div class="modal-overlay" id="receiveModal">
+  <div class="modal">
+    <div class="modal-head"><h3>📥 ငွေလက်ခံသည်</h3><button class="modal-close" onclick="closeM('receiveModal')">✕</button></div>
+    <div class="form-group">
+      <label>လက်ခံမည့် Wallet</label>
+      <select id="recvWallet" onchange="updateRecvForm()">
+        <option value="wave">💛 WaveMoney (Fiat)</option>
+        <option value="kpay">💙 KBZPay (Fiat)</option>
+        <option value="wc">🟣 WaveCoin (Crypto)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>သင့် Account / Address</label>
+      <input type="text" id="myAccount" readonly style="background:rgba(255,255,255,0.02); color:var(--muted);">
+    </div>
+    <button class="btn-submit btn-wc" onclick="alert('✅ တောင်းခံပြီးပါပြီ')">တောင်းခံမည် →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const data = {
+    all: { name:'All Wallets', desc:'ပေါင်းစပ်ထားသည်', label:'Total Balance', amount:'1,250,000', unit:'Ks', acc:'3 Wallets Synced', cur:'MMK / WC' },
+    wave: { name:'WaveMoney', desc:'09 7xx xxx 890', label:'WaveMoney Balance', amount:'620,000', unit:'Ks', acc:'09 7xx xxx 890', cur:'MMK' },
+    kpay: { name:'KBZPay', desc:'09 9xx xxx 123', label:'KBZPay Balance', amount:'575,000', unit:'Ks', acc:'09 9xx xxx 123', cur:'MMK' },
+    wc: { name:'WaveCoin (WC)', desc:'0x7A8c...5C9d', label:'WaveCoin Balance', amount:'1,420', unit:'WC', acc:'0x7A8c...5C9d', cur:'WC' }
+  };
+
+  function toggleMenu() { document.getElementById('walletMenu').classList.toggle('show'); }
+  
+  function selectW(key) {
+    const d = data[key];
+    document.getElementById('mainName').innerText = d.name;
+    document.getElementById('mainDesc').innerText = d.desc;
+    document.getElementById('balLabel').innerText = d.label;
+    document.getElementById('balAmount').innerHTML = d.amount + ' <small>' + d.unit + '</small>';
+    document.getElementById('balAcc').innerText = d.acc;
+    document.getElementById('balCur').innerText = d.cur;
+    
+    document.querySelectorAll('.wallet-option').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('walletMenu').classList.remove('show');
+    document.getElementById('fromWallet').value = key;
+    document.getElementById('recvWallet').value = key;
+    updateForm(); updateRecvForm();
+  }
+
+  function openTransfer() { document.getElementById('transferModal').classList.add('show'); updateForm(); }
+  function openReceive() { document.getElementById('receiveModal').classList.add('show'); updateRecvForm(); }
+  function closeM(id) { document.getElementById(id).classList.remove('show'); }
+  
+  function updateForm() {
+    const w = document.getElementById('fromWallet').value;
+    const label = document.getElementById('toLabel');
+    const input = document.getElementById('toAccount');
+    const fee = document.getElementById('feeBox');
+    if (w === 'wc') {
+      label.innerText = 'Crypto Address (0x...)';
+      input.placeholder = '0x...';
+      fee.style.display = 'flex';
+    } else {
+      label.innerText = 'ဖုန်းနံပါတ်';
+      input.placeholder = '09xxxxxxxxx';
+      fee.style.display = 'none';
+    }
+  }
+
+  function updateRecvForm() {
+    const w = document.getElementById('recvWallet').value;
+    const acc = document.getElementById('myAccount');
+    if (w === 'wc') acc.value = '0x7A8c9E4f2B1d5C3a8F6b0E9d2A4c7B1f8E2a5C9d';
+    else if (w === 'wave') acc.value = '09 7xx xxx 890';
+    else acc.value = '09 9xx xxx 123';
+  }
+
+  function doTransfer() {
+    const to = document.getElementById('toAccount').value;
+    const amt = document.getElementById('amount').value;
+    if(!to || !amt) return toast('အချက်အလက်များ ဖြည့်ပါ');
+    toast('✅ ငွေလွှဲပြီးပါပြီ');
+    setTimeout(() => closeM('transferModal'), 1000);
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.innerText = msg; el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
+`;
 </script>
 </body>
 </html>

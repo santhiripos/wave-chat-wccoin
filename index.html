@@ -3907,7 +3907,7 @@ function buildMessageEl(m, key, chat) {
   let reactionsHtml = '';
   if (Object.keys(counts).length > 0) {
     reactionsHtml = '<div class="reactions-bar">';
-    Object.entries(counts).forEach(([e, c]) => { const mine = reactions[currentUser.uid] === e; reactionsHtml += '<span class="reaction-chip ' + (mine ? 'mine' : '') + '" data-emoji="' + e + '" data-key="' + key + '">' + e + '<span>' + c + '</span></span>'; });
+    Object.entries(counts).forEach(([e, c]) => { const mine = rections[currentUser.uid] === e; reactionsHtml += '<span class="reaction-chip ' + (mine ? 'mine' : '') + '" data-emoji="' + e + '" data-key="' + key + '">' + e + '<span>' + c + '</span></span>'; });
     reactionsHtml += '</div>';
   }
   let readByHtml = '';

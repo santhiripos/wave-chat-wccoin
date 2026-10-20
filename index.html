@@ -4979,5 +4979,26 @@ window.WaveChatDebug = {
 console.log('🔧 Debug: WaveChatDebug.state()');
 console.log('✅ WaveChat Ultra v12.0.0 — PART 2C loaded (ALL SCRIPTS)');
 </script>
+  <script>
+// Slot ဂိမ်းကို နှိပ်လိုက်တဲ့အခါ အကောင့်အချက်အလက်တွေ ပါသွားအောင် လုပ်ခြင်း
+document.addEventListener('click', function(e) {
+  const gameCard = e.target.closest('.game-card');
+  if (gameCard) {
+    const title = gameCard.querySelector('.game-card-title');
+    if (title && title.textContent.includes('Slot')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (!currentUser) return alert('Login ဝင်ပါ');
+      
+      const url = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
+      const sep = url.includes('?') ? '&' : '?';
+      const finalUrl = url + sep + 'uid=' + currentUser.uid + '&name=' + encodeURIComponent(currentUser.name) + '&coins=' + (typeof coinState !== 'undefined' ? coinState.coins : 0);
+      
+      window.open(finalUrl, '_blank');
+    }
+  }
+}, true);
+  </script>
 </body>
 </html>

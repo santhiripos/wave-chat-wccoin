@@ -1792,5 +1792,27 @@ window.addEventListener('load', () => {
 
 document.addEventListener('gesturestart', e => e.preventDefault());
 </script>
+  // ======================================================
+// SLOT GAME CONNECTION (အလွယ်ဆုံးနည်းလမ်း)
+// ======================================================
+window.openGameWithUser = function(url) {
+  if (!currentUser) return alert('Login ဝင်ပါ');
+  const sep = url.includes('?') ? '&' : '?';
+  const finalUrl = url + sep + 'uid=' + currentUser.uid + '&name=' + encodeURIComponent(currentUser.name) + '&coins=' + (typeof coinState !== 'undefined' ? coinState.coins : 0);
+  window.open(finalUrl, '_blank');
+};
+
+document.addEventListener('click', function(e) {
+  const gameCard = e.target.closest('.game-card');
+  if (gameCard) {
+    const title = gameCard.querySelector('.game-card-title');
+    if (title && title.textContent.includes('Slot')) {
+      e.preventDefault();
+      e.stopPropagation();
+      const url = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
+      window.openGameWithUser(url);
+    }
+  }
+}, true);
 </body>
 </html>

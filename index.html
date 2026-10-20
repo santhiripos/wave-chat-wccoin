@@ -5067,5 +5067,31 @@ document.addEventListener('click', function(e) {
   }
 }, true);
   </script>
+ <script>
+document.addEventListener('click', function(e) {
+  const gameCard = e.target.closest('.game-card');
+  if (gameCard) {
+    const title = gameCard.querySelector('.game-card-title');
+    // နာမည်မှာ Slot ပါရင်
+    if (title && title.textContent.includes('Slot')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (typeof currentUser === 'undefined' || !currentUser) {
+        alert('အကောင့်ဝင်ရောက်ထားခြင်း မရှိပါ။');
+        return;
+      }
+      
+      // အကောင့်အချက်အလက်တွေကို သိမ်းမယ်
+      localStorage.setItem('wc_slot_uid', currentUser.uid);
+      localStorage.setItem('wc_slot_name', currentUser.name);
+      localStorage.setItem('wc_slot_coins', (typeof coinState !== 'undefined' ? coinState.coins : 0));
+      
+      // Slot ကို ဖွင့်မယ်
+      window.location.href = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
+    }
+  }
+}, true);
+ </script>   
 </body>
 </html>

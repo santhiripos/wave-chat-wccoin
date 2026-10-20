@@ -1555,7 +1555,7 @@ const generateQR = (text, size) => {
   return 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(text);
 };
 
-/* ---------- External links ---------- */
+/* ---------- FIXED: External links (New Tab မှာ သေချာပွင့်အောင်) ---------- */
 function openExternal(url) {
   if (!url) { toast('Invalid link', 'error'); return; }
   try {
@@ -1566,10 +1566,22 @@ function openExternal(url) {
     }
     const u = new URL(cleanUrl);
     if (!/^https?:$/.test(u.protocol)) { toast('⚠️ Only HTTP/HTTPS allowed', 'error'); return; }
+
+    // New Tab မှာ သေချာပွင့်အောင်
     const win = window.open(u.href, '_blank', 'noopener,noreferrer');
-    if (!win) toast('⚠️ Popup blocked', 'warn');
-    if (win) win.opener = null;
-  } catch (e) { toast('❌ Invalid URL: ' + e.message, 'error'); }
+    
+    // Popup Blocker က Block လုပ်ရင် Fallback
+    if (!win || win.closed || typeof win.closed === 'undefined') {
+      const confirmOpen = confirm('⚠️ Popup Blocked!\n\nLink ကို ဖွင့်ရန် OK နှိပ်ပါ:\n' + u.href);
+      if (confirmOpen) {
+        copyToClipboard(u.href, '📋 Link ကို Copy လုပ်ပြီးပါပြီ။ Browser မှာ Paste လုပ်ပြီး ဖွင့်ပါ။');
+      }
+    } else {
+      win.opener = null;
+    }
+  } catch (e) {
+    toast('❌ Invalid URL: ' + e.message, 'error');
+  }
 }
 function secureAllExternalLinks(root) {
   (root || document).querySelectorAll('a[target="_blank"]').forEach(a => {

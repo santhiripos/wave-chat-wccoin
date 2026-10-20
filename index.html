@@ -5007,5 +5007,44 @@ document.addEventListener('click', function(e) {
 }, true);
 </script>
   </script>
+<script>
+// WaveChat Slot Game Connection
+setTimeout(function() {
+    // Game Card တွေ အားလုံးကို ရှာမယ်
+    const gameCards = document.querySelectorAll('.game-card');
+    
+    gameCards.forEach(card => {
+        const title = card.querySelector('.game-card-title');
+        
+        // တကယ်လို့ အဲဒီ Card က Slot ဖြစ်နေရင်
+        if (title && title.textContent.includes('Slot')) {
+            
+            // အရင်က ရှိပြီးသား Click အလုပ်လုပ်တာတွေကို ပိတ်ပစ်မယ်
+            const newCard = card.cloneNode(true);
+            card.parentNode.replaceChild(newCard, card);
+            
+            // အသစ်ပြန်ပြီး Click နှိပ်ရင် လုပ်ဆောင်ချက် သတ်မှတ်မယ်
+            newCard.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // အကောင့်ဝင်ထားခြင်း ရှိမရှိ စစ်မယ်
+                if (typeof currentUser === 'undefined' || !currentUser) {
+                    alert('အကောင့်ဝင်ရောက်ထားခြင်း မရှိပါ။ WaveChat မှာ အရင်ဝင်ပါ။');
+                    return;
+                }
+                
+                // အကောင့်အချက်အလက်တွေ ပါတဲ့ Link ကို တည်ဆောက်မယ်
+                const url = 'https://santhiripos.github.io/wave-chat-wccoin/slot.html';
+                const sep = url.includes('?') ? '&' : '?';
+                const finalUrl = url + sep + 'uid=' + currentUser.uid + '&name=' + encodeURIComponent(currentUser.name) + '&coins=' + (typeof coinState !== 'undefined' ? coinState.coins : 0);
+                
+                // လက်ရှိ Tab မှာပဲ ဖွင့်မယ် (Popup မတက်စေရန်)
+                window.location.href = finalUrl;
+            });
+        }
+    });
+}, 2000); // ၂ စက္ကန့်စောင့်ပြီးမှ အလုပ်လုပ်မယ် (Game တွေ Load ဖြစ်ပြီးမှ)
+</script>
 </body>
 </html>

@@ -5325,5 +5325,71 @@ const TRIPAY_WALLET_HTML = `
 </html>
 `;
 </script>
+<script>
+// =========================================================
+// 💳 TRIPAY WALLET (POPUP MODAL)
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const headerActions = document.querySelector('.header-actions');
+    if (!headerActions) return;
+
+    // အရင်က ခလုတ်ဟောင်းရှိရင် ဖျက်မယ်
+    const oldChip = document.getElementById('coinChip');
+    if (oldChip) oldChip.remove();
+
+    // 💳 Wallet ခလုတ် ထည့်မယ်
+    const walletBtn = document.createElement('button');
+    walletBtn.type = 'button';
+    walletBtn.className = 'coin-chip';
+    walletBtn.style.cssText = 'background: linear-gradient(135deg, #FFB800, #FF8C00); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; margin-right: 6px; display: flex; align-items: center; gap: 6px;';
+    walletBtn.innerHTML = '💳 Wallet';
+    
+    walletBtn.onclick = () => openWalletModal();
+    headerActions.insertBefore(walletBtn, headerActions.firstChild);
+  }, 1000);
+});
+
+function openWalletModal() {
+  if (document.getElementById('triPayModal')) return;
+
+  const modalHTML = `
+  <div id="triPayModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(5px);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:linear-gradient(165deg,#141722,#0B0D14);border:1px solid rgba(255,255,255,0.1);border-radius:24px;width:100%;max-width:400px;padding:24px;color:#fff;position:relative;box-shadow:0 30px 80px rgba(0,0,0,0.8);">
+      
+      <!-- Close -->
+      <button onclick="document.getElementById('triPayModal').remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;">✕</button>
+
+      <!-- Header -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#FFC20E,#0066FF,#8A2BE2);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;">3P</div>
+        <div><h2 style="font-size:18px;font-weight:800;margin:0;">TriPay Wallet</h2><p style="font-size:10px;color:#7C8398;margin:0;text-transform:uppercase;">Wave · KBZ · WC</p></div>
+      </div>
+
+      <!-- Balance -->
+      <div style="background:linear-gradient(135deg,#1B1F2E,#12141C);border-radius:20px;padding:20px;border:1px solid rgba(255,255,255,0.07);margin-bottom:20px;">
+        <div style="font-size:12px;color:#7C8398;font-weight:600;margin-bottom:6px;">Total Balance</div>
+        <div style="font-size:32px;font-weight:900;letter-spacing:-1px;">1,250,000 <small style="font-size:16px;color:#7C8398;">Ks</small></div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;font-size:12px;color:#7C8398;font-weight:600;">
+          <div>Wave + KBZ</div><div>WC Rate: 1,000 Ks</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div onclick="alert('📤 ငွေလွှဲသည့် စနစ် (Simulation)')" style="background:rgba(255,194,14,0.1);border:1px solid rgba(255,194,14,0.3);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;">
+          <div style="font-size:24px;">📤</div><span style="font-size:12px;font-weight:700;color:#FFC20E;">လွဲသည်</span>
+        </div>
+        <div onclick="alert('📥 ငွေလက်ခံသည့် စနစ် (Simulation)')" style="background:rgba(138,43,226,0.1);border:1px solid rgba(138,43,226,0.3);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;">
+          <div style="font-size:24px;">📥</div><span style="font-size:12px;font-weight:700;color:#c084fc;">လက်ခံသည်</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+</script>
 </body>
 </html>

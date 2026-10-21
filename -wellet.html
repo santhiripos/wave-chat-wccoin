@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TriPay Ultra — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root{
+    /* Pastel palette — soft, eye-friendly */
+    --wave:#F5D76E;
+    --wave-soft:#FDF6E3;
+    --kpay:#A3C4F3;
+    --kpay-soft:#EEF4FC;
+    --wc:#A8E6CF;
+    --wc-soft:#EAF9F3;
+    --bg:#F7F5F0;
+    --sidebar:#F0EDE6;
+    --card:#FFFFFF;
+    --card-hover:#FAF8F4;
+    --glass:rgba(0,0,0,0.03);
+    --border:rgba(0,0,0,0.07);
+    --txt:#3D3D3D;
+    --muted:#9A9A9A;
+    --green:#7BC67E;
+    --red:#E88B8B;
+    --purple:#C9B8E8;
+    --purple-soft:#F3EEFB;
+    --shadow:0 2px 12px rgba(0,0,0,0.04);
+    --shadow-lg:0 8px 30px rgba(0,0,0,0.07);
+  }
+  body{
+    font-family:'Inter','Padauk',sans-serif;
+    background:var(--bg);
+    color:var(--txt);
+    min-height:100vh;
+    display:flex;
+    overflow-x:hidden;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    width:240px;
+    background:var(--sidebar);
+    border-right:1px solid var(--border);
+    padding:28px 16px;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top:0;bottom:0;left:0;
+    z-index:20;
+    overflow-y:auto;
+  }
+  .sb-brand{
+    display:flex;align-items:center;gap:11px;
+    padding:0 8px;margin-bottom:36px;
+  }
+  .sb-logo{
+    width:40px;height:40px;border-radius:12px;
+    background:linear-gradient(135deg,var(--wave),var(--kpay),var(--wc));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:15px;color:#fff;
+    box-shadow:0 3px 12px rgba(163,196,243,0.4);
+  }
+  .sb-brand h1{font-size:15px;font-weight:800;}
+  .sb-brand h1 span{background:linear-gradient(90deg,#E8B84B,#7BB8A0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .sb-brand p{font-size:9px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;font-weight:600;margin-top:2px;}
+
+  .sb-section{font-size:9.5px;color:var(--muted);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:0 12px;margin:20px 0 10px;}
+  .sb-item{
+    display:flex;align-items:center;gap:12px;
+    padding:11px 12px;border-radius:12px;
+    cursor:pointer;transition:.25s;color:var(--muted);
+    font-size:13px;font-weight:600;margin-bottom:3px;
+  }
+  .sb-item .sb-ico{font-size:16px;width:20px;text-align:center;}
+  .sb-item:hover{background:var(--glass);color:var(--txt);}
+  .sb-item.active{
+    background:linear-gradient(90deg,rgba(245,215,110,0.25),rgba(245,215,110,0.05));
+    color:#B8962E;
+    border-left:2px solid var(--wave);
+  }
+  .sb-badge{
+    margin-left:auto;font-size:9px;font-weight:800;
+    padding:2px 7px;border-radius:10px;
+    background:rgba(245,215,110,0.3);color:#B8962E;
+  }
+
+  .sb-wallets{margin-top:6px;}
+  .sb-wallet{
+    display:flex;align-items:center;gap:10px;
+    padding:9px 12px;border-radius:11px;
+    cursor:pointer;transition:.25s;margin-bottom:4px;
+  }
+  .sb-wallet:hover{background:var(--glass);}
+  .sb-wallet .sw-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .sb-wallet .sw-meta{flex:1;min-width:0;}
+  .sb-wallet .sw-meta h5{font-size:11.5px;font-weight:700;margin-bottom:1px;}
+  .sb-wallet .sw-meta p{font-size:9.5px;color:var(--muted);font-weight:500;}
+
+  .sb-user{
+    margin-top:auto;
+    display:flex;align-items:center;gap:11px;
+    padding:12px;border-radius:14px;
+    background:var(--glass);border:1px solid var(--border);
+    cursor:pointer;transition:.25s;
+  }
+  .sb-user:hover{background:var(--card-hover);}
+  .sb-avatar{
+    width:36px;height:36px;border-radius:50%;
+    background:linear-gradient(135deg,var(--wave),var(--kpay));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:14px;color:#fff;flex-shrink:0;
+  }
+  .sb-user h5{font-size:12px;font-weight:700;}
+  .sb-user p{font-size:9.5px;color:var(--muted);}
+
+  /* ===== MAIN ===== */
+  .main{
+    flex:1;
+    margin-left:240px;
+    padding:28px 32px;
+    min-height:100vh;
+    position:relative;
+    z-index:2;
+  }
+
+  /* ===== TOPBAR ===== */
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:28px;gap:16px;flex-wrap:wrap;
+  }
+  .tb-left h2{font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+  .tb-left p{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500;}
+  .tb-right{display:flex;align-items:center;gap:12px;}
+  .search{
+    display:flex;align-items:center;gap:9px;
+    background:var(--card);border:1px solid var(--border);
+    border-radius:12px;padding:10px 16px;width:240px;
+    transition:.3s;box-shadow:var(--shadow);
+  }
+  .search:focus-within{border-color:var(--wave);box-shadow:0 0 0 3px rgba(245,215,110,0.15);}
+  .search span{font-size:13px;color:var(--muted);}
+  .search input{
+    background:none;border:none;outline:none;color:var(--txt);
+    font-family:inherit;font-size:12.5px;font-weight:500;width:100%;
+  }
+  .search input::placeholder{color:var(--muted);}
+  .tb-btn{
+    width:40px;height:40px;border-radius:12px;
+    background:var(--card);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:15px;transition:.3s;box-shadow:var(--shadow);
+  }
+  .tb-btn:hover{background:var(--card-hover);border-color:var(--wave);transform:translateY(-2px);}
+
+  /* ===== STATS GRID ===== */
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:16px;
+    margin-bottom:24px;
+  }
+  .stat-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+    transition:.3s;
+    box-shadow:var(--shadow);
+  }
+  .stat-card:hover{transform:translateY(-3px);border-color:rgba(0,0,0,0.12);box-shadow:var(--shadow-lg);}
+  .stat-card::before{
+    content:'';position:absolute;top:-40%;right:-20%;
+    width:160px;height:160px;border-radius:50%;
+    opacity:.18;filter:blur(30px);
+  }
+  .sc-wave::before{background:var(--wave);}
+  .sc-kpay::before{background:var(--kpay);}
+  .sc-wc::before{background:var(--wc);}
+  .sc-total::before{background:linear-gradient(45deg,var(--wave),var(--kpay),var(--wc));}
+
+  .sc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;position:relative;z-index:2;}
+  .sc-icon{
+    width:38px;height:38px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;
+  }
+  .sc-wave .sc-icon{background:var(--wave-soft);color:#C9A63E;}
+  .sc-kpay .sc-icon{background:var(--kpay-soft);color:#6A9FD8;}
+  .sc-wc .sc-icon{background:var(--wc-soft);color:#6BBF9A;}
+  .sc-total .sc-icon{background:linear-gradient(135deg,var(--wave-soft),var(--wc-soft));color:#8B8B8B;}
+
+  .sc-trend{
+    font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;
+    display:flex;align-items:center;gap:3px;
+  }
+  .trend-up{background:rgba(123,198,126,0.15);color:#5EA862;}
+  .trend-down{background:rgba(232,139,139,0.15);color:#D16B6B;}
+
+  .sc-label{font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:6px;position:relative;z-index:2;}
+  .sc-value{
+    font-size:24px;font-weight:900;letter-spacing:-1px;
+    position:relative;z-index:2;line-height:1.1;
+  }
+  .sc-value small{font-size:13px;color:var(--muted);font-weight:700;}
+  .sc-foot{font-size:10px;color:var(--muted);margin-top:8px;position:relative;z-index:2;font-weight:500;}
+
+  /* ===== ACTION BUTTONS ROW ===== */
+  .action-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .act-btn{
+    border-radius:18px;
+    padding:20px 18px;
+    display:flex;align-items:center;gap:14px;
+    cursor:pointer;
+    transition:.35s cubic-bezier(.4,0,.2,1);
+    position:relative;
+    overflow:hidden;
+    border:1px solid transparent;
+    box-shadow:var(--shadow);
+  }
+  .act-btn::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,0.5) 50%,transparent 60%);
+    transform:translateX(-100%);
+    transition:.6s;
+  }
+  .act-btn:hover::after{transform:translateX(100%);}
+  .act-btn:hover{transform:translateY(-4px);}
+  .act-btn:active{transform:scale(.97);}
+
+  .act-send{
+    background:linear-gradient(135deg,var(--wave-soft),#FFF9E6);
+    border-color:rgba(245,215,110,0.4);
+  }
+  .act-receive{
+    background:linear-gradient(135deg,var(--wc-soft),#F0FBF7);
+    border-color:rgba(168,230,207,0.5);
+  }
+  .act-topup{
+    background:linear-gradient(135deg,var(--purple-soft),#F8F4FD);
+    border-color:rgba(201,184,232,0.4);
+  }
+  .act-qr{
+    background:linear-gradient(135deg,var(--kpay-soft),#F0F6FE);
+    border-color:rgba(163,196,243,0.5);
+  }
+
+  .act-icon{
+    width:46px;height:46px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;flex-shrink:0;
+    background:rgba(255,255,255,0.7);
+  }
+  .act-send .act-icon{color:#C9A63E;}
+  .act-receive .act-icon{color:#6BBF9A;}
+  .act-topup .act-icon{color:#9B85C4;}
+  .act-qr .act-icon{color:#6A9FD8;}
+
+  .act-text h4{font-size:13.5px;font-weight:800;margin-bottom:2px;}
+  .act-text p{font-size:10.5px;color:var(--muted);font-weight:500;}
+
+  /* ===== MAIN GRID ===== */
+  .content-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:20px;
+  }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .panel-head{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:18px;
+  }
+  .panel-head h3{font-size:15px;font-weight:800;}
+  .panel-head a{font-size:11.5px;color:#C9A63E;font-weight:700;cursor:pointer;text-decoration:none;transition:.2s;}
+  .panel-head a:hover{color:#B8962E;}
+
+  /* Transaction list */
+  .tx{
+    display:flex;align-items:center;gap:14px;
+    padding:13px 12px;
+    border-radius:14px;
+    transition:.3s;cursor:pointer;
+    margin-bottom:6px;
+  }
+  .tx:hover{background:var(--card-hover);transform:translateX(4px);}
+  .tx-ico{
+    width:42px;height:42px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;flex-shrink:0;
+  }
+  .tx-wave{background:var(--wave-soft);color:#C9A63E;}
+  .tx-kpay{background:var(--kpay-soft);color:#6A9FD8;}
+  .tx-wc{background:var(--wc-soft);color:#6BBF9A;}
+  .tx-info{flex:1;min-width:0;}
+  .tx-info h4{font-size:12.5px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tx-info p{font-size:10px;color:var(--muted);font-weight:500;}
+  .tx-amt{font-size:13px;font-weight:800;white-space:nowrap;}
+  .amt-in{color:#5EA862;}
+  .amt-out{color:#D16B6B;}
+
+  /* Wallet quick list */
+  .wallet-row{
+    display:flex;align-items:center;gap:12px;
+    padding:13px 12px;border-radius:14px;
+    transition:.3s;cursor:pointer;
+    margin-bottom:8px;
+    border:1px solid transparent;
+  }
+  .wallet-row:hover{background:var(--card-hover);border-color:var(--border);}
+  .wr-badge{
+    width:40px;height:40px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:15px;flex-shrink:0;
+  }
+  .w-wave{background:var(--wave-soft);color:#C9A63E;}
+  .w-kpay{background:var(--kpay-soft);color:#6A9FD8;}
+  .w-wc{background:var(--wc-soft);color:#6BBF9A;}
+  .wr-meta{flex:1;}
+  .wr-meta h5{font-size:12.5px;font-weight:700;margin-bottom:2px;}
+  .wr-meta p{font-size:10px;color:var(--muted);font-weight:500;}
+  .wr-amt{font-size:12.5px;font-weight:800;text-align:right;}
+  .wr-amt small{font-size:9.5px;color:var(--muted);display:block;font-weight:600;margin-top:1px;}
+
+  .fee-info{
+    background:var(--wave-soft);
+    border:1px solid rgba(245,215,110,0.4);
+    border-radius:12px;padding:11px 14px;
+    font-size:11px;color:#A8913E;
+    margin-bottom:18px;
+    display:flex;justify-content:space-between;
+  }
+  .fee-info b{color:#C9A63E;}
+
+  /* ===== MODAL ===== */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    opacity:0;visibility:hidden;
+    transition:.3s;z-index:100;
+  }
+  .modal-overlay.show{opacity:1;visibility:visible;}
+  .modal{
+    width:100%;max-width:440px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:26px;
+    padding:26px 24px;
+    box-shadow:0 30px 80px rgba(0,0,0,0.15);
+    transform:translateY(30px) scale(0.96);
+    transition:.35s cubic-bezier(.4,0,.2,1);
+    max-height:90vh;overflow-y:auto;
+  }
+  .modal-overlay.show .modal{transform:translateY(0) scale(1);}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .modal-head h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:9px;}
+  .modal-close{
+    width:32px;height:32px;border-radius:50%;
+    background:var(--glass);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:13px;color:var(--muted);
+    transition:.3s;
+  }
+  .modal-close:hover{background:rgba(0,0,0,0.08);color:var(--txt);}
+
+  .form-group{margin-bottom:16px;}
+  .form-group label{
+    display:block;font-size:10.5px;font-weight:700;
+    color:var(--muted);margin-bottom:7px;
+    letter-spacing:.6px;text-transform:uppercase;
+  }
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;
+    background:var(--glass);
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:13px 16px;
+    color:var(--txt);font-size:13.5px;font-weight:600;
+    font-family:inherit;outline:none;transition:.3s;
+    resize:none;
+  }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+    border-color:var(--wave);
+    background:var(--wave-soft);
+    box-shadow:0 0 0 3px rgba(245,215,110,0.15);
+  }
+  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted);font-weight:500;}
+  .form-group select option{background:#fff;color:var(--txt);}
+
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .btn-submit{
+    width:100%;padding:15px;
+    border:none;border-radius:15px;
+    font-family:inherit;font-size:14px;font-weight:800;
+    cursor:pointer;transition:.3s;color:#fff;letter-spacing:.3px;
+  }
+  .btn-wave{background:linear-gradient(135deg,#F0C94A,#E8B84B);box-shadow:0 6px 20px rgba(240,201,74,0.35);color:#5A4A0E;}
+  .btn-kpay{background:linear-gradient(135deg,#8BB8E8,#6A9FD8);box-shadow:0 6px 20px rgba(139,184,232,0.35);}
+  .btn-wc{background:linear-gradient(135deg,#8BD9B8,#6BBF9A);box-shadow:0 6px 20px rgba(139,217,184,0.35);color:#1E4A38;}
+  .btn-submit:hover{transform:translateY(-2px);filter:brightness(1.05);}
+  .btn-submit:active{transform:scale(.97);}
+
+  .toast{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);
+    background:linear-gradient(135deg,#F0C94A,#E8B84B);
+    color:#5A4A0E;padding:14px 28px;border-radius:50px;
+    font-weight:800;font-size:13px;opacity:0;transition:.4s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 10px 30px rgba(240,201,74,0.3);z-index:300;white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* Update indicator */
+  .update-dot{
+    position:fixed;top:20px;right:20px;
+    width:10px;height:10px;border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 8px rgba(123,198,126,0.6);
+    z-index:200;
+    display:none;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:900px){
+    .content-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:720px){
+    .sidebar{
+      width:70px;padding:20px 10px;
+    }
+    .sb-brand h1,.sb-brand p,.sb-section,.sb-item span:not(.sb-ico),.sb-wallet .sw-meta,.sb-user h5,.sb-user p,.sb-badge{display:none;}
+    .sb-brand{justify-content:center;padding:0;}
+    .sb-item,.sb-wallet,.sb-user{justify-content:center;padding:12px;}
+    .main{margin-left:70px;padding:20px 16px;}
+    .search{width:150px;}
+    .tb-left h2{font-size:18px;}
+    .form-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="update-dot" id="updateDot"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">3P</div>
+    <div>
+      <h1>Tri<span>Pay</span></h1>
+      <p>Ultra Wallet</p>
+    </div>
+  </div>
+
+  <div class="sb-section">Menu</div>
+  <div class="sb-item active" data-nav="dashboard"><span class="sb-ico">🏠</span><span>Dashboard</span></div>
+  <div class="sb-item" data-nav="transfer"><span class="sb-ico">📤</span><span>Transfer</span></div>
+  <div class="sb-item" data-nav="receive"><span class="sb-ico">📥</span><span>Receive</span></div>
+  <div class="sb-item" data-nav="history"><span class="sb-ico">📊</span><span>History</span><span class="sb-badge" id="historyBadge">0</span></div>
+
+  <div class="sb-section">Wallets</div>
+  <div class="sb-wallets" id="sidebarWallets">
+    <!-- rendered by JS -->
+  </div>
+
+  <div class="sb-item" data-nav="settings"><span class="sb-ico">⚙️</span><span>Settings</span></div>
+
+  <div class="sb-user" id="userProfile">
+    <div class="sb-avatar">K</div>
+    <div><h5>Ko Aung</h5><p>Pro Member</p></div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="tb-left">
+      <h2 id="welcomeTitle">မင်္ဂလာပါ, Ko Aung 👋</h2>
+      <p id="welcomeSub">သင့်ရဲ့ wallets အားလုံး ဒီနေ့ အဆင်ပြေပါစေ</p>
+    </div>
+    <div class="tb-right">
+      <div class="search">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Search transaction...">
+      </div>
+      <div class="tb-btn" id="notifBtn">🔔</div>
+      <div class="tb-btn" id="profileBtn">👤</div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid" id="statsGrid">
+    <!-- rendered by JS -->
+  </div>
+
+  <!-- Action Row -->
+  <div class="action-row" id="actionRow">
+    <div class="act-btn act-send" data-action="transfer">
+      <div class="act-icon">📤</div>
+      <div class="act-text"><h4>လွဲသည်</h4><p>Send money</p></div>
+    </div>
+    <div class="act-btn act-receive" data-action="receive">
+      <div class="act-icon">📥</div>
+      <div class="act-text"><h4>လက်ခံသည်</h4><p>Receive / Request</p></div>
+    </div>
+    <div class="act-btn act-topup" data-action="topup">
+      <div class="act-icon">⚡</div>
+      <div class="act-text"><h4>ဖုန်းဖြည့်</h4><p>Top-up</p></div>
+    </div>
+    <div class="act-btn act-qr" data-action="qr">
+      <div class="act-icon">📷</div>
+      <div class="act-text"><h4>QR Scan</h4><p>Scan & Pay</p></div>
+    </div>
+  </div>
+
+  <!-- Content Grid -->
+  <div class="content-grid">
+    <!-- Transactions Panel -->
+    <div class="panel">
+      <div class="panel-head">
+        <h3>📊 မကြာသေးမီ ငွေလွှဲမှု</h3>
+        <a data-action="viewAllTx">အားလုံး →</a>
+      </div>
+      <div id="txList">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Wallet Quick List -->
+    <div class="panel">
+      <div class="panel-head">
+        <h3>💼 သင့် Wallets</h3>
+        <a data-action="viewAllWallets">အားလုံး →</a>
+      </div>
+      <div id="walletList">
+        <!-- rendered by JS -->
+      </div>
+
+      <div class="fee-info" style="margin-top:16px;margin-bottom:0;">
+        <span>🔒 Secured by TriPay</span>
+        <b>256-bit</b>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TRANSFER MODAL ===== -->
+<div class="modal-overlay" id="transferModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📤 ငွေလွှဲသည်</h3>
+      <div class="modal-close" data-close="transferModal">✕</div>
+    </div>
+
+    <div class="form-group">
+      <label>ပို့မည့် Wallet</label>
+      <select id="fromWallet">
+        <option value="wave">💛 WaveMoney</option>
+        <option value="kpay">💙 KBZPay</option>
+        <option value="wc">💚 WCCoin Pay</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>လက်ခံမည့်သူ ဖုန်း / Account</label>
+      <input type="text" id="toAccount" placeholder="09xxxxxxxxx">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>ပမာဏ</label>
+        <input type="number" id="amount" placeholder="0" min="1">
+      </div>
+      <div class="form-group">
+        <label>မှတ်ချက်</label>
+        <input type="text" id="note" placeholder="optional">
+      </div>
+    </div>
+
+    <div class="fee-info">
+      <span>လွှဲခအခမဲ့</span>
+      <b>Fee: 0 Ks</b>
+    </div>
+
+    <button class="btn-submit btn-wave" id="doTransferBtn">လွှဲမည် →</button>
+  </div>
+</div>
+
+<!-- ===== RECEIVE MODAL ===== -->
+<div class="modal-overlay" id="receiveModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📥 ငွေလက်ခံသည်</h3>
+      <div class="modal-close" data-close="receiveModal">✕</div>
+    </div>
+
+    <div class="form-group">
+      <label>လက်ခံမည့် Wallet</label>
+      <select id="recvWallet">
+        <option value="wave">💛 WaveMoney</option>
+        <option value="kpay">💙 KBZPay</option>
+        <option value="wc">💚 WCCoin Pay</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>သင့် Account</label>
+      <input type="text" id="myAccount" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>တောင်းခံမည့် ပမာဏ (optional)</label>
+      <input type="number" id="recvAmount" placeholder="0" min="0">
+    </div>
+
+    <div class="fee-info">
+      <span>လက်ခံခအခမဲ့</span>
+      <b>Instant ⚡</b>
+    </div>
+
+    <button class="btn-submit btn-wc" id="doReceiveBtn">Request / Share →</button>
+  </div>
+</div>
+
+<!-- ===== TOPUP MODAL ===== -->
+<div class="modal-overlay" id="topupModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>⚡ ဖုန်းဖြည့်</h3>
+      <div class="modal-close" data-close="topupModal">✕</div>
+    </div>
+    <div class="form-group">
+      <label>ဖုန်းနံပါတ်</label>
+      <input type="tel" id="topupPhone" placeholder="09xxxxxxxxx">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>ပမာဏ</label>
+        <input type="number" id="topupAmount" placeholder="0" min="1">
+      </div>
+      <div class="form-group">
+        <label>Wallet</label>
+        <select id="topupWallet">
+          <option value="wave">WaveMoney</option>
+          <option value="kpay">KBZPay</option>
+          <option value="wc">WCCoin</option>
+        </select>
+      </div>
+    </div>
+    <div class="fee-info"><span>ဖုန်းဖြည့်ခအခမဲ့</span><b>Instant ⚡</b></div>
+    <button class="btn-submit btn-wave" id="doTopupBtn">ဖြည့်မည် →</button>
+  </div>
+</div>
+
+<!-- ===== QR MODAL ===== -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📷 QR Scan & Pay</h3>
+      <div class="modal-close" data-close="qrModal">✕</div>
+    </div>
+    <div style="text-align:center;padding:30px 0;">
+      <div style="width:160px;height:160px;border-radius:20px;background:var(--glass);border:2px dashed var(--border);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--muted);">📷</div>
+      <p style="font-size:12px;color:var(--muted);">QR code ကို scan ပါ</p>
+    </div>
+    <div class="form-group">
+      <label>သို့မဟုတ် ပမာဏထည့်ပါ</label>
+      <input type="number" id="qrAmount" placeholder="0" min="1">
+    </div>
+    <button class="btn-submit btn-kpay" id="doQrBtn">Scan & Pay →</button>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>⚙️ Settings</h3>
+      <div class="modal-close" data-close="settingsModal">✕</div>
+    </div>
+    <div class="form-group">
+      <label>အမည်</label>
+      <input type="text" id="setName" value="Ko Aung">
+    </div>
+    <div class="form-group">
+      <label>ဖုန်းနံပါတ်</label>
+      <input type="tel" id="setPhone" value="09 7xx xxx 890">
+    </div>
+    <div class="form-group">
+      <label>Language</label>
+      <select id="setLang">
+        <option value="my">မြန်မာ</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <div class="fee-info"><span>Auto-update</span><b>✅ Enabled</b></div>
+    <button class="btn-submit btn-wave" id="doSaveSettingsBtn">သိမ်းမည် →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  var state = {
+    wallets: {
+      wave: { key:'wave', name:'WaveMoney', sym:'Ks', balance:620000, color:'var(--wave)', account:'09 7xx xxx 890' },
+      kpay: { key:'kpay', name:'KBZPay', sym:'Ks', balance:575000, color:'var(--kpay)', account:'09 9xx xxx 123' },
+      wc:   { key:'wc', name:'WCCoin Pay', sym:'WC', balance:1420, color:'var(--wc)', account:'0xWC...8f2a' }
+    },
+    transactions: [
+      { wallet:'wave', dir:'in',  amount:50000,  label:'WaveMoney မှ လက်ခံ',   time:'ယနေ့ · 09:24 AM' },
+      { wallet:'kpay', dir:'out', amount:25000,  label:'KBZPay သို့ လွှဲ',     time:'မနေ့ · 06:12 PM' },
+      { wallet:'wc',   dir:'in',  amount:12,     label:'WCCoin မှ လက်ခံ',    time:'မနေ့ · 02:30 PM' },
+      { wallet:'wave', dir:'out', amount:12000,  label:'WaveMoney သို့ လွှဲ',  time:'မနေ့ · 01:40 PM' },
+      { wallet:'wc',   dir:'out', amount:5,      label:'WCCoin သို့ လွှဲ',     time:'2 ရက် · 11:15 AM' }
+    ],
+    version: '1.0.0'
+  };
+
+  /* ============================================================
+     DOM HELPERS
+     ============================================================ */
+  function $(id){ return document.getElementById(id); }
+
+  function el(tag, cls, txt){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(txt !== undefined && txt !== null) e.textContent = txt;
+    return e;
+  }
+
+  function fmtNum(n){
+    return Number(n).toLocaleString('en-US');
+  }
+
+  /* ============================================================
+     TOAST (safe, single instance)
+     ============================================================ */
+  var toastTimer = null;
+  function toast(msg){
+    var t = $('toast');
+    if(!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  /* ============================================================
+     MODALS
+     ============================================================ */
+  function openModal(id){
+    var m = $(id);
+    if(m) m.classList.add('show');
+  }
+  function closeModal(id){
+    var m = $(id);
+    if(m) m.classList.remove('show');
+  }
+  function closeAllModals(){
+    document.querySelectorAll('.modal-overlay.show').forEach(function(m){ m.classList.remove('show'); });
+  }
+
+  /* ============================================================
+     RENDER: Stats
+     ============================================================ */
+  function renderStats(){
+    var grid = $('statsGrid');
+    if(!grid) return;
+    grid.innerHTML = '';
+
+    var w = state.wallets;
+    var totalKs = w.wave.balance + w.kpay.balance;
+    var totalWc = w.wc.balance;
+
+    // Total
+    var c1 = el('div','stat-card sc-total');
+    c1.innerHTML =
+      '<div class="sc-head"><div class="sc-icon">Σ</div><div class="sc-trend trend-up">↑ 12.4%</div></div>' +
+      '<div class="sc-label">Total Balance</div>' +
+      '<div class="sc-value">' + fmtNum(totalKs) + ' <small>Ks</small></div>' +
+      '<div class="sc-foot">3 wallets synced</div>';
+
+    // Wave
+    var c2 = el('div','stat-card sc-wave');
+    c2.innerHTML =
+      '<div class="sc-head"><div class="sc-icon">💛</div><div class="sc-trend trend-up">↑ 5.2%</div></div>' +
+      '<div class="sc-label">WaveMoney</div>' +
+      '<div class="sc-value">' + fmtNum(w.wave.balance) + ' <small>Ks</small></div>' +
+      '<div class="sc-foot">' + w.wave.account + '</div>';
+
+    // KBZ
+    var c3 = el('div','stat-card sc-kpay');
+    c3.innerHTML =
+      '<div class="sc-head"><div class="sc-icon">💙</div><div class="sc-trend trend-up">↑ 8.1%</div></div>' +
+      '<div class="sc-label">KBZPay</div>' +
+      '<div class="sc-value">' + fmtNum(w.kpay.balance) + ' <small>Ks</small></div>' +
+      '<div class="sc-foot">' + w.kpay.account + '</div>';
+
+    // WC
+    var c4 = el('div','stat-card sc-wc');
+    c4.innerHTML =
+      '<div class="sc-head"><div class="sc-icon">💚</div><div class="sc-trend trend-down">↓ 2.3%</div></div>' +
+      '<div class="sc-label">WCCoin Pay</div>' +
+      '<div class="sc-value">' + fmtNum(w.wc.balance) + ' <small>WC</small></div>' +
+      '<div class="sc-foot">' + w.wc.account + '</div>';
+
+    grid.appendChild(c1);
+    grid.appendChild(c2);
+    grid.appendChild(c3);
+    grid.appendChild(c4);
+  }
+
+  /* ============================================================
+     RENDER: Sidebar wallets
+     ============================================================ */
+  function renderSidebarWallets(){
+    var wrap = $('sidebarWallets');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    Object.keys(state.wallets).forEach(function(k){
+      var w = state.wallets[k];
+      var row = el('div','sb-wallet');
+      row.setAttribute('data-wallet', k);
+      row.innerHTML =
+        '<div class="sw-dot" style="background:' + w.color + ';"></div>' +
+        '<div class="sw-meta"><h5>' + w.name + '</h5><p>' + fmtNum(w.balance) + ' ' + w.sym + '</p></div>';
+      wrap.appendChild(row);
+    });
+  }
+
+  /* ============================================================
+     RENDER: Wallet quick list
+     ============================================================ */
+  function renderWalletList(){
+    var wrap = $('walletList');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    Object.keys(state.wallets).forEach(function(k){
+      var w = state.wallets[k];
+      var row = el('div','wallet-row');
+      row.setAttribute('data-wallet', k);
+      var badgeCls = k === 'wave' ? 'w-wave' : (k === 'kpay' ? 'w-kpay' : 'w-wc');
+      var letter = k === 'wave' ? 'W' : (k === 'kpay' ? 'K' : '₩');
+      row.innerHTML =
+        '<div class="wr-badge ' + badgeCls + '">' + letter + '</div>' +
+        '<div class="wr-meta"><h5>' + w.name + '</h5><p>' + w.account + '</p></div>' +
+        '<div class="wr-amt" style="color:' + w.color + ';">' + fmtNum(w.balance) + '<small>' + w.sym + '</small></div>';
+      wrap.appendChild(row);
+    });
+  }
+
+  /* ============================================================
+     RENDER: Transactions
+     ============================================================ */
+  function renderTransactions(filter){
+    var wrap = $('txList');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+
+    var list = state.transactions.slice();
+    if(filter && filter.trim()){
+      var q = filter.toLowerCase();
+      list = list.filter(function(tx){ return tx.label.toLowerCase().indexOf(q) !== -1; });
+    }
+
+    if(list.length === 0){
+      wrap.appendChild(el('p','', 'ရှာဖွေမှု မတွေ့ပါ'));
+      return;
+    }
+
+    list.forEach(function(tx){
+      var w = state.wallets[tx.wallet];
+      if(!w) return;
+      var icoCls = 'tx-' + tx.wallet;
+      var amtCls = tx.dir === 'in' ? 'amt-in' : 'amt-out';
+      var sign = tx.dir === 'in' ? '+' : '-';
+      var row = el('div','tx');
+      row.innerHTML =
+        '<div class="tx-ico ' + icoCls + '">' + (tx.wallet === 'wave' ? '💛' : (tx.wallet === 'kpay' ? '💙' : '💚')) + '</div>' +
+        '<div class="tx-info"><h4>' + tx.label + '</h4><p>' + tx.time + '</p></div>' +
+        '<div class="tx-amt ' + amtCls + '">' + sign + fmtNum(tx.amount) + ' ' + w.sym + '</div>';
+      wrap.appendChild(row);
+    });
+  }
+
+  /* ============================================================
+     RENDER: History badge
+     ============================================================ */
+  function renderHistoryBadge(){
+    var b = $('historyBadge');
+    if(b) b.textContent = state.transactions.length;
+  }
+
+  /* ============================================================
+     SELECT WALLET
+     ============================================================ */
+  function selectWallet(key){
+    var w = state.wallets[key];
+    if(!w) return;
+
+    $('welcomeTitle').textContent = w.name + ' ကို ရွေးထားသည် ✅';
+    $('welcomeSub').textContent = 'ငွေလွှဲ / လက်ခံ လုပ်ဆောင်နိုင်ပါပြီ';
+
+    var fromSel = $('fromWallet');
+    if(fromSel) fromSel.value = key;
+
+    var recvSel = $('recvWallet');
+    if(recvSel) recvSel.value = key;
+
+    var myAcc = $('myAccount');
+    if(myAcc) myAcc.value = w.account;
+
+    var topupSel = $('topupWallet');
+    if(topupSel) topupSel.value = key;
+
+    toast('💼 ' + w.name + ' ရွေးချယ်ပြီး');
+  }
+
+  /* ============================================================
+     TRANSFER
+     ============================================================ */
+  function doTransfer(){
+    var fromKey = $('fromWallet').value;
+    var to = $('toAccount').value.trim();
+    var amtRaw = $('amount').value;
+    var note = $('note').value.trim();
+
+    if(!to){ toast('⚠️ လက်ခံမည့်သူ ထည့်ပါ'); return; }
+    if(!amtRaw || Number(amtRaw) <= 0){ toast('⚠️ ပမာဏ ထည့်ပါ'); return; }
+
+    var amt = Number(amtRaw);
+    var w = state.wallets[fromKey];
+    if(!w){ toast('⚠️ Wallet မမှန်ပါ'); return; }
+    if(amt > w.balance){ toast('⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ'); return; }
+
+    // Deduct
+    w.balance -= amt;
+
+    // Add transaction
+    state.transactions.unshift({
+      wallet: fromKey,
+      dir: 'out',
+      amount: amt,
+      label: w.name + ' မှ လွှဲပြီး' + (note ? ' (' + note + ')' : ''),
+      time: 'ယခု'
+    });
+
+    // Refresh UI
+    renderStats();
+    renderSidebarWallets();
+    renderWalletList();
+    renderTransactions($('searchInput') ? $('searchInput').value : '');
+    renderHistoryBadge();
+
+    closeModal('transferModal');
+    toast('📤 ' + w.name + ' မှ ' + fmtNum(amt) + ' ' + w.sym + ' လွှဲပြီး ✅');
+
+    // Clear form
+    $('toAccount').value = '';
+    $('amount').value = '';
+    $('note').value = '';
+  }
+
+  /* ============================================================
+     RECEIVE
+     ============================================================ */
+  function doReceive(){
+    var wKey = $('recvWallet').value;
+    var amtRaw = $('recvAmount').value;
+    var w = state.wallets[wKey];
+    if(!w){ toast('⚠️ Wallet မမှန်ပါ'); return; }
+
+    if(amtRaw && Number(amtRaw) > 0){
+      toast('📥 ' + w.name + ' — ' + fmtNum(Number(amtRaw)) + ' ' + w.sym + ' တောင်းခံပြီး ✅');
+    } else {
+      toast('📥 ' + w.name + ' လက်ခံရန် အသင့် ✅');
+    }
+
+    closeModal('receiveModal');
+    $('recvAmount').value = '';
+  }
+
+  /* ============================================================
+     TOPUP
+     ============================================================ */
+  function doTopup(){
+    var phone = $('topupPhone').value.trim();
+    var amtRaw = $('topupAmount').value;
+    var wKey = $('topupWallet').value;
+    var w = state.wallets[wKey];
+
+    if(!phone){ toast('⚠️ ဖုန်းနံပါတ် ထည့်ပါ'); return; }
+    if(!amtRaw || Number(amtRaw) <= 0){ toast('⚠️ ပမာဏ ထည့်ပါ'); return; }
+    if(!w){ toast('⚠️ Wallet မမှန်ပါ'); return; }
+
+    var amt = Number(amtRaw);
+    if(amt > w.balance){ toast('⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ'); return; }
+
+    w.balance -= amt;
+
+    state.transactions.unshift({
+      wallet: wKey,
+      dir: 'out',
+      amount: amt,
+      label: phone + ' ဖုန်းဖြည့်',
+      time: 'ယခု'
+    });
+
+    renderStats();
+    renderSidebarWallets();
+    renderWalletList();
+    renderTransactions($('searchInput') ? $('searchInput').value : '');
+    renderHistoryBadge();
+
+    closeModal('topupModal');
+    toast('⚡ ' + fmtNum(amt) + ' ' + w.sym + ' ဖုန်းဖြည့်ပြီး ✅');
+
+    $('topupPhone').value = '';
+    $('topupAmount').value = '';
+  }
+
+  /* ============================================================
+     QR
+     ============================================================ */
+  function doQr(){
+    var amtRaw = $('qrAmount').value;
+    if(!amtRaw || Number(amtRaw) <= 0){ toast('⚠️ ပမာဏ ထည့်ပါ'); return; }
+
+    closeModal('qrModal');
+    toast('📷 QR Scan & Pay — ' + fmtNum(Number(amtRaw)) + ' Ks ✅');
+    $('qrAmount').value = '';
+  }
+
+  /* ============================================================
+     SETTINGS
+     ============================================================ */
+  function doSaveSettings(){
+    var name = $('setName').value.trim() || 'Ko Aung';
+    var phone = $('setPhone').value.trim();
+    var lang = $('setLang').value;
+
+    $('userProfile').querySelector('h5').textContent = name;
+    $('welcomeTitle').textContent = (lang === 'en' ? 'Hello, ' : 'မင်္ဂလာပါ, ') + name + ' 👋';
+    $('welcomeSub').textContent = (lang === 'en' ? 'All wallets are synced' : 'သင့်ရဲ့ wallets အားလုံး ဒီနေ့ အဆင်ပြေပါစေ');
+
+    if(phone){
+      state.wallets.wave.account = phone;
+      renderSidebarWallets();
+      renderWalletList();
+    }
+
+    closeModal('settingsModal');
+    toast('⚙️ Settings သိမ်းပြီး ✅');
+  }
+
+  /* ============================================================
+     AUTO UPDATE
+     ============================================================ */
+  var updateCheckTimer = null;
+  var currentVersion = state.version;
+
+  function checkForUpdate(){
+    // Simulate version check — in production, fetch from server
+    // For demo: auto-update every 60s (just a version bump notification)
+    var dot = $('updateDot');
+    if(dot) dot.style.display = 'block';
+
+    setTimeout(function(){
+      if(dot) dot.style.display = 'none';
+    }, 4000);
+  }
+
+  function startAutoUpdate(){
+    // Initial check after 10s
+    setTimeout(checkForUpdate, 10000);
+    // Then every 120s
+    updateCheckTimer = setInterval(checkForUpdate, 120000);
+  }
+
+  /* ============================================================
+     EVENT DELEGATION — all clicks
+     ============================================================ */
+  function bindEvents(){
+
+    // Sidebar navigation
+    document.querySelectorAll('.sb-item[data-nav]').forEach(function(item){
+      item.addEventListener('click', function(){
+        var nav = this.getAttribute('data-nav');
+        // Active state
+        document.querySelectorAll('.sb-item[data-nav]').forEach(function(i){ i.classList.remove('active'); });
+        this.classList.add('active');
+
+        if(nav === 'dashboard'){
+          $('welcomeTitle').textContent = 'မင်္ဂလာပါ, Ko Aung 👋';
+          $('welcomeSub').textContent = 'သင့်ရဲ့ wallets အားလုံး ဒီနေ့ အဆင်ပြေပါစေ';
+          toast('🏠 Dashboard');
+        } else if(nav === 'transfer'){
+          openModal('transferModal');
+        } else if(nav === 'receive'){
+          openModal('receiveModal');
+        } else if(nav === 'history'){
+          toast('📊 History — ' + state.transactions.length + ' ခု');
+        } else if(nav === 'settings'){
+          openModal('settingsModal');
+        }
+      });
+    });
+
+    // Sidebar wallet clicks
+    $('sidebarWallets').addEventListener('click', function(e){
+      var row = e.target.closest('.sb-wallet');
+      if(row) selectWallet(row.getAttribute('data-wallet'));
+    });
+
+    // Wallet quick list clicks
+    $('walletList').addEventListener('click', function(e){
+      var row = e.target.closest('.wallet-row');
+      if(row) selectWallet(row.getAttribute('data-wallet'));
+    });
+
+    // Action buttons
+    $('actionRow').addEventListener('click', function(e){
+      var btn = e.target.closest('.act-btn');
+      if(!btn) return;
+      var action = btn.getAttribute('data-action');
+      if(action === 'transfer') openModal('transferModal');
+      else if(action === 'receive') openModal('receiveModal');
+      else if(action === 'topup') openModal('topupModal');
+      else if(action === 'qr') openModal('qrModal');
+    });
+
+    // Panel links
+    document.querySelectorAll('[data-action="viewAllTx"]').forEach(function(a){
+      a.addEventListener('click', function(){
+        toast('📊 ငွေလွှဲမှု အားလုံး — ' + state.transactions.length + ' ခု');
+      });
+    });
+    document.querySelectorAll('[data-action="viewAllWallets"]').forEach(function(a){
+      a.addEventListener('click', function(){
+        toast('💼 Wallets 3 ခု');
+      });
+    });
+
+    // Topbar
+    $('notifBtn').addEventListener('click', function(){ toast('🔔 Notifications'); });
+    $('profileBtn').addEventListener('click', function(){ openModal('settingsModal'); });
+    $('userProfile').addEventListener('click', function(){ openModal('settingsModal'); });
+
+    // Search
+    $('searchInput').addEventListener('input', function(){
+      renderTransactions(this.value);
+    });
+
+    // Modal close buttons
+    document.querySelectorAll('[data-close]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        closeModal(this.getAttribute('data-close'));
+      });
+    });
+
+    // Overlay click to close
+    document.querySelectorAll('.modal-overlay').forEach(function(ov){
+      ov.addEventListener('click', function(e){
+        if(e.target === ov) ov.classList.remove('show');
+      });
+    });
+
+    // Form submit buttons
+    $('doTransferBtn').addEventListener('click', doTransfer);
+    $('doReceiveBtn').addEventListener('click', doReceive);
+    $('doTopupBtn').addEventListener('click', doTopup);
+    $('doQrBtn').addEventListener('click', doQr);
+    $('doSaveSettingsBtn').addEventListener('click', doSaveSettings);
+
+    // Keyboard: Escape closes modals
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeAllModals();
+    });
+  }
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init(){
+    // Initial render
+    renderStats();
+    renderSidebarWallets();
+    renderWalletList();
+    renderTransactions('');
+    renderHistoryBadge();
+
+    // Set default accounts
+    $('myAccount').value = state.wallets.wave.account;
+    $('setName').value = 'Ko Aung';
+
+    // Bind all events
+    bindEvents();
+
+    // Start auto-update checker
+    startAutoUpdate();
+
+    // Welcome
+    console.log('[TriPay] v' + state.version + ' initialized — all systems functional');
+  }
+
+  // Run when DOM ready
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
+</body>
+</html>

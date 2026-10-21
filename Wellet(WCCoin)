@@ -2,1244 +2,1894 @@
 <html lang="my">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TriPay Ultra — Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#00B4D8">
+<title>WC Wallet + Slot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  :root{
-    /* Pastel palette — soft, eye-friendly */
-    --wave:#F5D76E;
-    --wave-soft:#FDF6E3;
-    --kpay:#A3C4F3;
-    --kpay-soft:#EEF4FC;
-    --wc:#A8E6CF;
-    --wc-soft:#EAF9F3;
-    --bg:#F7F5F0;
-    --sidebar:#F0EDE6;
-    --card:#FFFFFF;
-    --card-hover:#FAF8F4;
-    --glass:rgba(0,0,0,0.03);
-    --border:rgba(0,0,0,0.07);
-    --txt:#3D3D3D;
-    --muted:#9A9A9A;
-    --green:#7BC67E;
-    --red:#E88B8B;
-    --purple:#C9B8E8;
-    --purple-soft:#F3EEFB;
-    --shadow:0 2px 12px rgba(0,0,0,0.04);
-    --shadow-lg:0 8px 30px rgba(0,0,0,0.07);
-  }
-  body{
-    font-family:'Inter','Padauk',sans-serif;
-    background:var(--bg);
-    color:var(--txt);
-    min-height:100vh;
-    display:flex;
-    overflow-x:hidden;
-  }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --wc-blue:#00B4D8;--wc-blue-dark:#0077B6;--wc-gold:#FFB800;--wc-gold-dark:#FF8C00;
+  --bg:#F0F4F8;--surface:#FFF;--surface-2:#F8FAFC;--text:#1A202C;--text-2:#64748B;
+  --border:#E2E8F0;--green:#00D9A3;--red:#FF4757;--warn:#FFB800;
+  --grad:linear-gradient(135deg,#00B4D8,#0077B6);
+  --grad-gold:linear-gradient(135deg,#FFB800,#FF8C00);
+  --r:14px;--r-pill:999px;
+  --sh-sm:0 1px 3px rgba(0,0,0,.06);--sh-md:0 4px 16px rgba(0,0,0,.08);
+  --sh-lg:0 12px 32px rgba(0,0,0,.12);
+  --slot-bg:#0d021a;--panel:#1a0b2e;--header:#2a0845;
+  --gold:#ffcc00;--cyan:#00ffcc;--pink:#ff00ff;
+  --reel:#fff8e7;--reel-text:#333;
+}
+body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.hidden{display:none!important}
 
-  /* ===== SIDEBAR ===== */
-  .sidebar{
-    width:240px;
-    background:var(--sidebar);
-    border-right:1px solid var(--border);
-    padding:28px 16px;
-    display:flex;
-    flex-direction:column;
-    position:fixed;
-    top:0;bottom:0;left:0;
-    z-index:20;
-    overflow-y:auto;
-  }
-  .sb-brand{
-    display:flex;align-items:center;gap:11px;
-    padding:0 8px;margin-bottom:36px;
-  }
-  .sb-logo{
-    width:40px;height:40px;border-radius:12px;
-    background:linear-gradient(135deg,var(--wave),var(--kpay),var(--wc));
-    display:flex;align-items:center;justify-content:center;
-    font-weight:900;font-size:15px;color:#fff;
-    box-shadow:0 3px 12px rgba(163,196,243,0.4);
-  }
-  .sb-brand h1{font-size:15px;font-weight:800;}
-  .sb-brand h1 span{background:linear-gradient(90deg,#E8B84B,#7BB8A0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-  .sb-brand p{font-size:9px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;font-weight:600;margin-top:2px;}
+/* ===== LOADING ===== */
+.loading{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(4px)}
+.loading.show{display:flex}
+.spinner{width:48px;height:48px;border:4px solid rgba(0,180,216,.15);border-top-color:var(--wc-blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  .sb-section{font-size:9.5px;color:var(--muted);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:0 12px;margin:20px 0 10px;}
-  .sb-item{
-    display:flex;align-items:center;gap:12px;
-    padding:11px 12px;border-radius:12px;
-    cursor:pointer;transition:.25s;color:var(--muted);
-    font-size:13px;font-weight:600;margin-bottom:3px;
-  }
-  .sb-item .sb-ico{font-size:16px;width:20px;text-align:center;}
-  .sb-item:hover{background:var(--glass);color:var(--txt);}
-  .sb-item.active{
-    background:linear-gradient(90deg,rgba(245,215,110,0.25),rgba(245,215,110,0.05));
-    color:#B8962E;
-    border-left:2px solid var(--wave);
-  }
-  .sb-badge{
-    margin-left:auto;font-size:9px;font-weight:800;
-    padding:2px 7px;border-radius:10px;
-    background:rgba(245,215,110,0.3);color:#B8962E;
-  }
+/* ===== AUTH SCREEN ===== */
+#authScreen{display:none;min-height:100vh;background:linear-gradient(135deg,#00B4D8 0%,#0077B6 50%,#03045E 100%);align-items:center;justify-content:center;padding:20px;position:fixed;inset:0;z-index:1000;overflow-y:auto}
+#authScreen.active{display:flex}
+.auth-logo{position:absolute;top:30px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:10}
+.auth-logo-mark{width:52px;height:52px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#0077B6;box-shadow:0 10px 32px rgba(0,0,0,.2);letter-spacing:-0.5px}
+.auth-logo-text{font-size:26px;font-weight:900;color:#fff;letter-spacing:-0.8px}
+.auth-logo-text span{color:#48CAE4}
+.auth-box{background:#FFF;padding:40px 32px 32px;border-radius:26px;box-shadow:0 30px 80px rgba(0,0,0,.3);width:400px;max-width:100%;position:relative;z-index:5;margin:80px 0 20px}
+.auth-box h1{font-size:26px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;letter-spacing:-0.5px}
+.auth-box .subtitle{text-align:center;color:var(--text-2);font-size:13.5px;margin-bottom:22px;font-weight:600}
+.auth-tabs{display:flex;background:var(--surface-2);border-radius:var(--r-pill);padding:5px;margin-bottom:22px}
+.auth-tab{flex:1;padding:11px;border:none;background:transparent;cursor:pointer;font-weight:800;font-size:13.5px;color:var(--text-2);border-radius:var(--r-pill);font-family:inherit;transition:.2s}
+.auth-tab.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
+.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-input-group{position:relative;display:flex;align-items:center}
+.auth-input-group .ico{position:absolute;left:16px;font-size:16px;pointer-events:none;z-index:1}
+.auth-form input{width:100%;padding:14px 16px 14px 44px;border:2px solid var(--border);border-radius:12px;font-size:14px;background:var(--surface-2);transition:.2s;outline:none;color:var(--text);font-family:inherit;font-weight:600}
+.auth-form input:focus{border-color:var(--wc-blue);background:#FFF;box-shadow:0 0 0 4px rgba(0,180,216,.1)}
+.auth-form input::placeholder{color:var(--text-2);font-weight:500}
+.auth-btn{background:var(--grad);color:#fff;padding:14px;border:none;border-radius:12px;font-weight:900;cursor:pointer;font-size:15px;font-family:inherit;transition:.2s;box-shadow:0 6px 20px rgba(0,180,216,.3);margin-top:4px}
+.auth-btn:hover{transform:translateY(-2px)}
+.auth-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.auth-err{color:var(--red);font-size:13px;text-align:center;min-height:18px;font-weight:700}
+.auth-hint{font-size:11.5px;color:var(--text-2);text-align:center;margin-top:-6px;font-weight:600}
+.auth-footer{margin-top:20px;text-align:center;font-size:11.5px;color:var(--text-2);font-weight:600}
 
-  .sb-wallets{margin-top:6px;}
-  .sb-wallet{
-    display:flex;align-items:center;gap:10px;
-    padding:9px 12px;border-radius:11px;
-    cursor:pointer;transition:.25s;margin-bottom:4px;
-  }
-  .sb-wallet:hover{background:var(--glass);}
-  .sb-wallet .sw-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-  .sb-wallet .sw-meta{flex:1;min-width:0;}
-  .sb-wallet .sw-meta h5{font-size:11.5px;font-weight:700;margin-bottom:1px;}
-  .sb-wallet .sw-meta p{font-size:9.5px;color:var(--muted);font-weight:500;}
+/* ===== TOASTS ===== */
+.toast-container{position:fixed;top:20px;right:20px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:calc(100vw - 40px)}
+.toast{background:#FFF;padding:13px 18px;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.15);border-left:4px solid var(--wc-blue);font-size:13.5px;font-weight:700;color:var(--text);min-width:220px;max-width:320px;pointer-events:auto;display:flex;align-items:center;gap:10px;animation:slideRight .3s ease-out}
+.toast.success{border-left-color:var(--green)}
+.toast.error{border-left-color:var(--red)}
+.toast.warn{border-left-color:var(--warn)}
+@keyframes slideRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-  .sb-user{
-    margin-top:auto;
-    display:flex;align-items:center;gap:11px;
-    padding:12px;border-radius:14px;
-    background:var(--glass);border:1px solid var(--border);
-    cursor:pointer;transition:.25s;
-  }
-  .sb-user:hover{background:var(--card-hover);}
-  .sb-avatar{
-    width:36px;height:36px;border-radius:50%;
-    background:linear-gradient(135deg,var(--wave),var(--kpay));
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:14px;color:#fff;flex-shrink:0;
-  }
-  .sb-user h5{font-size:12px;font-weight:700;}
-  .sb-user p{font-size:9.5px;color:var(--muted);}
+.coin-reward{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-200px);background:var(--grad-gold);color:#fff;padding:13px 24px;border-radius:30px;font-weight:900;font-size:16px;box-shadow:0 12px 32px rgba(255,184,0,.4);z-index:99998;transition:transform .4s cubic-bezier(.4,0,.2,1);pointer-events:none;display:flex;align-items:center;gap:8px}
+.coin-reward.show{transform:translateX(-50%) translateY(0)}
+.coin-reward .coin-icon{width:24px;height:24px}
+.coin-reward .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
 
-  /* ===== MAIN ===== */
-  .main{
-    flex:1;
-    margin-left:240px;
-    padding:28px 32px;
-    min-height:100vh;
-    position:relative;
-    z-index:2;
-  }
+/* ===== APP SHELL ===== */
+.app-shell{display:none;min-height:100vh}
+.app-shell.active{display:flex}
+.sidebar{width:230px;background:#FFF;border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20;overflow-y:auto}
+.sidebar-logo{display:flex;align-items:center;gap:11px;padding:0 8px;margin-bottom:26px}
+.logo-mark{width:42px;height:42px;border-radius:14px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.35);letter-spacing:-0.5px}
+.sidebar-logo h1{font-size:16px;font-weight:900;letter-spacing:-0.4px}
+.sidebar-logo p{font-size:9px;color:var(--text-2);letter-spacing:1.2px;text-transform:uppercase;font-weight:700;margin-top:2px}
+.nav-section{font-size:9.5px;color:var(--text-2);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:0 12px;margin:18px 0 8px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;cursor:pointer;transition:.2s;color:var(--text-2);font-size:13px;font-weight:700;margin-bottom:3px;border:none;background:transparent;width:100%;text-align:left;font-family:inherit}
+.nav-item .ni-icon{font-size:17px;width:20px;text-align:center}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:linear-gradient(90deg,rgba(0,180,216,.15),rgba(0,180,216,.03));color:var(--wc-blue-dark);border-left:2px solid var(--wc-blue)}
+.nav-wallet{margin-top:6px}
+.wallet-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;cursor:pointer;transition:.2s;margin-bottom:4px}
+.wallet-row:hover{background:var(--surface-2)}
+.wallet-row .wr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.wallet-row .wr-meta{flex:1;min-width:0}
+.wallet-row .wr-meta h5{font-size:12px;font-weight:800;margin-bottom:1px}
+.wallet-row .wr-meta p{font-size:10px;color:var(--text-2);font-weight:600}
+.sb-user{margin-top:auto;display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);cursor:pointer;transition:.2s}
+.sb-user:hover{background:#FFF}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.sb-user h5{font-size:12px;font-weight:800}
+.sb-user p{font-size:9.5px;color:var(--text-2);font-weight:600}
 
-  /* ===== TOPBAR ===== */
-  .topbar{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-bottom:28px;gap:16px;flex-wrap:wrap;
-  }
-  .tb-left h2{font-size:22px;font-weight:800;letter-spacing:-0.5px;}
-  .tb-left p{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500;}
-  .tb-right{display:flex;align-items:center;gap:12px;}
-  .search{
-    display:flex;align-items:center;gap:9px;
-    background:var(--card);border:1px solid var(--border);
-    border-radius:12px;padding:10px 16px;width:240px;
-    transition:.3s;box-shadow:var(--shadow);
-  }
-  .search:focus-within{border-color:var(--wave);box-shadow:0 0 0 3px rgba(245,215,110,0.15);}
-  .search span{font-size:13px;color:var(--muted);}
-  .search input{
-    background:none;border:none;outline:none;color:var(--txt);
-    font-family:inherit;font-size:12.5px;font-weight:500;width:100%;
-  }
-  .search input::placeholder{color:var(--muted);}
-  .tb-btn{
-    width:40px;height:40px;border-radius:12px;
-    background:var(--card);border:1px solid var(--border);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:15px;transition:.3s;box-shadow:var(--shadow);
-  }
-  .tb-btn:hover{background:var(--card-hover);border-color:var(--wave);transform:translateY(-2px);}
+.main-content{flex:1;margin-left:230px;padding:24px 28px 40px;position:relative;z-index:2}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;gap:16px;flex-wrap:wrap}
+.topbar-left h2{font-size:23px;font-weight:900;letter-spacing:-0.6px}
+.topbar-left p{font-size:12.5px;color:var(--text-2);margin-top:3px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.avatar-btn{width:42px;height:42px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;cursor:pointer;box-shadow:var(--sh-sm);position:relative;border:none;font-family:inherit}
+.avatar-btn .status-dot{position:absolute;bottom:1px;right:1px;width:11px;height:11px;background:var(--green);border:2px solid #FFF;border-radius:50%}
+.logout-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--red);transition:.2s}
+.logout-btn:hover{background:#FFF0F1;border-color:var(--red)}
 
-  /* ===== STATS GRID ===== */
-  .stats-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:16px;
-    margin-bottom:24px;
-  }
-  .stat-card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:20px;
-    position:relative;
-    overflow:hidden;
-    transition:.3s;
-    box-shadow:var(--shadow);
-  }
-  .stat-card:hover{transform:translateY(-3px);border-color:rgba(0,0,0,0.12);box-shadow:var(--shadow-lg);}
-  .stat-card::before{
-    content:'';position:absolute;top:-40%;right:-20%;
-    width:160px;height:160px;border-radius:50%;
-    opacity:.18;filter:blur(30px);
-  }
-  .sc-wave::before{background:var(--wave);}
-  .sc-kpay::before{background:var(--kpay);}
-  .sc-wc::before{background:var(--wc);}
-  .sc-total::before{background:linear-gradient(45deg,var(--wave),var(--kpay),var(--wc));}
+/* ===== PAGE VIEWS ===== */
+.page-view{display:none}
+.page-view.active{display:block;animation:fadeUp .25s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-  .sc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;position:relative;z-index:2;}
-  .sc-icon{
-    width:38px;height:38px;border-radius:11px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:15px;
-  }
-  .sc-wave .sc-icon{background:var(--wave-soft);color:#C9A63E;}
-  .sc-kpay .sc-icon{background:var(--kpay-soft);color:#6A9FD8;}
-  .sc-wc .sc-icon{background:var(--wc-soft);color:#6BBF9A;}
-  .sc-total .sc-icon{background:linear-gradient(135deg,var(--wave-soft),var(--wc-soft));color:#8B8B8B;}
+/* ===== BALANCE / STATS / ACTIONS ===== */
+.balance-card{background:linear-gradient(135deg,#00B4D8 0%,#0077B6 100%);border-radius:24px;padding:26px 24px;color:#fff;position:relative;overflow:hidden;margin-bottom:22px;box-shadow:0 12px 32px rgba(0,180,216,.28)}
+.balance-card::before{content:'';position:absolute;top:-50%;right:-30%;width:280px;height:280px;background:rgba(255,255,255,.08);border-radius:50%}
+.balance-card::after{content:'';position:absolute;bottom:-60%;left:-20%;width:220px;height:220px;background:rgba(255,255,255,.05);border-radius:50%}
+.balance-label{font-size:11.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.85;margin-bottom:10px;position:relative;z-index:2}
+.balance-amount{font-size:38px;font-weight:900;letter-spacing:-1.5px;line-height:1.1;position:relative;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.balance-amount .coin-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.balance-amount .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+.balance-amount small{font-size:16px;font-weight:800;opacity:.9}
+.balance-sub{font-size:12.5px;margin-top:10px;font-weight:600;opacity:.85;position:relative;z-index:2;display:flex;align-items:center;gap:6px}
+.balance-actions{display:flex;gap:10px;margin-top:20px;position:relative;z-index:2}
+.balance-action{flex:1;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);color:#fff;padding:12px 10px;border-radius:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s;backdrop-filter:blur(10px)}
+.balance-action:hover{background:rgba(255,255,255,.3);transform:translateY(-2px)}
 
-  .sc-trend{
-    font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;
-    display:flex;align-items:center;gap:3px;
-  }
-  .trend-up{background:rgba(123,198,126,0.15);color:#5EA862;}
-  .trend-down{background:rgba(232,139,139,0.15);color:#D16B6B;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.stat-box{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:18px 20px;box-shadow:var(--sh-sm);transition:.25s}
+.stat-box:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
+.stat-box .sb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.stat-box .sb-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.sb-wave .sb-icon{background:linear-gradient(135deg,#FFF3D0,#FFE29A)}
+.sb-kpay .sb-icon{background:linear-gradient(135deg,#DDEEFF,#B8DCFF)}
+.sb-wc .sb-icon{background:linear-gradient(135deg,#D0F9E8,#A8EFD3)}
+.sb-total .sb-icon{background:linear-gradient(135deg,#E0F2FE,#BAE6FD)}
+.stat-box .sb-label{font-size:11.5px;color:var(--text-2);font-weight:700;margin-bottom:6px}
+.stat-box .sb-value{font-size:22px;font-weight:900;letter-spacing:-0.8px;line-height:1.15;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.stat-box .sb-value small{font-size:12px;font-weight:800;color:var(--text-2)}
+.stat-box .sb-value .inline-coin{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-box .sb-value .inline-coin img{width:100%;height:100%;object-fit:contain}
+.stat-box .sb-foot{font-size:10.5px;color:var(--text-2);margin-top:8px;font-weight:600}
 
-  .sc-label{font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:6px;position:relative;z-index:2;}
-  .sc-value{
-    font-size:24px;font-weight:900;letter-spacing:-1px;
-    position:relative;z-index:2;line-height:1.1;
-  }
-  .sc-value small{font-size:13px;color:var(--muted);font-weight:700;}
-  .sc-foot{font-size:10px;color:var(--muted);margin-top:8px;position:relative;z-index:2;font-weight:500;}
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:26px}
+.action-tile{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm);font-family:inherit;border:none}
+.action-tile:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:rgba(0,180,216,.3)}
+.action-tile .at-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.at-play .at-icon{background:linear-gradient(135deg,#FFE4B8,#FFC97A)}
+.at-receive .at-icon{background:linear-gradient(135deg,#D0F9E8,#A8EFD3)}
+.at-history .at-icon{background:linear-gradient(135deg,#DDEEFF,#B8DCFF)}
+.at-buy .at-icon{background:linear-gradient(135deg,#F3E4FF,#E0C8FF)}
+.action-tile h4{font-size:13.5px;font-weight:800;color:var(--text);text-align:center;line-height:1.2}
+.action-tile p{font-size:10.5px;color:var(--text-2);font-weight:600;text-align:center}
 
-  /* ===== ACTION BUTTONS ROW ===== */
-  .action-row{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:14px;
-    margin-bottom:28px;
-  }
-  .act-btn{
-    border-radius:18px;
-    padding:20px 18px;
-    display:flex;align-items:center;gap:14px;
-    cursor:pointer;
-    transition:.35s cubic-bezier(.4,0,.2,1);
-    position:relative;
-    overflow:hidden;
-    border:1px solid transparent;
-    box-shadow:var(--shadow);
-  }
-  .act-btn::after{
-    content:'';position:absolute;inset:0;
-    background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,0.5) 50%,transparent 60%);
-    transform:translateX(-100%);
-    transition:.6s;
-  }
-  .act-btn:hover::after{transform:translateX(100%);}
-  .act-btn:hover{transform:translateY(-4px);}
-  .act-btn:active{transform:scale(.97);}
+/* ===== WALLET CARDS ===== */
+.wallets-section{margin-bottom:24px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.section-header h3{font-size:17px;font-weight:900;letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
+.section-header a{font-size:12.5px;color:var(--wc-blue-dark);font-weight:800;cursor:pointer;text-decoration:none}
+.wallet-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.wallet-card{background:#FFF;border:1px solid var(--border);border-radius:20px;padding:20px;position:relative;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm)}
+.wallet-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.wallet-card::before{content:'';position:absolute;top:-40%;right:-20%;width:180px;height:180px;border-radius:50%;opacity:.12;filter:blur(20px);background:#00B4D8}
+.wallet-card-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:2}
+.wallet-logo{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;flex-shrink:0;background:var(--grad);letter-spacing:-0.5px}
+.wallet-card-head .wc-name{flex:1;min-width:0}
+.wallet-card-head .wc-name h4{font-size:14.5px;font-weight:900;margin-bottom:2px}
+.wallet-card-head .wc-name p{font-size:11px;color:var(--text-2);font-weight:600}
+.wallet-balance{font-size:28px;font-weight:900;letter-spacing:-1px;position:relative;z-index:2;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wallet-balance small{font-size:13px;font-weight:800;color:var(--text-2)}
+.wallet-balance .inline-coin{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.wallet-balance .inline-coin img{width:100%;height:100%;object-fit:contain}
+.wallet-meta{font-size:11px;color:var(--text-2);margin-top:6px;font-weight:600;position:relative;z-index:2}
 
-  .act-send{
-    background:linear-gradient(135deg,var(--wave-soft),#FFF9E6);
-    border-color:rgba(245,215,110,0.4);
-  }
-  .act-receive{
-    background:linear-gradient(135deg,var(--wc-soft),#F0FBF7);
-    border-color:rgba(168,230,207,0.5);
-  }
-  .act-topup{
-    background:linear-gradient(135deg,var(--purple-soft),#F8F4FD);
-    border-color:rgba(201,184,232,0.4);
-  }
-  .act-qr{
-    background:linear-gradient(135deg,var(--kpay-soft),#F0F6FE);
-    border-color:rgba(163,196,243,0.5);
-  }
+/* ===== SLOT ===== */
+.slot-wrapper{background:linear-gradient(145deg,#1e0a36,#0d021a);border-radius:24px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.3);border:2px solid var(--gold);max-width:780px;margin:0 auto}
+.slot-top{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:10px 14px;margin-bottom:10px}
+.slot-credit{display:flex;align-items:center;gap:8px;color:var(--gold);font-weight:900;font-size:15px}
+.slot-credit .coin-icon{width:22px;height:22px}
+.slot-credit .coin-icon img{width:100%;height:100%;object-fit:contain}
+.slot-credit .lbl{font-size:11px;opacity:.75;margin-right:2px}
+.slot-credit .val{color:var(--cyan);font-size:18px;text-shadow:0 0 8px rgba(0,255,204,.5)}
+.slot-top-right{display:flex;gap:6px}
+.slot-btn-sm{background:var(--gold);color:#1a0b2e;border:none;border-radius:6px;width:34px;height:34px;cursor:pointer;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.slot-btn-sm:active{transform:scale(.9)}
+.slot-title{text-align:center;font-size:34px;font-weight:900;color:var(--gold);text-shadow:0 0 20px var(--gold),0 0 40px var(--pink),0 2px 4px rgba(0,0,0,.5);letter-spacing:6px;margin:6px 0 4px}
+.slot-subtitle{text-align:center;font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;border:1px solid var(--cyan);border-radius:4px;padding:4px;background:rgba(0,255,204,.08);font-weight:800}
+.slot-info-row{display:flex;justify-content:space-between;background:var(--header);border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:10px}
+.slot-info-item{display:flex;flex-direction:column;align-items:center;min-width:70px}
+.slot-info-item .lbl{font-size:10px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.slot-info-item .val{font-size:17px;color:#fff;font-weight:900;margin-top:2px}
+.slot-info-item.vip .val{color:#ffaa00}
+.slot-main{display:flex;gap:8px;margin-bottom:10px}
+.slot-ways{display:flex;flex-direction:column;justify-content:center;align-items:center;background:#4a0000;border:1px solid var(--gold);border-radius:8px;padding:6px 4px;width:36px;flex-shrink:0}
+.slot-ways span{writing-mode:vertical-rl;color:var(--gold);font-weight:900;font-size:10px;letter-spacing:1px}
+.slot-reels{flex:1;background:var(--reel);border:2px solid var(--gold);border-radius:8px;padding:6px;position:relative;display:flex;flex-direction:column;min-width:0}
+.reels-table{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed}
+.reels-table td{background:var(--reel);border-radius:5px;border:1px solid var(--gold);text-align:center;vertical-align:middle;width:20%;height:20%;padding:0;position:relative;overflow:hidden;aspect-ratio:1}
+.sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:28px;color:var(--reel-text);transition:transform .1s}
+.sym svg{width:100%;height:100%;max-width:34px;max-height:34px;display:block;margin:auto}
+.sym.bomb{font-size:26px}
+.reels-table.spinning .sym{animation:spinSym .08s linear infinite}
+@keyframes spinSym{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+.sym.win{background:linear-gradient(135deg,rgba(0,255,204,.9),rgba(255,204,0,.8));border-radius:4px;animation:wf .4s infinite alternate;box-shadow:0 0 12px #00ffcc,0 0 24px #ffcc00;z-index:2}
+.sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.9),rgba(255,100,0,.8));border-radius:4px;animation:sf .4s infinite alternate;box-shadow:0 0 16px #ff00ff,0 0 32px #ff6600;z-index:2}
+@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.06)}}
+@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.1)}}
+.slot-btns{display:flex;flex-direction:column;gap:8px;width:92px;flex-shrink:0}
+.slot-btn{border-radius:10px;font-weight:900;cursor:pointer;text-transform:uppercase;border:2px solid rgba(255,255,255,.3);transition:.15s;font-family:inherit;padding:0;color:#1a0b2e}
+.slot-btn:active{transform:scale(.95)}
+.slot-spin{background:linear-gradient(180deg,#00ffcc,#00cc99);font-size:16px;padding:20px 0;box-shadow:0 0 20px var(--cyan);line-height:1.2}
+.slot-spin:disabled{opacity:.5;box-shadow:none;cursor:not-allowed}
+.slot-auto{background:linear-gradient(180deg,#ff00ff,#cc00cc);color:#fff;font-size:13px;padding:12px 0;line-height:1.2}
+.slot-turbo{background:linear-gradient(180deg,#ffaa00,#cc8800);font-size:13px;padding:12px 0;line-height:1.2}
+.slot-bet-row{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:8px 10px;gap:8px;flex-wrap:wrap}
+.bet-ctrl{display:flex;align-items:center;gap:5px;background:#4a0000;padding:4px 8px;border-radius:6px;border:1px solid var(--gold)}
+.bet-ctrl button{background:var(--gold);border:none;width:30px;height:30px;border-radius:5px;font-weight:900;cursor:pointer;font-size:16px;color:#1a0b2e}
+.bet-ctrl .bv{color:#fff;font-weight:900;font-size:16px;min-width:46px;text-align:center}
+.bet-ctrl .bl{color:var(--gold);font-size:9px;font-weight:800;text-transform:uppercase}
+.quick-bets{display:flex;gap:5px}
+.quick-bets button{border:none;border-radius:6px;font-weight:900;cursor:pointer;color:#fff;font-size:14px;padding:9px 12px;min-width:44px;font-family:inherit}
+.q2x{background:linear-gradient(180deg,#ffaa00,#cc8800)}
+.q3x{background:linear-gradient(180deg,#ff6600,#cc4400)}
+.q5x{background:linear-gradient(180deg,#ff0066,#cc0044)}
+.daily-btn{background:#0f0;color:#1a0b2e;padding:9px 14px;border:none;border-radius:6px;font-weight:900;cursor:pointer;font-size:16px;font-family:inherit}
+.slot-msg{background:#000;border:1px solid var(--gold);border-radius:6px;padding:9px;color:#ffcc00;font-size:12.5px;font-weight:800;min-height:44px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.4;flex-wrap:wrap;gap:4px;margin-top:10px}
+.slot-msg .win-line{background:rgba(255,204,0,.15);border:1px solid var(--gold);border-radius:4px;padding:2px 7px;margin:2px;display:inline-block;font-size:10px}
+.slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:52px;font-weight:900;text-shadow:0 0 30px currentColor,0 0 60px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
+.slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .5s infinite alternate}
+@keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.1)}}
+.slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,255,.2),rgba(255,204,0,.2));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:8px}
+.slot-freespin.show{opacity:1}
+.slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:28px;font-weight:900;color:#ff00ff;text-shadow:0 0 20px #ff00ff,0 0 40px #ff00ff;animation:fsFlash .5s infinite alternate}
+@keyframes fsFlash{0%{opacity:.5}100%{opacity:1}}
 
-  .act-icon{
-    width:46px;height:46px;border-radius:14px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px;flex-shrink:0;
-    background:rgba(255,255,255,0.7);
-  }
-  .act-send .act-icon{color:#C9A63E;}
-  .act-receive .act-icon{color:#6BBF9A;}
-  .act-topup .act-icon{color:#9B85C4;}
-  .act-qr .act-icon{color:#6A9FD8;}
+/* ===== TRANSFER / BUY / HISTORY LIST ===== */
+.tab-bar{display:flex;gap:8px;background:var(--surface-2);border-radius:var(--r-pill);padding:5px;margin-bottom:18px;overflow-x:auto}
+.tab-bar button{padding:10px 16px;border:none;background:transparent;font-weight:800;font-size:12.5px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
+.tab-bar button.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
 
-  .act-text h4{font-size:13.5px;font-weight:800;margin-bottom:2px;}
-  .act-text p{font-size:10.5px;color:var(--muted);font-weight:500;}
+.info-row{margin-bottom:16px}
+.info-row label{display:block;font-size:11.5px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.info-row input,.info-row select,.info-row textarea{width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;font-size:14.5px;background:var(--surface-2);outline:none;color:var(--text);font-family:inherit;font-weight:600;transition:.15s}
+.info-row input:focus,.info-row select:focus,.info-row textarea:focus{border-color:var(--wc-blue);background:#FFF;box-shadow:0 0 0 4px rgba(0,180,216,.1)}
+.info-row textarea{resize:vertical;min-height:80px}
 
-  /* ===== MAIN GRID ===== */
-  .content-grid{
-    display:grid;
-    grid-template-columns:1.6fr 1fr;
-    gap:20px;
-  }
+.btn{padding:13px 20px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.3)}
+.btn-secondary{background:var(--surface-2);color:var(--text);border:1.5px solid var(--border)}
+.btn-danger{background:linear-gradient(135deg,#FF4757,#FF6B7A);color:#fff}
+.btn-gold{background:var(--grad-gold);color:#fff;box-shadow:0 4px 14px rgba(255,184,0,.3)}
+.btn-block{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-  .panel{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:22px;
-    padding:22px;
-    box-shadow:var(--shadow);
-  }
-  .panel-head{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-bottom:18px;
-  }
-  .panel-head h3{font-size:15px;font-weight:800;}
-  .panel-head a{font-size:11.5px;color:#C9A63E;font-weight:700;cursor:pointer;text-decoration:none;transition:.2s;}
-  .panel-head a:hover{color:#B8962E;}
+.history-list{display:flex;flex-direction:column;gap:8px}
+.tx-row{background:#FFF;border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh-sm);transition:.2s}
+.tx-row:hover{transform:translateX(3px);box-shadow:var(--sh-md)}
+.tx-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--surface-2)}
+.tx-icon.plus{background:linear-gradient(135deg,#D0F9E8,#A8EFD3);color:#00A378}
+.tx-icon.minus{background:linear-gradient(135deg,#FFE4E4,#FFC8C8);color:#E63946}
+.tx-body{flex:1;min-width:0}
+.tx-body .tx-title{font-size:13.5px;font-weight:800;margin-bottom:2px}
+.tx-body .tx-desc{font-size:11.5px;color:var(--text-2);font-weight:600}
+.tx-amount{font-size:15px;font-weight:900;flex-shrink:0;display:flex;align-items:center;gap:5px}
+.tx-amount.plus{color:#00A378}
+.tx-amount.minus{color:#E63946}
+.tx-amount .coin-icon{width:18px;height:18px}
+.tx-amount .coin-icon img{width:100%;height:100%;object-fit:contain}
 
-  /* Transaction list */
-  .tx{
-    display:flex;align-items:center;gap:14px;
-    padding:13px 12px;
-    border-radius:14px;
-    transition:.3s;cursor:pointer;
-    margin-bottom:6px;
-  }
-  .tx:hover{background:var(--card-hover);transform:translateX(4px);}
-  .tx-ico{
-    width:42px;height:42px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:16px;flex-shrink:0;
-  }
-  .tx-wave{background:var(--wave-soft);color:#C9A63E;}
-  .tx-kpay{background:var(--kpay-soft);color:#6A9FD8;}
-  .tx-wc{background:var(--wc-soft);color:#6BBF9A;}
-  .tx-info{flex:1;min-width:0;}
-  .tx-info h4{font-size:12.5px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .tx-info p{font-size:10px;color:var(--muted);font-weight:500;}
-  .tx-amt{font-size:13px;font-weight:800;white-space:nowrap;}
-  .amt-in{color:#5EA862;}
-  .amt-out{color:#D16B6B;}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text-2)}
+.empty-state .em{font-size:56px;display:block;margin-bottom:14px;opacity:.5}
+.empty-state h3{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px}
+.empty-state p{font-size:13px;font-weight:600}
 
-  /* Wallet quick list */
-  .wallet-row{
-    display:flex;align-items:center;gap:12px;
-    padding:13px 12px;border-radius:14px;
-    transition:.3s;cursor:pointer;
-    margin-bottom:8px;
-    border:1px solid transparent;
-  }
-  .wallet-row:hover{background:var(--card-hover);border-color:var(--border);}
-  .wr-badge{
-    width:40px;height:40px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-weight:900;font-size:15px;flex-shrink:0;
-  }
-  .w-wave{background:var(--wave-soft);color:#C9A63E;}
-  .w-kpay{background:var(--kpay-soft);color:#6A9FD8;}
-  .w-wc{background:var(--wc-soft);color:#6BBF9A;}
-  .wr-meta{flex:1;}
-  .wr-meta h5{font-size:12.5px;font-weight:700;margin-bottom:2px;}
-  .wr-meta p{font-size:10px;color:var(--muted);font-weight:500;}
-  .wr-amt{font-size:12.5px;font-weight:800;text-align:right;}
-  .wr-amt small{font-size:9.5px;color:var(--muted);display:block;font-weight:600;margin-top:1px;}
+/* ===== PACKAGE / REQUEST CARDS ===== */
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.pkg-card{background:#FFF;border:2px solid var(--border);border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;position:relative;transition:.2s}
+.pkg-card:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
+.pkg-card.selected{border-color:var(--wc-gold);background:rgba(255,184,0,.06);box-shadow:0 6px 20px rgba(255,184,0,.2)}
+.pkg-coins{font-size:22px;font-weight:900;color:#FF8C00;line-height:1.1;margin-bottom:6px}
+.pkg-price{font-size:13px;color:var(--text-2);font-weight:800}
+.pkg-bonus{position:absolute;top:-8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px}
+.req-card{background:#FFF;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.req-card .req-body{flex:1;min-width:0}
+.req-card .req-title{font-size:13.5px;font-weight:800;margin-bottom:2px}
+.req-card .req-sub{font-size:11.5px;color:var(--text-2);font-weight:600}
 
-  .fee-info{
-    background:var(--wave-soft);
-    border:1px solid rgba(245,215,110,0.4);
-    border-radius:12px;padding:11px 14px;
-    font-size:11px;color:#A8913E;
-    margin-bottom:18px;
-    display:flex;justify-content:space-between;
-  }
-  .fee-info b{color:#C9A63E;}
+/* ===== MODALS ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,14,39,.6);display:none;align-items:center;justify-content:center;z-index:9000;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:#FFF;border-radius:22px;width:100%;max-width:440px;max-height:88vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:popIn .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+.modal.modal-lg{max-width:560px}
+@keyframes popIn{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+.modal-head{padding:20px 22px;border-bottom:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-head h3{font-size:18px;font-weight:900;letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
+.modal-close{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--text-2);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:inherit}
+.modal-close:hover{background:var(--surface-2)}
+.modal-body{padding:22px;flex:1;overflow-y:auto}
+.modal-foot{padding:16px 22px 22px;display:flex;gap:10px;flex-shrink:0}
 
-  /* ===== MODAL ===== */
-  .modal-overlay{
-    position:fixed;inset:0;
-    background:rgba(0,0,0,0.35);
-    backdrop-filter:blur(8px);
-    display:flex;align-items:center;justify-content:center;
-    padding:20px;
-    opacity:0;visibility:hidden;
-    transition:.3s;z-index:100;
-  }
-  .modal-overlay.show{opacity:1;visibility:visible;}
-  .modal{
-    width:100%;max-width:440px;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:26px;
-    padding:26px 24px;
-    box-shadow:0 30px 80px rgba(0,0,0,0.15);
-    transform:translateY(30px) scale(0.96);
-    transition:.35s cubic-bezier(.4,0,.2,1);
-    max-height:90vh;overflow-y:auto;
-  }
-  .modal-overlay.show .modal{transform:translateY(0) scale(1);}
-  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
-  .modal-head h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:9px;}
-  .modal-close{
-    width:32px;height:32px;border-radius:50%;
-    background:var(--glass);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:13px;color:var(--muted);
-    transition:.3s;
-  }
-  .modal-close:hover{background:rgba(0,0,0,0.08);color:var(--txt);}
+/* ===== ADMIN ===== */
+#adminScreen{display:none;min-height:100vh;background:var(--bg);position:fixed;inset:0;z-index:1000;overflow-y:auto}
+#adminScreen.active{display:block}
+.admin-header{background:var(--grad);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.admin-header h2{font-size:18px;font-weight:900}
+.admin-body{padding:24px;max-width:1200px;margin:0 auto}
+.admin-tabs{display:flex;gap:8px;background:#FFF;border-radius:var(--r-pill);padding:6px;margin-bottom:18px;overflow-x:auto;box-shadow:var(--sh-sm)}
+.admin-tab{padding:11px 18px;border:none;background:transparent;font-weight:800;font-size:12.5px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
+.admin-tab.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+.admin-card{background:#FFF;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh-sm)}
+.user-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface-2);border-radius:12px;margin-bottom:8px}
+.user-row .ur-av{width:42px;height:42px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}
+.user-row .ur-body{flex:1;min-width:0}
+.user-row .ur-name{font-size:14px;font-weight:800;margin-bottom:2px}
+.user-row .ur-sub{font-size:11.5px;color:var(--text-2);font-weight:600}
 
-  .form-group{margin-bottom:16px;}
-  .form-group label{
-    display:block;font-size:10.5px;font-weight:700;
-    color:var(--muted);margin-bottom:7px;
-    letter-spacing:.6px;text-transform:uppercase;
-  }
-  .form-group input,.form-group select,.form-group textarea{
-    width:100%;
-    background:var(--glass);
-    border:1px solid var(--border);
-    border-radius:13px;
-    padding:13px 16px;
-    color:var(--txt);font-size:13.5px;font-weight:600;
-    font-family:inherit;outline:none;transition:.3s;
-    resize:none;
-  }
-  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
-    border-color:var(--wave);
-    background:var(--wave-soft);
-    box-shadow:0 0 0 3px rgba(245,215,110,0.15);
-  }
-  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted);font-weight:500;}
-  .form-group select option{background:#fff;color:var(--txt);}
-
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-  .btn-submit{
-    width:100%;padding:15px;
-    border:none;border-radius:15px;
-    font-family:inherit;font-size:14px;font-weight:800;
-    cursor:pointer;transition:.3s;color:#fff;letter-spacing:.3px;
-  }
-  .btn-wave{background:linear-gradient(135deg,#F0C94A,#E8B84B);box-shadow:0 6px 20px rgba(240,201,74,0.35);color:#5A4A0E;}
-  .btn-kpay{background:linear-gradient(135deg,#8BB8E8,#6A9FD8);box-shadow:0 6px 20px rgba(139,184,232,0.35);}
-  .btn-wc{background:linear-gradient(135deg,#8BD9B8,#6BBF9A);box-shadow:0 6px 20px rgba(139,217,184,0.35);color:#1E4A38;}
-  .btn-submit:hover{transform:translateY(-2px);filter:brightness(1.05);}
-  .btn-submit:active{transform:scale(.97);}
-
-  .toast{
-    position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);
-    background:linear-gradient(135deg,#F0C94A,#E8B84B);
-    color:#5A4A0E;padding:14px 28px;border-radius:50px;
-    font-weight:800;font-size:13px;opacity:0;transition:.4s cubic-bezier(.4,0,.2,1);
-    box-shadow:0 10px 30px rgba(240,201,74,0.3);z-index:300;white-space:nowrap;
-  }
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-  /* Update indicator */
-  .update-dot{
-    position:fixed;top:20px;right:20px;
-    width:10px;height:10px;border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 8px rgba(123,198,126,0.6);
-    z-index:200;
-    display:none;
-    animation:pulse 2s infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
-
-  /* ===== RESPONSIVE ===== */
-  @media(max-width:900px){
-    .content-grid{grid-template-columns:1fr;}
-  }
-  @media(max-width:720px){
-    .sidebar{
-      width:70px;padding:20px 10px;
-    }
-    .sb-brand h1,.sb-brand p,.sb-section,.sb-item span:not(.sb-ico),.sb-wallet .sw-meta,.sb-user h5,.sb-user p,.sb-badge{display:none;}
-    .sb-brand{justify-content:center;padding:0;}
-    .sb-item,.sb-wallet,.sb-user{justify-content:center;padding:12px;}
-    .main{margin-left:70px;padding:20px 16px;}
-    .search{width:150px;}
-    .tb-left h2{font-size:18px;}
-    .form-row{grid-template-columns:1fr;}
-  }
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .sidebar{width:70px;padding:18px 8px}
+  .sidebar-logo h1,.sidebar-logo p,.nav-section,.nav-item span:not(.ni-icon),.wallet-row .wr-meta,.sb-user h5,.sb-user p{display:none}
+  .sidebar-logo{justify-content:center;padding:0}
+  .nav-item,.wallet-row{justify-content:center;padding:12px 8px}
+  .main-content{margin-left:70px;padding:18px 14px 30px}
+}
+@media(max-width:600px){
+  .slot-wrapper{padding:12px;border-radius:18px}
+  .slot-title{font-size:26px;letter-spacing:4px}
+  .sym{font-size:22px}.sym svg{max-width:26px;max-height:26px}
+  .slot-btns{width:78px}
+  .slot-spin{font-size:14px;padding:16px 0}
+  .slot-auto,.slot-turbo{font-size:11.5px;padding:10px 0}
+  .balance-amount{font-size:32px}
+  .balance-amount .coin-icon{width:28px;height:28px}
+  .balance-action{padding:10px 8px;font-size:12px}
+  .auth-box{padding:30px 22px 24px}
+}
 </style>
 </head>
 <body>
 
-<div class="update-dot" id="updateDot"></div>
+<!-- ===== LOADING ===== -->
+<div class="loading" id="loading"><div class="spinner"></div></div>
 
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar">
-  <div class="sb-brand">
-    <div class="sb-logo">3P</div>
-    <div>
-      <h1>Tri<span>Pay</span></h1>
-      <p>Ultra Wallet</p>
+<!-- ===== TOASTS ===== -->
+<div class="toast-container" id="toastContainer"></div>
+<div class="coin-reward" id="coinReward">
+  <div class="coin-icon"><img id="coinRewardIcon" src="" alt="WCCoin"></div>
+  <span id="coinRewardText">+0 WCCoin</span>
+</div>
+
+<!-- ===== AUTH SCREEN ===== -->
+<div id="authScreen" class="active">
+  <div class="auth-logo">
+    <div class="auth-logo-mark">WC</div>
+    <div class="auth-logo-text">WC<span>Wallet</span></div>
+  </div>
+  <div class="auth-box">
+    <h1 id="authTitle">Login</h1>
+    <p class="subtitle" id="authSub">WC Wallet ထဲ ဝင်ရောက်ပါ</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin">Login</button>
+      <button class="auth-tab" id="tabSignup">Sign Up</button>
     </div>
-  </div>
-
-  <div class="sb-section">Menu</div>
-  <div class="sb-item active" data-nav="dashboard"><span class="sb-ico">🏠</span><span>Dashboard</span></div>
-  <div class="sb-item" data-nav="transfer"><span class="sb-ico">📤</span><span>Transfer</span></div>
-  <div class="sb-item" data-nav="receive"><span class="sb-ico">📥</span><span>Receive</span></div>
-  <div class="sb-item" data-nav="history"><span class="sb-ico">📊</span><span>History</span><span class="sb-badge" id="historyBadge">0</span></div>
-
-  <div class="sb-section">Wallets</div>
-  <div class="sb-wallets" id="sidebarWallets">
-    <!-- rendered by JS -->
-  </div>
-
-  <div class="sb-item" data-nav="settings"><span class="sb-ico">⚙️</span><span>Settings</span></div>
-
-  <div class="sb-user" id="userProfile">
-    <div class="sb-avatar">K</div>
-    <div><h5>Ko Aung</h5><p>Pro Member</p></div>
+    <form class="auth-form" id="loginForm">
+      <div class="auth-input-group">
+        <span class="ico">📱</span>
+        <input type="tel" id="loginPhone" placeholder="09xxxxxxxxx" autocomplete="username" required>
+      </div>
+      <div class="auth-input-group">
+        <span class="ico">🔒</span>
+        <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required>
+      </div>
+      <p class="auth-err" id="loginErr"></p>
+      <button type="submit" class="auth-btn" id="loginBtn">Login</button>
+    </form>
+    <form class="auth-form hidden" id="signupForm">
+      <div class="auth-input-group">
+        <span class="ico">👤</span>
+        <input type="text" id="suName" placeholder="Full Name" required>
+      </div>
+      <div class="auth-input-group">
+        <span class="ico">📱</span>
+        <input type="tel" id="suPhone" placeholder="09xxxxxxxxx" required>
+      </div>
+      <div class="auth-input-group">
+        <span class="ico">🔒</span>
+        <input type="password" id="suPass" placeholder="Password (6+ chars)" required>
+      </div>
+      <p class="auth-err" id="signupErr"></p>
+      <button type="submit" class="auth-btn" id="signupBtn">Sign Up</button>
+    </form>
+    <div class="auth-footer">WC Wallet · v1.1.0</div>
   </div>
 </div>
 
-<!-- ===== MAIN ===== -->
-<div class="main">
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="tb-left">
-      <h2 id="welcomeTitle">မင်္ဂလာပါ, Ko Aung 👋</h2>
-      <p id="welcomeSub">သင့်ရဲ့ wallets အားလုံး ဒီနေ့ အဆင်ပြေပါစေ</p>
-    </div>
-    <div class="tb-right">
-      <div class="search">
-        <span>🔍</span>
-        <input type="text" id="searchInput" placeholder="Search transaction...">
+<!-- ===== APP SHELL ===== -->
+<div class="app-shell" id="appShell">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">WC</div>
+      <div>
+        <h1>WC Wallet</h1>
+        <p>Wallet + Slot</p>
       </div>
-      <div class="tb-btn" id="notifBtn">🔔</div>
-      <div class="tb-btn" id="profileBtn">👤</div>
     </div>
+    <div class="nav-section">Menu</div>
+    <button class="nav-item active" data-page="dashboard"><span class="ni-icon">🏠</span><span>Dashboard</span></button>
+    <button class="nav-item" data-page="play"><span class="ni-icon">🎰</span><span>Play Slot</span></button>
+    <button class="nav-item" data-page="transfer"><span class="ni-icon">💸</span><span>Transfer</span></button>
+    <button class="nav-item" data-page="buy"><span class="ni-icon">🛒</span><span>Buy WCCoin</span></button>
+    <button class="nav-item" data-page="history"><span class="ni-icon">📜</span><span>History</span></button>
+    <button class="nav-item" data-page="settings"><span class="ni-icon">⚙️</span><span>Settings</span></button>
+    <div class="nav-section">Wallets</div>
+    <div class="nav-wallet" id="sidebarWallets"></div>
+    <div class="sb-user" onclick="gotoPage('settings')">
+      <div class="sb-avatar" id="sbAvatar">W</div>
+      <div>
+        <h5 id="userName">Player</h5>
+        <p id="userPhone">-</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2 id="pageTitle">WC Wallet</h2>
+        <p id="pageSubtitle">သင့်ရဲ့ WCCoin နဲ့ Slot ဂိမ်း</p>
+      </div>
+      <div class="topbar-right">
+        <button class="avatar-btn" onclick="gotoPage('settings')"><span id="topAvatar">W</span><span class="status-dot"></span></button>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="page-view active" id="page-dashboard">
+      <div class="balance-card">
+        <div class="balance-label">WCCoin Balance</div>
+        <div class="balance-amount">
+          <div class="coin-icon"><img id="coinIconMain" src="" alt="WCCoin"></div>
+          <span id="mainBalance">0</span>
+          <small>WCCoin</small>
+        </div>
+        <div class="balance-sub"><span id="balanceSub">💎 သင်ရဲ့ လက်ကျန် WCCoin</span></div>
+        <div class="balance-actions">
+          <button class="balance-action" onclick="gotoPage('play')">🎰 Play Slot</button>
+          <button class="balance-action" onclick="gotoPage('transfer')">💸 Transfer</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box sb-total">
+          <div class="sb-head"><div class="sb-icon">📊</div></div>
+          <div class="sb-label">Total WCCoin</div>
+          <div class="sb-value"><div class="inline-coin"><img class="coin-icon-mini" src=""></div><span id="statTotal">0</span><small>WCCoin</small></div>
+          <div class="sb-foot">သင့်ရဲ့ စုစုပေါင်း</div>
+        </div>
+        <div class="stat-box sb-wc">
+          <div class="sb-head"><div class="sb-icon">🎁</div></div>
+          <div class="sb-label">Today's Earned</div>
+          <div class="sb-value"><div class="inline-coin"><img class="coin-icon-mini" src=""></div><span id="statToday">0</span><small>WCCoin</small></div>
+          <div class="sb-foot">ယနေ့ ရရှိမှု</div>
+        </div>
+        <div class="stat-box sb-wave">
+          <div class="sb-head"><div class="sb-icon">🎮</div></div>
+          <div class="sb-label">Games Played</div>
+          <div class="sb-value"><span id="statGames">0</span><small>Games</small></div>
+          <div class="sb-foot">ကစားခဲ့သည့် အရေအတွက်</div>
+        </div>
+        <div class="stat-box sb-kpay">
+          <div class="sb-head"><div class="sb-icon">🏆</div></div>
+          <div class="sb-label">Total Wins</div>
+          <div class="sb-value"><div class="inline-coin"><img class="coin-icon-mini" src=""></div><span id="statWins">0</span><small>WCCoin</small></div>
+          <div class="sb-foot">စုစုပေါင်း အနိုင်ရမှု</div>
+        </div>
+      </div>
+
+      <div class="action-grid">
+        <button class="action-tile at-play" onclick="gotoPage('play')">
+          <div class="at-icon">🎰</div><h4>Play Slot</h4><p>WCCoin ရယူပါ</p>
+        </button>
+        <button class="action-tile at-receive" onclick="gotoPage('transfer')">
+          <div class="at-icon">💸</div><h4>Transfer</h4><p>WCCoin လွှဲပို့</p>
+        </button>
+        <button class="action-tile at-history" onclick="gotoPage('buy')">
+          <div class="at-icon">🛒</div><h4>Buy WCCoin</h4><p>ပိုက်ဆံနဲ့ ဝယ်</p>
+        </button>
+        <button class="action-tile at-buy" onclick="gotoPage('history')">
+          <div class="at-icon">📜</div><h4>History</h4><p>မှတ်တမ်း</p>
+        </button>
+      </div>
+
+      <div class="wallets-section">
+        <div class="section-header"><h3>💼 Wallets</h3></div>
+        <div class="wallet-cards" id="walletCards"></div>
+      </div>
+    </div>
+
+    <!-- PLAY SLOT -->
+    <div class="page-view" id="page-play">
+      <div class="slot-wrapper">
+        <div class="slot-top">
+          <div class="slot-credit">
+            <div class="coin-icon"><img class="coin-icon-credit" src=""></div>
+            <span class="lbl">WCCoin</span>
+            <span class="val" id="slotCredit">0</span>
+          </div>
+          <div class="slot-top-right">
+            <button class="slot-btn-sm" onclick="refreshSlot()" title="Refresh">🔄</button>
+            <button class="slot-btn-sm" onclick="gotoPage('dashboard')" title="Back">✕</button>
+          </div>
+        </div>
+        <div class="slot-title">SLOT</div>
+        <div class="slot-subtitle">WCCoin · 5×5 · WIN 30%</div>
+        <div class="slot-info-row">
+          <div class="slot-info-item"><div class="lbl">Bet</div><div class="val" id="slotBetDisplay">10</div></div>
+          <div class="slot-info-item"><div class="lbl">Win</div><div class="val" id="slotWinDisplay">0</div></div>
+          <div class="slot-info-item vip"><div class="lbl">VIP</div><div class="val" id="slotVipDisplay">🥉</div></div>
+        </div>
+        <div class="slot-main">
+          <div class="slot-ways"><span>5×5</span></div>
+          <div class="slot-reels" id="slotReels">
+            <table class="reels-table"><tbody id="reelsBody"></tbody></table>
+            <div class="slot-effect" id="slotEffect"></div>
+            <div class="slot-freespin" id="slotFreeSpin"></div>
+          </div>
+          <div class="slot-btns">
+            <button class="slot-btn slot-spin" id="slotSpinBtn" onclick="slotSpin()">🎰<br>SPIN</button>
+            <button class="slot-btn slot-auto" id="slotAutoBtn" onclick="slotToggleAuto()">🔄<br>AUTO</button>
+            <button class="slot-btn slot-turbo" id="slotTurboBtn" onclick="slotToggleTurbo()">⚡<br>TURBO</button>
+          </div>
+        </div>
+        <div class="slot-bet-row">
+          <div class="bet-ctrl">
+            <button onclick="slotChangeBet(-5)">−</button>
+            <div style="text-align:center"><div class="bl">BET</div><div class="bv" id="slotBetValue">10</div></div>
+            <button onclick="slotChangeBet(5)">+</button>
+          </div>
+          <div class="quick-bets">
+            <button class="q2x" onclick="slotQuickBet(2)">2×</button>
+            <button class="q3x" onclick="slotQuickBet(3)">3×</button>
+            <button class="q5x" onclick="slotQuickBet(5)">5×</button>
+          </div>
+          <button class="daily-btn" onclick="slotDailyBonus()">🎁</button>
+        </div>
+        <div class="slot-msg" id="slotMessage">🎰 SPIN နှိပ်ပြီး ကစားပါ</div>
+      </div>
+    </div>
+
+    <!-- TRANSFER -->
+    <div class="page-view" id="page-transfer">
+      <div class="section-header"><h3>💸 WCCoin Transfer</h3></div>
+      <div class="admin-card">
+        <div class="info-row">
+          <label>လက်ခံမည့်သူ ဖုန်းနံပါတ်</label>
+          <input type="tel" id="trPhone" placeholder="09xxxxxxxxx">
+        </div>
+        <div class="info-row">
+          <label>ပမာဏ (WCCoin)</label>
+          <input type="number" id="trAmount" placeholder="0" min="1">
+        </div>
+        <div class="info-row">
+          <label>မှတ်ချက် (optional)</label>
+          <input type="text" id="trNote" placeholder="မှတ်ချက်">
+        </div>
+        <div style="background:var(--surface-2);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;font-size:13px;font-weight:700">
+          <span>သင့်လက်ကျန်:</span>
+          <span style="color:var(--wc-blue)"><span id="trBalance">0</span> WCCoin</span>
+        </div>
+        <button class="btn btn-primary btn-block" id="doTransferBtn" onclick="doTransfer()">💸 လွှဲပို့မည်</button>
+      </div>
+    </div>
+
+    <!-- BUY WCCoin -->
+    <div class="page-view" id="page-buy">
+      <div class="section-header"><h3>🛒 Buy WCCoin</h3></div>
+      <p style="font-size:13px;color:var(--text-2);font-weight:600;margin-bottom:16px">Package ရွေးပြီး request ပို့ပါ။ Admin approve လုပ်ပြီး WCCoin ထည့်ပေးပါမယ်။</p>
+      <div class="pkg-grid" id="pkgGrid"></div>
+      <div class="admin-card">
+        <div class="info-row">
+          <label>ငွေပေးချေမှု Note</label>
+          <textarea id="buyNote" placeholder="KBZ Pay ref, Wave Money, screenshot link..."></textarea>
+        </div>
+        <button class="btn btn-gold btn-block" id="reqBuyBtn" onclick="requestBuyCoins()">🛒 Buy Request ပို့မည်</button>
+      </div>
+      <div class="section-header" style="margin-top:24px"><h3>📋 ကျွန်ုပ်၏ Requests</h3></div>
+      <div id="myBuyRequests"></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="page-view" id="page-history">
+      <div class="section-header">
+        <h3>📜 Transaction History</h3>
+        <a onclick="loadHistory()">🔄 Refresh</a>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page-view" id="page-settings">
+      <div class="section-header"><h3>⚙️ Settings</h3></div>
+      <div class="admin-card">
+        <div class="info-row">
+          <label>Display Name</label>
+          <input type="text" id="setName" placeholder="Your name">
+        </div>
+        <div class="info-row">
+          <label>Phone</label>
+          <input type="tel" id="setPhone" disabled>
+        </div>
+        <div class="info-row">
+          <label>Notification</label>
+          <select id="setNotif">
+            <option value="on">🔔 Enabled</option>
+            <option value="off">🔕 Disabled</option>
+          </select>
+        </div>
+        <div class="info-row">
+          <label>Language</label>
+          <select id="setLang">
+            <option value="my">မြန်မာ</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="saveSettings()">💾 Save</button>
+      </div>
+      <div class="admin-card">
+        <div class="info-row">
+          <label>App Version</label>
+          <input type="text" id="setVersion" readonly>
+        </div>
+        <button class="btn btn-secondary btn-block" onclick="checkUpdateManually()">🔄 Check for Update</button>
+        <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="openAdminLogin()">👑 Admin Panel</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===== ADMIN SCREEN ===== -->
+<div id="adminScreen">
+  <div class="admin-header">
+    <h2>👑 WC Admin</h2>
+    <button class="logout-btn" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3)" onclick="closeAdmin()">Close</button>
   </div>
-
-  <!-- Stats Grid -->
-  <div class="stats-grid" id="statsGrid">
-    <!-- rendered by JS -->
-  </div>
-
-  <!-- Action Row -->
-  <div class="action-row" id="actionRow">
-    <div class="act-btn act-send" data-action="transfer">
-      <div class="act-icon">📤</div>
-      <div class="act-text"><h4>လွဲသည်</h4><p>Send money</p></div>
+  <div class="admin-body">
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="users">👥 Users</button>
+      <button class="admin-tab" data-tab="buyreq">🛒 Buy Requests</button>
+      <button class="admin-tab" data-tab="coin">💰 Add/Deduct WCCoin</button>
+      <button class="admin-tab" data-tab="version">🚀 Version</button>
     </div>
-    <div class="act-btn act-receive" data-action="receive">
-      <div class="act-icon">📥</div>
-      <div class="act-text"><h4>လက်ခံသည်</h4><p>Receive / Request</p></div>
+    <div class="admin-panel active" id="admPanel-users">
+      <div class="info-row"><input type="text" id="admSearch" placeholder="🔍 Search users..." oninput="renderAdminUsers(this.value)"></div>
+      <div id="admUserList"></div>
     </div>
-    <div class="act-btn act-topup" data-action="topup">
-      <div class="act-icon">⚡</div>
-      <div class="act-text"><h4>ဖုန်းဖြည့်</h4><p>Top-up</p></div>
+    <div class="admin-panel" id="admPanel-buyreq">
+      <div id="admBuyReqList"></div>
     </div>
-    <div class="act-btn act-qr" data-action="qr">
-      <div class="act-icon">📷</div>
-      <div class="act-text"><h4>QR Scan</h4><p>Scan & Pay</p></div>
-    </div>
-  </div>
-
-  <!-- Content Grid -->
-  <div class="content-grid">
-    <!-- Transactions Panel -->
-    <div class="panel">
-      <div class="panel-head">
-        <h3>📊 မကြာသေးမီ ငွေလွှဲမှု</h3>
-        <a data-action="viewAllTx">အားလုံး →</a>
-      </div>
-      <div id="txList">
-        <!-- rendered by JS -->
+    <div class="admin-panel" id="admPanel-coin">
+      <div class="admin-card">
+        <div class="info-row"><label>User ရွေးပါ</label><select id="admCoinUser"></select></div>
+        <div class="info-row"><label>ပမာဏ (+ ထည့် / − နှုတ်)</label><input type="number" id="admCoinAmt" placeholder="e.g. 100 or -50"></div>
+        <div class="info-row"><label>အကြောင်းပြချက်</label><input type="text" id="admCoinReason" placeholder="Bonus / Gift / Correction"></div>
+        <button class="btn btn-primary btn-block" onclick="adminApplyCoins()">✅ အတည်ပြု</button>
       </div>
     </div>
-
-    <!-- Wallet Quick List -->
-    <div class="panel">
-      <div class="panel-head">
-        <h3>💼 သင့် Wallets</h3>
-        <a data-action="viewAllWallets">အားလုံး →</a>
-      </div>
-      <div id="walletList">
-        <!-- rendered by JS -->
-      </div>
-
-      <div class="fee-info" style="margin-top:16px;margin-bottom:0;">
-        <span>🔒 Secured by TriPay</span>
-        <b>256-bit</b>
+    <div class="admin-panel" id="admPanel-version">
+      <div class="admin-card">
+        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.0.1"></div>
+        <div class="info-row"><label>Release Notes</label><textarea id="admNotes" placeholder="Bug fixes..."></textarea></div>
+        <div class="info-row" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="admForce" style="width:20px;height:20px"><label style="margin:0">Force Update</label></div>
+        <button class="btn btn-primary btn-block" onclick="adminSaveVersion()">🚀 Save Version</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== TRANSFER MODAL ===== -->
-<div class="modal-overlay" id="transferModal">
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div class="modal-overlay" id="adminLoginModal">
   <div class="modal">
     <div class="modal-head">
-      <h3>📤 ငွေလွှဲသည်</h3>
-      <div class="modal-close" data-close="transferModal">✕</div>
+      <h3>👑 Admin Login</h3>
+      <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
     </div>
-
-    <div class="form-group">
-      <label>ပို့မည့် Wallet</label>
-      <select id="fromWallet">
-        <option value="wave">💛 WaveMoney</option>
-        <option value="kpay">💙 KBZPay</option>
-        <option value="wc">💚 WCCoin Pay</option>
-      </select>
+    <div class="modal-body">
+      <div class="info-row"><label>Admin Phone</label><input type="tel" id="admLoginPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="info-row"><label>Password</label><input type="password" id="admLoginPass" placeholder="Admin password"></div>
+      <p class="auth-err" id="admLoginErr"></p>
     </div>
-
-    <div class="form-group">
-      <label>လက်ခံမည့်သူ ဖုန်း / Account</label>
-      <input type="text" id="toAccount" placeholder="09xxxxxxxxx">
+    <div class="modal-foot">
+      <button class="btn btn-primary btn-block" onclick="doAdminLogin()">Login as Admin</button>
     </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>ပမာဏ</label>
-        <input type="number" id="amount" placeholder="0" min="1">
-      </div>
-      <div class="form-group">
-        <label>မှတ်ချက်</label>
-        <input type="text" id="note" placeholder="optional">
-      </div>
-    </div>
-
-    <div class="fee-info">
-      <span>လွှဲခအခမဲ့</span>
-      <b>Fee: 0 Ks</b>
-    </div>
-
-    <button class="btn-submit btn-wave" id="doTransferBtn">လွှဲမည် →</button>
   </div>
 </div>
 
-<!-- ===== RECEIVE MODAL ===== -->
-<div class="modal-overlay" id="receiveModal">
+<!-- ===== UPDATE MODAL ===== -->
+<div class="modal-overlay" id="updateModal">
   <div class="modal">
     <div class="modal-head">
-      <h3>📥 ငွေလက်ခံသည်</h3>
-      <div class="modal-close" data-close="receiveModal">✕</div>
+      <h3>🚀 Update Available</h3>
+      <button class="modal-close" onclick="closeModal('updateModal')">✕</button>
     </div>
-
-    <div class="form-group">
-      <label>လက်ခံမည့် Wallet</label>
-      <select id="recvWallet">
-        <option value="wave">💛 WaveMoney</option>
-        <option value="kpay">💙 KBZPay</option>
-        <option value="wc">💚 WCCoin Pay</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>သင့် Account</label>
-      <input type="text" id="myAccount" readonly>
-    </div>
-
-    <div class="form-group">
-      <label>တောင်းခံမည့် ပမာဏ (optional)</label>
-      <input type="number" id="recvAmount" placeholder="0" min="0">
-    </div>
-
-    <div class="fee-info">
-      <span>လက်ခံခအခမဲ့</span>
-      <b>Instant ⚡</b>
-    </div>
-
-    <button class="btn-submit btn-wc" id="doReceiveBtn">Request / Share →</button>
-  </div>
-</div>
-
-<!-- ===== TOPUP MODAL ===== -->
-<div class="modal-overlay" id="topupModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>⚡ ဖုန်းဖြည့်</h3>
-      <div class="modal-close" data-close="topupModal">✕</div>
-    </div>
-    <div class="form-group">
-      <label>ဖုန်းနံပါတ်</label>
-      <input type="tel" id="topupPhone" placeholder="09xxxxxxxxx">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>ပမာဏ</label>
-        <input type="number" id="topupAmount" placeholder="0" min="1">
-      </div>
-      <div class="form-group">
-        <label>Wallet</label>
-        <select id="topupWallet">
-          <option value="wave">WaveMoney</option>
-          <option value="kpay">KBZPay</option>
-          <option value="wc">WCCoin</option>
-        </select>
+    <div class="modal-body" style="text-align:center">
+      <div style="width:90px;height:90px;border-radius:26px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:42px;color:#fff;margin-bottom:16px;animation:pulseUpdate 2s infinite">🚀</div>
+      <h2 style="font-size:22px;font-weight:900;margin-bottom:6px">ဗားရှင်းအသစ် ထွက်ပါပြီ</h2>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Version <strong id="newVerLabel" style="color:var(--wc-blue)">1.0.0</strong></p>
+      <div class="info-row" style="text-align:left">
+        <label>Release Notes</label>
+        <div id="releaseNotes" style="font-size:13px;line-height:1.7;padding:12px;background:var(--surface-2);border-radius:10px;min-height:60px"></div>
       </div>
     </div>
-    <div class="fee-info"><span>ဖုန်းဖြည့်ခအခမဲ့</span><b>Instant ⚡</b></div>
-    <button class="btn-submit btn-wave" id="doTopupBtn">ဖြည့်မည် →</button>
+    <div class="modal-foot" style="flex-direction:column">
+      <button class="btn btn-primary btn-block" onclick="applyUpdate()">🔄 Update Now</button>
+      <button class="btn btn-secondary btn-block" onclick="closeModal('updateModal')">နောက်မှ</button>
+    </div>
   </div>
 </div>
 
-<!-- ===== QR MODAL ===== -->
-<div class="modal-overlay" id="qrModal">
+<!-- ===== NOTIFICATION PROMPT ===== -->
+<div class="modal-overlay" id="notificationPromptModal">
   <div class="modal">
     <div class="modal-head">
-      <h3>📷 QR Scan & Pay</h3>
-      <div class="modal-close" data-close="qrModal">✕</div>
+      <h3>🔔 Notification</h3>
+      <button class="modal-close" onclick="closeModal('notificationPromptModal')">✕</button>
     </div>
-    <div style="text-align:center;padding:30px 0;">
-      <div style="width:160px;height:160px;border-radius:20px;background:var(--glass);border:2px dashed var(--border);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--muted);">📷</div>
-      <p style="font-size:12px;color:var(--muted);">QR code ကို scan ပါ</p>
+    <div class="modal-body" style="text-align:center">
+      <div style="font-size:64px;margin-bottom:16px">🔔</div>
+      <h2 style="font-size:18px;font-weight:900;margin-bottom:8px">WCCoin ရောက်တဲ့အခါ အသိပေးမယ်</h2>
+      <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:16px">Notification ဖွင့်ထားရင် WCCoin ရတဲ့အခါ ဖုန်းပေါ်မှာ အသိပေးပါမယ်</p>
     </div>
-    <div class="form-group">
-      <label>သို့မဟုတ် ပမာဏထည့်ပါ</label>
-      <input type="number" id="qrAmount" placeholder="0" min="1">
+    <div class="modal-foot" style="flex-direction:column">
+      <button class="btn btn-primary btn-block" onclick="enableNotifications()">🔔 Enable Notifications</button>
+      <button class="btn btn-secondary btn-block" onclick="closeModal('notificationPromptModal')">နောက်မှ</button>
     </div>
-    <button class="btn-submit btn-kpay" id="doQrBtn">Scan & Pay →</button>
   </div>
 </div>
 
-<!-- ===== SETTINGS MODAL ===== -->
-<div class="modal-overlay" id="settingsModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>⚙️ Settings</h3>
-      <div class="modal-close" data-close="settingsModal">✕</div>
-    </div>
-    <div class="form-group">
-      <label>အမည်</label>
-      <input type="text" id="setName" value="Ko Aung">
-    </div>
-    <div class="form-group">
-      <label>ဖုန်းနံပါတ်</label>
-      <input type="tel" id="setPhone" value="09 7xx xxx 890">
-    </div>
-    <div class="form-group">
-      <label>Language</label>
-      <select id="setLang">
-        <option value="my">မြန်မာ</option>
-        <option value="en">English</option>
-      </select>
-    </div>
-    <div class="fee-info"><span>Auto-update</span><b>✅ Enabled</b></div>
-    <button class="btn-submit btn-wave" id="doSaveSettingsBtn">သိမ်းမည် →</button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-(function(){
-  'use strict';
+'use strict';
 
-  /* ============================================================
-     STATE
-     ============================================================ */
-  var state = {
-    wallets: {
-      wave: { key:'wave', name:'WaveMoney', sym:'Ks', balance:620000, color:'var(--wave)', account:'09 7xx xxx 890' },
-      kpay: { key:'kpay', name:'KBZPay', sym:'Ks', balance:575000, color:'var(--kpay)', account:'09 9xx xxx 123' },
-      wc:   { key:'wc', name:'WCCoin Pay', sym:'WC', balance:1420, color:'var(--wc)', account:'0xWC...8f2a' }
-    },
-    transactions: [
-      { wallet:'wave', dir:'in',  amount:50000,  label:'WaveMoney မှ လက်ခံ',   time:'ယနေ့ · 09:24 AM' },
-      { wallet:'kpay', dir:'out', amount:25000,  label:'KBZPay သို့ လွှဲ',     time:'မနေ့ · 06:12 PM' },
-      { wallet:'wc',   dir:'in',  amount:12,     label:'WCCoin မှ လက်ခံ',    time:'မနေ့ · 02:30 PM' },
-      { wallet:'wave', dir:'out', amount:12000,  label:'WaveMoney သို့ လွှဲ',  time:'မနေ့ · 01:40 PM' },
-      { wallet:'wc',   dir:'out', amount:5,      label:'WCCoin သို့ လွှဲ',     time:'2 ရက် · 11:15 AM' }
-    ],
-    version: '1.0.0'
-  };
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const COIN_ICON_URL = '';  // ← သင့် WCCoin icon link ဒီမှာထည့်ပါ
+const ADMIN_PHONE = '09672124213';  // ← Admin phone (လိုအပ်ရင် ပြောင်း)
+const ADMIN_PASSWORD = 'admin123';   // ← Admin password (လိုအပ်ရင် ပြောင်း)
+const APP_VERSION = '1.1.0';
 
-  /* ============================================================
-     DOM HELPERS
-     ============================================================ */
-  function $(id){ return document.getElementById(id); }
+const firebaseConfig = {
+  apiKey: "AIzaSyBQJ4zzAxZ_aSuGBxwegTw_dtfaW8oLJnU",
+  authDomain: "wavechat-21.firebaseapp.com",
+  databaseURL: "https://wavechat-21-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "wavechat-21",
+  storageBucket: "wavechat-21.firebasestorage.app",
+  messagingSenderId: "974140621548",
+  appId: "1:974140621548:web:16566800329e43d05c5bc9"
+};
 
-  function el(tag, cls, txt){
-    var e = document.createElement(tag);
-    if(cls) e.className = cls;
-    if(txt !== undefined && txt !== null) e.textContent = txt;
-    return e;
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+const SLOT_MIN_BET = 5;
+const SLOT_MAX_BET = 5000;
+const SLOT_WIN_RATE = 30;
+const DAILY_REWARDS = [10, 30, 50, 100];
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Math.floor(Number(n) || 0).toLocaleString('en-US');
+
+const FALLBACK_COIN = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%23FFD54A"/><stop offset="1" stop-color="%23FF8C00"/></linearGradient></defs><circle cx="50" cy="50" r="42" fill="url(%23g)" stroke="%238B4513" stroke-width="4"/><text x="50" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="34" font-weight="900" fill="%23FFF">W</text></svg>';
+
+function getCoinSrc() {
+  const stored = localStorage.getItem('wc_coin_icon');
+  return stored || COIN_ICON_URL || FALLBACK_COIN;
+}
+
+function applyCoinIcons() {
+  const src = getCoinSrc();
+  document.querySelectorAll('img[class*="coin-icon"]').forEach(img => {
+    img.src = src;
+    img.onerror = () => { img.src = FALLBACK_COIN; };
+  });
+}
+
+// Normalize phone to email for Firebase Auth
+function toEmail(phone) {
+  const digits = String(phone || '').replace(/\D/g, '');
+  return digits + '@wcwallet.app';
+}
+function cleanPhone(p) {
+  let s = String(p || '').replace(/\D/g, '');
+  if (s.startsWith('0')) s = s.slice(1);
+  return s;
+}
+function displayPhone(p) {
+  const s = cleanPhone(p);
+  return s ? '0' + s : '';
+}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let currentUser = null;  // { uid, name, phone, coin_balance }
+let coinBalance = 0;
+let todayEarned = 0;
+let totalGamesPlayed = 0;
+let totalWins = 0;
+let txHistory = [];
+let settings = { name: 'Player', notifications: 'on', lang: 'my' };
+let userDataRef = null;
+let txRef = null;
+let isAdmin = false;
+
+let selectedPkgId = null;
+let allCoinPackages = {
+  pkg100: { coins: 100, price: '1,000 Ks', bonus: 0, order: 1 },
+  pkg500: { coins: 500, price: '4,500 Ks', bonus: 50, order: 2 },
+  pkg1000: { coins: 1000, price: '8,500 Ks', bonus: 150, order: 3 },
+  pkg5000: { coins: 5000, price: '40,000 Ks', bonus: 1000, order: 4 }
+};
+
+let slotState = {
+  credit: 0, bet: 10, baseBet: 10, spinning: false, auto: false, turbo: false,
+  autoCount: 0, freeSpins: 0, isFreeSpin: false, totalSpins: 0, totalWins: 0,
+  checkinState: { streak:0, lastCheckin:'', claimed:[] }
+};
+
+let updateCheckInterval = null;
+let _updateVersion = null;
+
+/* ============================================================
+   TOAST / NOTIFICATION
+   ============================================================ */
+function toast(msg, type = 'info') {
+  const c = $('toastContainer');
+  if (!c) return;
+  const el = document.createElement('div');
+  el.className = 'toast ' + (type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warn' ? 'warn' : '');
+  const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
+  el.innerHTML = '<span>' + icon + '</span><span>' + esc(msg) + '</span>';
+  c.appendChild(el);
+  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3200);
+}
+
+function showCoinReward(amount, reason) {
+  const el = $('coinReward'), txt = $('coinRewardText'), icn = $('coinRewardIcon');
+  if (!el || !txt) return;
+  if (icn) icn.src = getCoinSrc();
+  txt.textContent = (amount >= 0 ? '+' : '') + fmt(amount) + ' WCCoin';
+  el.style.background = amount >= 0 ? 'linear-gradient(135deg,#FFB800,#FF8C00)' : 'linear-gradient(135deg,#FF4757,#FF6B7A)';
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+async function requestNotificationPermission() {
+  if (!('Notification' in window)) return false;
+  if (Notification.permission === 'granted') return true;
+  if (Notification.permission === 'denied') return false;
+  try { const r = await Notification.requestPermission(); return r === 'granted'; }
+  catch(e) { return false; }
+}
+
+function showPhoneNotification(title, body) {
+  if (settings.notifications !== 'on') return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    const n = new Notification(title, { body, icon: getCoinSrc(), badge: getCoinSrc(), tag: 'wccoin', renotify: true, vibrate: [200,100,200] });
+    setTimeout(() => { try { n.close(); } catch(e){} }, 6000);
+  } catch(e) { console.warn('Notif err:', e); }
+}
+
+async function enableNotifications() {
+  const ok = await requestNotificationPermission();
+  closeModal('notificationPromptModal');
+  if (ok) {
+    toast('🔔 Notifications enabled!', 'success');
+    settings.notifications = 'on';
+    saveSettingsLocal();
+    if ($('setNotif')) $('setNotif').value = 'on';
+  } else toast('⚠️ Permission denied', 'error');
+}
+
+/* ============================================================
+   LOCAL SETTINGS
+   ============================================================ */
+function loadSettingsLocal() {
+  try {
+    const s = localStorage.getItem('wc_settings_v2');
+    if (s) settings = Object.assign(settings, JSON.parse(s));
+  } catch(e){}
+}
+function saveSettingsLocal() {
+  try { localStorage.setItem('wc_settings_v2', JSON.stringify(settings)); } catch(e){}
+}
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+function showAuthTab(tab) {
+  if (tab === 'login') {
+    $('tabLogin').classList.add('active');
+    $('tabSignup').classList.remove('active');
+    $('loginForm').classList.remove('hidden');
+    $('signupForm').classList.add('hidden');
+    $('authTitle').textContent = 'Login';
+    $('authSub').textContent = 'WC Wallet ထဲ ဝင်ရောက်ပါ';
+  } else {
+    $('tabSignup').classList.add('active');
+    $('tabLogin').classList.remove('active');
+    $('signupForm').classList.remove('hidden');
+    $('loginForm').classList.add('hidden');
+    $('authTitle').textContent = 'Sign Up';
+    $('authSub').textContent = 'အကောင့်အသစ် ဖွင့်ပါ';
   }
+}
 
-  function fmtNum(n){
-    return Number(n).toLocaleString('en-US');
-  }
+async function signup(name, phone, password) {
+  const email = toEmail(phone);
+  const cred = await auth.createUserWithEmailAndPassword(email, password);
+  const uid = cred.user.uid;
+  // Create user record
+  await db.ref('users/' + uid).set({
+    uid, name, phone: displayPhone(phone),
+    coin_balance: 100, today_earned: 0, games_played: 0, total_wins: 0,
+    createdAt: Date.now(), isAdmin: false
+  });
+  await db.ref('coin_transactions/' + uid).push({
+    ts: Date.now(), amount: 100, reason: 'signup_bonus', type: 'signup_bonus',
+    desc: '🎉 Welcome bonus'
+  });
+  return cred.user;
+}
 
-  /* ============================================================
-     TOAST (safe, single instance)
-     ============================================================ */
-  var toastTimer = null;
-  function toast(msg){
-    var t = $('toast');
-    if(!t) return;
-    t.textContent = msg;
-    t.classList.add('show');
-    if(toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
-  }
+async function login(phone, password) {
+  const email = toEmail(phone);
+  return await auth.signInWithEmailAndPassword(email, password);
+}
 
-  /* ============================================================
-     MODALS
-     ============================================================ */
-  function openModal(id){
-    var m = $(id);
-    if(m) m.classList.add('show');
-  }
-  function closeModal(id){
-    var m = $(id);
-    if(m) m.classList.remove('show');
-  }
-  function closeAllModals(){
-    document.querySelectorAll('.modal-overlay.show').forEach(function(m){ m.classList.remove('show'); });
-  }
+async function logout() {
+  if (userDataRef) { try { userDataRef.off(); } catch(e){} userDataRef = null; }
+  if (txRef) { try { txRef.off(); } catch(e){} txRef = null; }
+  await auth.signOut();
+  currentUser = null;
+  showScreen('auth');
+  toast('Logged out', 'info');
+}
 
-  /* ============================================================
-     RENDER: Stats
-     ============================================================ */
-  function renderStats(){
-    var grid = $('statsGrid');
-    if(!grid) return;
-    grid.innerHTML = '';
+function showScreen(name) {
+  document.querySelectorAll('#authScreen, #appShell, #adminScreen').forEach(el => { if (el) { el.classList.remove('active'); } });
+  if (name === 'auth') $('authScreen').classList.add('active');
+  else if (name === 'app') $('appShell').classList.add('active');
+  else if (name === 'admin') $('adminScreen').classList.add('active');
+}
 
-    var w = state.wallets;
-    var totalKs = w.wave.balance + w.kpay.balance;
-    var totalWc = w.wc.balance;
+/* ============================================================
+   USER DATA
+   ============================================================ */
+function loadUserData() {
+  if (!currentUser) return;
+  if (userDataRef) { try { userDataRef.off(); } catch(e){} }
+  userDataRef = db.ref('users/' + currentUser.uid);
+  userDataRef.on('value', snap => {
+    const data = snap.val();
+    if (!data) return;
+    coinBalance = data.coin_balance || 0;
+    todayEarned = data.today_earned || 0;
+    totalGamesPlayed = data.games_played || 0;
+    totalWins = data.total_wins || 0;
+    currentUser = Object.assign(currentUser, data);
+    settings.name = data.name || settings.name;
+    isAdmin = data.isAdmin === true || displayPhone(currentUser.phone) === ADMIN_PHONE;
+    updateAllUI();
+  }, err => console.warn('[userData]', err.message));
+}
 
-    // Total
-    var c1 = el('div','stat-card sc-total');
-    c1.innerHTML =
-      '<div class="sc-head"><div class="sc-icon">Σ</div><div class="sc-trend trend-up">↑ 12.4%</div></div>' +
-      '<div class="sc-label">Total Balance</div>' +
-      '<div class="sc-value">' + fmtNum(totalKs) + ' <small>Ks</small></div>' +
-      '<div class="sc-foot">3 wallets synced</div>';
+function loadHistory() {
+  if (!currentUser) return;
+  if (txRef) { try { txRef.off(); } catch(e){} }
+  txRef = db.ref('coin_transactions/' + currentUser.uid).limitToLast(50);
+  txRef.on('value', snap => {
+    const data = snap.val() || {};
+    txHistory = Object.entries(data).map(([id, tx]) => Object.assign({ id }, tx)).sort((a,b) => (b.ts||0) - (a.ts||0));
+    renderHistoryList();
+  }, err => console.warn('[tx]', err.message));
+}
 
-    // Wave
-    var c2 = el('div','stat-card sc-wave');
-    c2.innerHTML =
-      '<div class="sc-head"><div class="sc-icon">💛</div><div class="sc-trend trend-up">↑ 5.2%</div></div>' +
-      '<div class="sc-label">WaveMoney</div>' +
-      '<div class="sc-value">' + fmtNum(w.wave.balance) + ' <small>Ks</small></div>' +
-      '<div class="sc-foot">' + w.wave.account + '</div>';
-
-    // KBZ
-    var c3 = el('div','stat-card sc-kpay');
-    c3.innerHTML =
-      '<div class="sc-head"><div class="sc-icon">💙</div><div class="sc-trend trend-up">↑ 8.1%</div></div>' +
-      '<div class="sc-label">KBZPay</div>' +
-      '<div class="sc-value">' + fmtNum(w.kpay.balance) + ' <small>Ks</small></div>' +
-      '<div class="sc-foot">' + w.kpay.account + '</div>';
-
-    // WC
-    var c4 = el('div','stat-card sc-wc');
-    c4.innerHTML =
-      '<div class="sc-head"><div class="sc-icon">💚</div><div class="sc-trend trend-down">↓ 2.3%</div></div>' +
-      '<div class="sc-label">WCCoin Pay</div>' +
-      '<div class="sc-value">' + fmtNum(w.wc.balance) + ' <small>WC</small></div>' +
-      '<div class="sc-foot">' + w.wc.account + '</div>';
-
-    grid.appendChild(c1);
-    grid.appendChild(c2);
-    grid.appendChild(c3);
-    grid.appendChild(c4);
-  }
-
-  /* ============================================================
-     RENDER: Sidebar wallets
-     ============================================================ */
-  function renderSidebarWallets(){
-    var wrap = $('sidebarWallets');
-    if(!wrap) return;
-    wrap.innerHTML = '';
-    Object.keys(state.wallets).forEach(function(k){
-      var w = state.wallets[k];
-      var row = el('div','sb-wallet');
-      row.setAttribute('data-wallet', k);
-      row.innerHTML =
-        '<div class="sw-dot" style="background:' + w.color + ';"></div>' +
-        '<div class="sw-meta"><h5>' + w.name + '</h5><p>' + fmtNum(w.balance) + ' ' + w.sym + '</p></div>';
-      wrap.appendChild(row);
+async function addCoins(amount, reason, meta = {}) {
+  if (!currentUser || !amount) return false;
+  try {
+    const result = await db.ref('users/' + currentUser.uid + '/coin_balance').transaction(c => {
+      const n = (c || 0) + amount;
+      return n < 0 ? undefined : n;
     });
-  }
-
-  /* ============================================================
-     RENDER: Wallet quick list
-     ============================================================ */
-  function renderWalletList(){
-    var wrap = $('walletList');
-    if(!wrap) return;
-    wrap.innerHTML = '';
-    Object.keys(state.wallets).forEach(function(k){
-      var w = state.wallets[k];
-      var row = el('div','wallet-row');
-      row.setAttribute('data-wallet', k);
-      var badgeCls = k === 'wave' ? 'w-wave' : (k === 'kpay' ? 'w-kpay' : 'w-wc');
-      var letter = k === 'wave' ? 'W' : (k === 'kpay' ? 'K' : '₩');
-      row.innerHTML =
-        '<div class="wr-badge ' + badgeCls + '">' + letter + '</div>' +
-        '<div class="wr-meta"><h5>' + w.name + '</h5><p>' + w.account + '</p></div>' +
-        '<div class="wr-amt" style="color:' + w.color + ';">' + fmtNum(w.balance) + '<small>' + w.sym + '</small></div>';
-      wrap.appendChild(row);
+    if (!result.committed) return false;
+    await db.ref('coin_transactions/' + currentUser.uid).push({
+      ts: Date.now(), amount, reason, type: reason,
+      desc: meta.desc || reason, ...meta
     });
-  }
-
-  /* ============================================================
-     RENDER: Transactions
-     ============================================================ */
-  function renderTransactions(filter){
-    var wrap = $('txList');
-    if(!wrap) return;
-    wrap.innerHTML = '';
-
-    var list = state.transactions.slice();
-    if(filter && filter.trim()){
-      var q = filter.toLowerCase();
-      list = list.filter(function(tx){ return tx.label.toLowerCase().indexOf(q) !== -1; });
+    if (amount > 0) {
+      await db.ref('users/' + currentUser.uid + '/today_earned').transaction(c => (c || 0) + amount).catch(()=>{});
     }
+    return true;
+  } catch(e) { console.error('[addCoins]', e); return false; }
+}
 
-    if(list.length === 0){
-      wrap.appendChild(el('p','', 'ရှာဖွေမှု မတွေ့ပါ'));
+/* ============================================================
+   UI UPDATES
+   ============================================================ */
+function updateAllUI() {
+  const fmtCoins = fmt(coinBalance);
+  $('mainBalance') && ($('mainBalance').textContent = fmtCoins);
+  $('slotCredit') && ($('slotCredit').textContent = fmtCoins);
+  $('statTotal') && ($('statTotal').textContent = fmtCoins);
+  $('statToday') && ($('statToday').textContent = fmt(todayEarned));
+  $('statGames') && ($('statGames').textContent = fmt(totalGamesPlayed));
+  $('statWins') && ($('statWins').textContent = fmt(totalWins));
+  $('trBalance') && ($('trBalance').textContent = fmtCoins);
+  $('balanceSub') && ($('balanceSub').textContent = todayEarned > 0 ? '📈 ယနေ့ +' + fmt(todayEarned) + ' WCCoin' : '💎 သင်ရဲ့ လက်ကျန် WCCoin');
+  const name = currentUser ? (currentUser.name || 'Player') : 'Player';
+  $('userName') && ($('userName').textContent = name);
+  $('sbAvatar') && ($('sbAvatar').textContent = name.charAt(0).toUpperCase());
+  $('topAvatar') && ($('topAvatar').textContent = name.charAt(0).toUpperCase());
+  $('userPhone') && ($('userPhone').textContent = currentUser ? currentUser.phone || '-' : '-');
+  $('setName') && ($('setName').value = currentUser ? currentUser.name || '' : '');
+  $('setPhone') && ($('setPhone').value = currentUser ? currentUser.phone || '' : '');
+  $('setNotif') && ($('setNotif').value = settings.notifications);
+  $('setLang') && ($('setLang').value = settings.lang);
+  $('setVersion') && ($('setVersion').value = APP_VERSION);
+  slotState.credit = coinBalance;
+  renderSidebarWallets();
+  renderWalletCards();
+  renderPkgGrid();
+  // Admin button visibility
+  document.querySelectorAll('[data-admin-only]').forEach(el => el.style.display = isAdmin ? '' : 'none');
+  updateSlotVIP();
+}
+
+function renderSidebarWallets() {
+  const wrap = $('sidebarWallets');
+  if (!wrap) return;
+  wrap.innerHTML = `<div class="wallet-row" onclick="gotoPage('dashboard')"><div class="wr-dot" style="background:#00B4D8"></div><div class="wr-meta"><h5>WC Wallet</h5><p>${fmt(coinBalance)} WCCoin</p></div></div>`;
+}
+
+function renderWalletCards() {
+  const wrap = $('walletCards');
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div class="wallet-card" onclick="gotoPage('play')">
+      <div class="wallet-card-head">
+        <div class="wallet-logo">WC</div>
+        <div class="wc-name"><h4>WC Wallet</h4><p>WCCoin Wallet</p></div>
+      </div>
+      <div class="wallet-balance">
+        <div class="inline-coin"><img class="coin-icon-mini" src="${getCoinSrc()}"></div>
+        <span>${fmt(coinBalance)}</span><small>WCCoin</small>
+      </div>
+      <div class="wallet-meta">🎰 Play Slot ကနေ WCCoin ရယူပါ</div>
+    </div>`;
+}
+
+function renderHistoryList() {
+  const wrap = $('historyList');
+  if (!wrap) return;
+  if (txHistory.length === 0) {
+    wrap.innerHTML = '<div class="empty-state"><span class="em">📜</span><h3>မှတ်တမ်း မရှိသေးပါ</h3><p>Slot ကစားပြီး WCCoin ရယူပါ</p></div>';
+    return;
+  }
+  const src = getCoinSrc();
+  wrap.innerHTML = txHistory.map(tx => {
+    const amt = tx.amount || 0;
+    const cls = amt >= 0 ? 'plus' : 'minus';
+    const sign = amt >= 0 ? '+' : '';
+    const desc = tx.game ? (tx.desc + ' · ' + tx.game) : (tx.desc || tx.reason || 'Transaction');
+    return `<div class="tx-row">
+      <div class="tx-icon ${cls}">${amt >= 0 ? '⬇' : '⬆'}</div>
+      <div class="tx-body"><div class="tx-title">${esc(desc)}</div><div class="tx-desc">${new Date(tx.ts || Date.now()).toLocaleString()}</div></div>
+      <div class="tx-amount ${cls}">${sign}${fmt(amt)}<div class="coin-icon"><img src="${src}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderPkgGrid() {
+  const wrap = $('pkgGrid');
+  if (!wrap) return;
+  const items = Object.entries(allCoinPackages).sort((a,b) => a[1].order - b[1].order);
+  wrap.innerHTML = items.map(([id, p]) => `
+    <div class="pkg-card ${selectedPkgId === id ? 'selected' : ''}" data-pkg="${id}">
+      ${p.bonus ? `<span class="pkg-bonus">+${p.bonus}</span>` : ''}
+      <div class="pkg-coins">${fmt(p.coins)} WCCoin</div>
+      <div class="pkg-price">${esc(p.price)}</div>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.pkg-card').forEach(card => {
+    card.onclick = () => {
+      selectedPkgId = card.dataset.pkg;
+      renderPkgGrid();
+    };
+  });
+}
+
+function updateSlotVIP() {
+  const c = coinBalance || 0;
+  let icon = '🥉';
+  if (c >= 100000) icon = '💎';
+  else if (c >= 20000) icon = '👑';
+  else if (c >= 5000) icon = '🥇';
+  else if (c >= 1000) icon = '🥈';
+  $('slotVipDisplay') && ($('slotVipDisplay').textContent = icon);
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+const PAGE_TITLES = {
+  dashboard: { title: 'WC Wallet', sub: 'သင့်ရဲ့ WCCoin နဲ့ Slot ဂိမ်း' },
+  play: { title: '🎰 Slot Game', sub: 'WCCoin နဲ့ ကစားပြီး ဆုရယူပါ' },
+  transfer: { title: '💸 Transfer', sub: 'WCCoin လွှဲပို့ရန်' },
+  buy: { title: '🛒 Buy WCCoin', sub: 'ပိုက်ဆံနဲ့ WCCoin ဝယ်ယူပါ' },
+  history: { title: '📜 History', sub: 'WCCoin ရရှိမှု မှတ်တမ်း' },
+  settings: { title: '⚙️ Settings', sub: 'ပြင်ဆင်ရန်' }
+};
+
+function gotoPage(page) {
+  document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const view = $('page-' + page);
+  if (view) view.classList.add('active');
+  const nav = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (nav) nav.classList.add('active');
+  const meta = PAGE_TITLES[page] || { title: 'WC Wallet', sub: '' };
+  $('pageTitle') && ($('pageTitle').textContent = meta.title);
+  $('pageSubtitle') && ($('pageSubtitle').textContent = meta.sub);
+  if (page === 'history') loadHistory();
+  if (page === 'play') syncSlotCredit();
+  if (page === 'buy') { renderPkgGrid(); loadMyBuyRequests(); }
+  closeAllModals();
+}
+
+function closeModal(id) { const el = $(id); if (el) el.classList.remove('show'); }
+function closeAllModals() { document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show')); }
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+async function saveSettings() {
+  const name = $('setName').value.trim() || 'Player';
+  const notif = $('setNotif').value;
+  const lang = $('setLang').value;
+  settings = Object.assign(settings, { name, notifications: notif, lang });
+  saveSettingsLocal();
+  if (currentUser) await db.ref('users/' + currentUser.uid).update({ name }).catch(()=>{});
+  updateAllUI();
+  toast('✅ Settings saved', 'success');
+}
+
+/* ============================================================
+   TRANSFER
+   ============================================================ */
+async function doTransfer() {
+  const phoneInput = $('trPhone').value.trim();
+  const amtInput = $('trAmount').value.trim();
+  const note = $('trNote').value.trim();
+  if (!phoneInput) return toast('ဖုန်းနံပါတ် ထည့်ပါ', 'warn');
+  if (!amtInput) return toast('ပမာဏ ထည့်ပါ', 'warn');
+  const amt = parseInt(amtInput, 10);
+  if (!amt || amt <= 0) return toast('ပမာဏ မှန်ကန်စွာ ထည့်ပါ', 'warn');
+  if (amt > coinBalance) return toast('WCCoin မလုံလောက်ပါ', 'warn');
+  if (cleanPhone(phoneInput) === cleanPhone(currentUser.phone)) return toast('ကိုယ့်ကိုယ် လွှဲလို့မရ', 'warn');
+  
+  const btn = $('doTransferBtn');
+  btn.disabled = true;
+  try {
+    // Find recipient
+    const usersSnap = await db.ref('users').orderByChild('phone').equalTo(displayPhone(phoneInput)).once('value');
+    let recipient = null;
+    usersSnap.forEach(child => { if (!recipient) recipient = Object.assign({ _key: child.key }, child.val()); });
+    if (!recipient) throw new Error('လက်ခံမည့်သူ မတွေ့ပါ');
+    if (recipient.uid === currentUser.uid) throw new Error('ကိုယ့်ကိုယ် လွှဲလို့မရ');
+    
+    // Deduct from sender
+    const ok = await addCoins(-amt, 'transfer_sent', { desc: '💸 Transfer to ' + recipient.name, to: recipient.uid, toName: recipient.name, note });
+    if (!ok) throw new Error('လွှဲမရပါ');
+    
+    // Add to recipient
+    const ok2 = await addCoinsToUser(recipient.uid, amt, 'transfer_received', { desc: '💸 Transfer from ' + currentUser.name, from: currentUser.uid, fromName: currentUser.name, note });
+    if (!ok2) {
+      // Rollback
+      await addCoins(amt, 'transfer_refund', { desc: 'Transfer failed - refund' });
+      throw new Error('လွှဲမရပါ (rollback)');
+    }
+    
+    toast('✅ ' + fmt(amt) + ' WCCoin လွှဲပြီး', 'success');
+    showCoinReward(-amt, 'transfer_sent');
+    showPhoneNotification('💸 Transfer sent', '-' + fmt(amt) + ' WCCoin to ' + recipient.name);
+    $('trPhone').value = '';
+    $('trAmount').value = '';
+    $('trNote').value = '';
+  } catch(err) {
+    toast('❌ ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function addCoinsToUser(uid, amount, reason, meta = {}) {
+  try {
+    const result = await db.ref('users/' + uid + '/coin_balance').transaction(c => {
+      const n = (c || 0) + amount;
+      return n < 0 ? undefined : n;
+    });
+    if (!result.committed) return false;
+    await db.ref('coin_transactions/' + uid).push({
+      ts: Date.now(), amount, reason, type: reason,
+      desc: meta.desc || reason, ...meta
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+/* ============================================================
+   BUY WCCoin
+   ============================================================ */
+async function requestBuyCoins() {
+  if (!selectedPkgId) return toast('Package ရွေးပါ', 'warn');
+  const pkg = allCoinPackages[selectedPkgId];
+  if (!pkg) return toast('Package မတွေ့', 'error');
+  const note = $('buyNote').value.trim();
+  const btn = $('reqBuyBtn');
+  btn.disabled = true;
+  try {
+    await db.ref('coin_buy_requests').push({
+      uid: currentUser.uid, userName: currentUser.name, phone: currentUser.phone,
+      coins: pkg.coins, bonus: pkg.bonus || 0, price: pkg.price, note,
+      status: 'pending', ts: Date.now()
+    });
+    toast('✅ Request sent! Admin approve လုပ်ပါမယ်', 'success');
+    $('buyNote').value = '';
+    loadMyBuyRequests();
+  } catch(err) {
+    toast('❌ ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function loadMyBuyRequests() {
+  if (!currentUser) return;
+  db.ref('coin_buy_requests').orderByChild('uid').equalTo(currentUser.uid).once('value').then(snap => {
+    const data = snap.val() || {};
+    const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0)).slice(0, 10);
+    const wrap = $('myBuyRequests');
+    if (!wrap) return;
+    if (list.length === 0) {
+      wrap.innerHTML = '<div class="empty-state"><span class="em">🛒</span><h3>Request မရှိသေးပါ</h3></div>';
       return;
     }
+    wrap.innerHTML = list.map(([id, r]) => {
+      const statusColor = r.status === 'approved' ? '#00D9A3' : r.status === 'rejected' ? '#FF4757' : '#FFB800';
+      const statusIcon = r.status === 'approved' ? '✅' : r.status === 'rejected' ? '❌' : '⏳';
+      return `<div class="req-card">
+        <div style="font-size:24px">${statusIcon}</div>
+        <div class="req-body">
+          <div class="req-title">${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ' bonus)' : ''} · ${esc(r.price || '')}</div>
+          <div class="req-sub">${new Date(r.ts || Date.now()).toLocaleString()} · <span style="color:${statusColor};font-weight:800">${esc(r.status || 'pending')}</span></div>
+        </div>
+      </div>`;
+    }).join('');
+  }).catch(() => {});
+}
 
-    list.forEach(function(tx){
-      var w = state.wallets[tx.wallet];
-      if(!w) return;
-      var icoCls = 'tx-' + tx.wallet;
-      var amtCls = tx.dir === 'in' ? 'amt-in' : 'amt-out';
-      var sign = tx.dir === 'in' ? '+' : '-';
-      var row = el('div','tx');
-      row.innerHTML =
-        '<div class="tx-ico ' + icoCls + '">' + (tx.wallet === 'wave' ? '💛' : (tx.wallet === 'kpay' ? '💙' : '💚')) + '</div>' +
-        '<div class="tx-info"><h4>' + tx.label + '</h4><p>' + tx.time + '</p></div>' +
-        '<div class="tx-amt ' + amtCls + '">' + sign + fmtNum(tx.amount) + ' ' + w.sym + '</div>';
-      wrap.appendChild(row);
-    });
-  }
+/* ============================================================
+   SLOT GAME (unchanged core)
+   ============================================================ */
+const SYMBOLS = ['cherry','lemon','orange','plum','watermelon','bell','seven','diamond','BAR','star','grapes','coin','crown','horseshoe','clover'];
+const SCATTER_SYMBOL = 'bomb';
+const PAYOUTS = {
+  'cherry':{3:2,4:5,5:10},'lemon':{3:2,4:8,5:15},'orange':{3:2,4:10,5:20},
+  'plum':{3:2,4:12,5:25},'watermelon':{3:2,4:15,5:30},'bell':{3:2,4:20,5:40},
+  'seven':{3:2,4:30,5:60},'diamond':{3:2,4:40,5:80},'BAR':{3:2,4:50,5:100},
+  'star':{3:2,4:60,5:120},'grapes':{3:2,4:70,5:140},'coin':{3:2,4:80,5:160},
+  'crown':{3:2,4:100,5:200},'horseshoe':{3:2,4:120,5:250},'clover':{3:2,4:160,5:300}
+};
+const SVG_ICONS = {
+  'cherry':'<svg viewBox="0 0 24 24"><circle cx="8" cy="16" r="4" fill="#FF0000"/><circle cx="16" cy="16" r="4" fill="#FF0000"/><path d="M12 12V4" stroke="#00AA00" stroke-width="2"/></svg>',
+  'lemon':'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7" fill="#FFEB3B" stroke="#F9A825" stroke-width="1"/></svg>',
+  'orange':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#FFA500"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>',
+  'plum':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#8A2BE2"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>',
+  'watermelon':'<svg viewBox="0 0 24 24"><path d="M2 12A10 10 0 0 1 22 12z" fill="#FF4444"/><path d="M6 12h12" stroke="#00AA00" stroke-width="1"/></svg>',
+  'bell':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'seven':'<svg viewBox="0 0 24 24"><text x="12" y="18" font-size="18" text-anchor="middle" fill="#FF0000" font-weight="bold">7</text></svg>',
+  'diamond':'<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#00BFFF" stroke="#0066AA" stroke-width="1"/></svg>',
+  'BAR':'<svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="2" fill="#FFD700"/><text x="12" y="15" font-size="8" text-anchor="middle" fill="#8B4513" font-weight="bold">BAR</text></svg>',
+  'star':'<svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'grapes':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#8A2BE2"/><circle cx="16" cy="8" r="3" fill="#8A2BE2"/><circle cx="12" cy="12" r="3" fill="#8A2BE2"/><circle cx="8" cy="16" r="3" fill="#8A2BE2"/><circle cx="16" cy="16" r="3" fill="#8A2BE2"/></svg>',
+  'coin':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD700" stroke="#8B4513" stroke-width="1"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="#8B4513" font-weight="bold">W</text></svg>',
+  'crown':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'horseshoe':'<svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 3 2 5 5 6-3 1-5 3-5 6 0 4 3 7 7 7s7-3 7-7c0-3-2-5-5-6 3-1 5-3 5-6 0-4-3-7-7-7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'clover':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#00FF00"/><circle cx="16" cy="8" r="3" fill="#00FF00"/><circle cx="8" cy="16" r="3" fill="#00FF00"/><circle cx="16" cy="16" r="3" fill="#00FF00"/></svg>',
+  'bomb':'💣'
+};
 
-  /* ============================================================
-     RENDER: History badge
-     ============================================================ */
-  function renderHistoryBadge(){
-    var b = $('historyBadge');
-    if(b) b.textContent = state.transactions.length;
-  }
+function syncSlotCredit() {
+  slotState.credit = coinBalance;
+  $('slotCredit') && ($('slotCredit').textContent = fmt(coinBalance));
+  $('slotBetValue') && ($('slotBetValue').textContent = fmt(slotState.bet));
+  $('slotBetDisplay') && ($('slotBetDisplay').textContent = fmt(slotState.bet));
+  updateSlotVIP();
+}
 
-  /* ============================================================
-     SELECT WALLET
-     ============================================================ */
-  function selectWallet(key){
-    var w = state.wallets[key];
-    if(!w) return;
-
-    $('welcomeTitle').textContent = w.name + ' ကို ရွေးထားသည် ✅';
-    $('welcomeSub').textContent = 'ငွေလွှဲ / လက်ခံ လုပ်ဆောင်နိုင်ပါပြီ';
-
-    var fromSel = $('fromWallet');
-    if(fromSel) fromSel.value = key;
-
-    var recvSel = $('recvWallet');
-    if(recvSel) recvSel.value = key;
-
-    var myAcc = $('myAccount');
-    if(myAcc) myAcc.value = w.account;
-
-    var topupSel = $('topupWallet');
-    if(topupSel) topupSel.value = key;
-
-    toast('💼 ' + w.name + ' ရွေးချယ်ပြီး');
-  }
-
-  /* ============================================================
-     TRANSFER
-     ============================================================ */
-  function doTransfer(){
-    var fromKey = $('fromWallet').value;
-    var to = $('toAccount').value.trim();
-    var amtRaw = $('amount').value;
-    var note = $('note').value.trim();
-
-    if(!to){ toast('⚠️ လက်ခံမည့်သူ ထည့်ပါ'); return; }
-    if(!amtRaw || Number(amtRaw) <= 0){ toast('⚠️ ပမာဏ ထည့်ပါ'); return; }
-
-    var amt = Number(amtRaw);
-    var w = state.wallets[fromKey];
-    if(!w){ toast('⚠️ Wallet မမှန်ပါ'); return; }
-    if(amt > w.balance){ toast('⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ'); return; }
-
-    // Deduct
-    w.balance -= amt;
-
-    // Add transaction
-    state.transactions.unshift({
-      wallet: fromKey,
-      dir: 'out',
-      amount: amt,
-      label: w.name + ' မှ လွှဲပြီး' + (note ? ' (' + note + ')' : ''),
-      time: 'ယခု'
-    });
-
-    // Refresh UI
-    renderStats();
-    renderSidebarWallets();
-    renderWalletList();
-    renderTransactions($('searchInput') ? $('searchInput').value : '');
-    renderHistoryBadge();
-
-    closeModal('transferModal');
-    toast('📤 ' + w.name + ' မှ ' + fmtNum(amt) + ' ' + w.sym + ' လွှဲပြီး ✅');
-
-    // Clear form
-    $('toAccount').value = '';
-    $('amount').value = '';
-    $('note').value = '';
-  }
-
-  /* ============================================================
-     RECEIVE
-     ============================================================ */
-  function doReceive(){
-    var wKey = $('recvWallet').value;
-    var amtRaw = $('recvAmount').value;
-    var w = state.wallets[wKey];
-    if(!w){ toast('⚠️ Wallet မမှန်ပါ'); return; }
-
-    if(amtRaw && Number(amtRaw) > 0){
-      toast('📥 ' + w.name + ' — ' + fmtNum(Number(amtRaw)) + ' ' + w.sym + ' တောင်းခံပြီး ✅');
-    } else {
-      toast('📥 ' + w.name + ' လက်ခံရန် အသင့် ✅');
+function generateReels() {
+  const tbody = $('reelsBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  for (let r = 0; r < 5; r++) {
+    const tr = document.createElement('tr');
+    for (let c = 0; c < 5; c++) {
+      const td = document.createElement('td');
+      const s = document.createElement('div');
+      s.className = 'sym';
+      s.innerHTML = SVG_ICONS['cherry'];
+      td.appendChild(s);
+      tr.appendChild(td);
     }
-
-    closeModal('receiveModal');
-    $('recvAmount').value = '';
+    tbody.appendChild(tr);
   }
+}
 
-  /* ============================================================
-     TOPUP
-     ============================================================ */
-  function doTopup(){
-    var phone = $('topupPhone').value.trim();
-    var amtRaw = $('topupAmount').value;
-    var wKey = $('topupWallet').value;
-    var w = state.wallets[wKey];
-
-    if(!phone){ toast('⚠️ ဖုန်းနံပါတ် ထည့်ပါ'); return; }
-    if(!amtRaw || Number(amtRaw) <= 0){ toast('⚠️ ပမာဏ ထည့်ပါ'); return; }
-    if(!w){ toast('⚠️ Wallet မမှန်ပါ'); return; }
-
-    var amt = Number(amtRaw);
-    if(amt > w.balance){ toast('⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ'); return; }
-
-    w.balance -= amt;
-
-    state.transactions.unshift({
-      wallet: wKey,
-      dir: 'out',
-      amount: amt,
-      label: phone + ' ဖုန်းဖြည့်',
-      time: 'ယခု'
-    });
-
-    renderStats();
-    renderSidebarWallets();
-    renderWalletList();
-    renderTransactions($('searchInput') ? $('searchInput').value : '');
-    renderHistoryBadge();
-
-    closeModal('topupModal');
-    toast('⚡ ' + fmtNum(amt) + ' ' + w.sym + ' ဖုန်းဖြည့်ပြီး ✅');
-
-    $('topupPhone').value = '';
-    $('topupAmount').value = '';
+function slotSpin() {
+  if (slotState.spinning) return;
+  if (!currentUser) return toast('Login လုပ်ပါ', 'warn');
+  if (!slotState.isFreeSpin && slotState.bet > slotState.credit) {
+    toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn');
+    slotStopAuto();
+    return;
   }
-
-  /* ============================================================
-     QR
-     ============================================================ */
-  function doQr(){
-    var amtRaw = $('qrAmount').value;
-    if(!amtRaw || Number(amtRaw) <= 0){ toast('⚠️ ပမာဏ ထည့်ပါ'); return; }
-
-    closeModal('qrModal');
-    toast('📷 QR Scan & Pay — ' + fmtNum(Number(amtRaw)) + ' Ks ✅');
-    $('qrAmount').value = '';
+  if (!slotState.isFreeSpin) {
+    slotState.credit -= slotState.bet;
+    $('slotCredit') && ($('slotCredit').textContent = fmt(slotState.credit));
+    addCoins(-slotState.bet, 'bet', { desc: '🎰 Slot Bet', game: 'Slot' });
   }
-
-  /* ============================================================
-     SETTINGS
-     ============================================================ */
-  function doSaveSettings(){
-    var name = $('setName').value.trim() || 'Ko Aung';
-    var phone = $('setPhone').value.trim();
-    var lang = $('setLang').value;
-
-    $('userProfile').querySelector('h5').textContent = name;
-    $('welcomeTitle').textContent = (lang === 'en' ? 'Hello, ' : 'မင်္ဂလာပါ, ') + name + ' 👋';
-    $('welcomeSub').textContent = (lang === 'en' ? 'All wallets are synced' : 'သင့်ရဲ့ wallets အားလုံး ဒီနေ့ အဆင်ပြေပါစေ');
-
-    if(phone){
-      state.wallets.wave.account = phone;
-      renderSidebarWallets();
-      renderWalletList();
+  $('slotWinDisplay') && ($('slotWinDisplay').textContent = '0');
+  slotState.spinning = true;
+  $('slotSpinBtn') && ($('slotSpinBtn').disabled = true);
+  $('slotAutoBtn') && ($('slotAutoBtn').disabled = true);
+  $('slotMessage') && ($('slotMessage').textContent = slotState.isFreeSpin ? `🎁 Free Spin! (${slotState.freeSpins})` : '🎰 လှည့်နေသည်...');
+  slotState.totalSpins++;
+  totalGamesPlayed++;
+  db.ref('users/' + currentUser.uid + '/games_played').set(totalGamesPlayed).catch(()=>{});
+  $('slotEffect') && $('slotEffect').classList.remove('show');
+  $('slotFreeSpin') && $('slotFreeSpin').classList.remove('show');
+  document.querySelectorAll('.sym').forEach(el => el.classList.remove('win', 'scatter'));
+  const cols = [];
+  for (let c = 0; c < 5; c++) {
+    const col = [];
+    for (let r = 0; r < 5; r++) {
+      const td = document.querySelectorAll('#reelsBody tr')[r].querySelectorAll('td')[c];
+      td.classList.add('spinning');
+      col.push(td);
     }
-
-    closeModal('settingsModal');
-    toast('⚙️ Settings သိမ်းပြီး ✅');
+    cols.push(col);
   }
-
-  /* ============================================================
-     AUTO UPDATE
-     ============================================================ */
-  var updateCheckTimer = null;
-  var currentVersion = state.version;
-
-  function checkForUpdate(){
-    // Simulate version check — in production, fetch from server
-    // For demo: auto-update every 60s (just a version bump notification)
-    var dot = $('updateDot');
-    if(dot) dot.style.display = 'block';
-
-    setTimeout(function(){
-      if(dot) dot.style.display = 'none';
-    }, 4000);
+  const results = [];
+  let bombCount = 0;
+  const winChance = Math.random() * 100 < SLOT_WIN_RATE;
+  for (let i = 0; i < 5; i++) {
+    const colRes = [];
+    for (let j = 0; j < 5; j++) {
+      const rand = Math.random();
+      let sym;
+      if (rand < 0.03 && bombCount < 2) { sym = SCATTER_SYMBOL; bombCount++; }
+      else {
+        const wr = Math.random();
+        if (wr < 0.6) sym = SYMBOLS[Math.floor(Math.random() * 5)];
+        else if (wr < 0.9) sym = SYMBOLS[Math.floor(Math.random() * 10)];
+        else sym = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+      }
+      colRes.push(sym);
+    }
+    results.push(colRes);
   }
-
-  function startAutoUpdate(){
-    // Initial check after 10s
-    setTimeout(checkForUpdate, 10000);
-    // Then every 120s
-    updateCheckTimer = setInterval(checkForUpdate, 120000);
+  if (winChance && !slotState.isFreeSpin) {
+    const low = ['cherry','lemon','orange','plum','watermelon'];
+    const rs = low[Math.floor(Math.random() * low.length)];
+    const row = Math.floor(Math.random() * 5);
+    results[0][row] = rs; results[1][row] = rs; results[2][row] = rs;
   }
-
-  /* ============================================================
-     EVENT DELEGATION — all clicks
-     ============================================================ */
-  function bindEvents(){
-
-    // Sidebar navigation
-    document.querySelectorAll('.sb-item[data-nav]').forEach(function(item){
-      item.addEventListener('click', function(){
-        var nav = this.getAttribute('data-nav');
-        // Active state
-        document.querySelectorAll('.sb-item[data-nav]').forEach(function(i){ i.classList.remove('active'); });
-        this.classList.add('active');
-
-        if(nav === 'dashboard'){
-          $('welcomeTitle').textContent = 'မင်္ဂလာပါ, Ko Aung 👋';
-          $('welcomeSub').textContent = 'သင့်ရဲ့ wallets အားလုံး ဒီနေ့ အဆင်ပြေပါစေ';
-          toast('🏠 Dashboard');
-        } else if(nav === 'transfer'){
-          openModal('transferModal');
-        } else if(nav === 'receive'){
-          openModal('receiveModal');
-        } else if(nav === 'history'){
-          toast('📊 History — ' + state.transactions.length + ' ခု');
-        } else if(nav === 'settings'){
-          openModal('settingsModal');
-        }
-      });
-    });
-
-    // Sidebar wallet clicks
-    $('sidebarWallets').addEventListener('click', function(e){
-      var row = e.target.closest('.sb-wallet');
-      if(row) selectWallet(row.getAttribute('data-wallet'));
-    });
-
-    // Wallet quick list clicks
-    $('walletList').addEventListener('click', function(e){
-      var row = e.target.closest('.wallet-row');
-      if(row) selectWallet(row.getAttribute('data-wallet'));
-    });
-
-    // Action buttons
-    $('actionRow').addEventListener('click', function(e){
-      var btn = e.target.closest('.act-btn');
-      if(!btn) return;
-      var action = btn.getAttribute('data-action');
-      if(action === 'transfer') openModal('transferModal');
-      else if(action === 'receive') openModal('receiveModal');
-      else if(action === 'topup') openModal('topupModal');
-      else if(action === 'qr') openModal('qrModal');
-    });
-
-    // Panel links
-    document.querySelectorAll('[data-action="viewAllTx"]').forEach(function(a){
-      a.addEventListener('click', function(){
-        toast('📊 ငွေလွှဲမှု အားလုံး — ' + state.transactions.length + ' ခု');
-      });
-    });
-    document.querySelectorAll('[data-action="viewAllWallets"]').forEach(function(a){
-      a.addEventListener('click', function(){
-        toast('💼 Wallets 3 ခု');
-      });
-    });
-
-    // Topbar
-    $('notifBtn').addEventListener('click', function(){ toast('🔔 Notifications'); });
-    $('profileBtn').addEventListener('click', function(){ openModal('settingsModal'); });
-    $('userProfile').addEventListener('click', function(){ openModal('settingsModal'); });
-
-    // Search
-    $('searchInput').addEventListener('input', function(){
-      renderTransactions(this.value);
-    });
-
-    // Modal close buttons
-    document.querySelectorAll('[data-close]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        closeModal(this.getAttribute('data-close'));
-      });
-    });
-
-    // Overlay click to close
-    document.querySelectorAll('.modal-overlay').forEach(function(ov){
-      ov.addEventListener('click', function(e){
-        if(e.target === ov) ov.classList.remove('show');
-      });
-    });
-
-    // Form submit buttons
-    $('doTransferBtn').addEventListener('click', doTransfer);
-    $('doReceiveBtn').addEventListener('click', doReceive);
-    $('doTopupBtn').addEventListener('click', doTopup);
-    $('doQrBtn').addEventListener('click', doQr);
-    $('doSaveSettingsBtn').addEventListener('click', doSaveSettings);
-
-    // Keyboard: Escape closes modals
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape') closeAllModals();
-    });
+  const spinDur = slotState.turbo ? 400 : 1200;
+  const stopDelay = slotState.turbo ? 80 : 200;
+  for (let c = 0; c < 5; c++) {
+    setTimeout(() => {
+      for (let r = 0; r < 5; r++) {
+        const td = cols[c][r];
+        td.classList.remove('spinning');
+        const s = td.querySelector('.sym');
+        const key = results[c][r];
+        if (key === SCATTER_SYMBOL) { s.innerHTML = SVG_ICONS['bomb']; s.classList.add('bomb'); }
+        else { s.innerHTML = SVG_ICONS[key] || SVG_ICONS['cherry']; s.classList.remove('bomb'); }
+      }
+      if (c === 4) {
+        setTimeout(() => {
+          slotCheckWin(results);
+          slotState.spinning = false;
+          $('slotSpinBtn') && ($('slotSpinBtn').disabled = false);
+          $('slotAutoBtn') && ($('slotAutoBtn').disabled = false);
+          if (slotState.isFreeSpin) {
+            slotState.freeSpins--;
+            if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1200);
+            else { slotState.isFreeSpin = false; $('slotFreeSpin') && $('slotFreeSpin').classList.remove('show'); }
+          }
+          if (slotState.auto && slotState.autoCount > 0) {
+            slotState.autoCount--;
+            $('slotAutoBtn') && ($('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`);
+            if (slotState.autoCount > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1000);
+            else slotStopAuto();
+          }
+        }, 100);
+      }
+    }, spinDur + (c * stopDelay));
   }
+}
 
-  /* ============================================================
-     INIT
-     ============================================================ */
-  function init(){
-    // Initial render
-    renderStats();
-    renderSidebarWallets();
-    renderWalletList();
-    renderTransactions('');
-    renderHistoryBadge();
+function slotStopAuto() {
+  slotState.auto = false;
+  slotState.autoCount = 0;
+  $('slotAutoBtn') && ($('slotAutoBtn').innerHTML = '🔄<br>AUTO', $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff00ff,#cc00cc)');
+}
 
-    // Set default accounts
-    $('myAccount').value = state.wallets.wave.account;
-    $('setName').value = 'Ko Aung';
-
-    // Bind all events
-    bindEvents();
-
-    // Start auto-update checker
-    startAutoUpdate();
-
-    // Welcome
-    console.log('[TriPay] v' + state.version + ' initialized — all systems functional');
-  }
-
-  // Run when DOM ready
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', init);
+function slotToggleAuto() {
+  if (slotState.spinning) return;
+  slotState.auto = !slotState.auto;
+  if (slotState.auto) {
+    slotState.autoCount = 10;
+    $('slotAutoBtn') && ($('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`, $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff0000,#cc0000)');
+    $('slotMessage') && ($('slotMessage').textContent = '🔄 Auto Spin!');
+    setTimeout(() => { if (!slotState.spinning && slotState.auto) slotSpin(); }, 300);
   } else {
-    init();
+    slotStopAuto();
+    $('slotMessage') && ($('slotMessage').textContent = 'Auto ရပ်');
   }
+}
 
-})();
+function slotToggleTurbo() {
+  slotState.turbo = !slotState.turbo;
+  $('slotTurboBtn') && ($('slotTurboBtn').style.background = slotState.turbo ? 'linear-gradient(180deg,#ff0000,#cc0000)' : 'linear-gradient(180deg,#ffaa00,#cc8800)');
+  $('slotMessage') && ($('slotMessage').textContent = slotState.turbo ? '⚡ Turbo ON!' : 'Turbo OFF');
+}
+
+function slotChangeBet(delta) {
+  if (slotState.spinning) return;
+  let nb = slotState.bet + delta;
+  if (nb < SLOT_MIN_BET) nb = SLOT_MIN_BET;
+  if (nb > SLOT_MAX_BET) nb = SLOT_MAX_BET;
+  if (nb > coinBalance) { $('slotMessage') && ($('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'); return; }
+  slotState.bet = nb;
+  slotState.baseBet = nb;
+  syncSlotCredit();
+}
+
+function slotQuickBet(mult) {
+  if (slotState.spinning) return;
+  const nb = slotState.baseBet * mult;
+  if (nb > SLOT_MAX_BET) return;
+  if (nb > coinBalance) { $('slotMessage') && ($('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'); return; }
+  slotState.bet = nb;
+  syncSlotCredit();
+  $('slotMessage') && ($('slotMessage').textContent = `💰 ${fmt(nb)} WCCoin (${mult}×)`);
+}
+
+function slotCheckWin(results) {
+  let totalWin = 0;
+  const winPositions = [];
+  const winLines = [];
+  let hasJackpot = false;
+  const scatterPos = [];
+  for (let c = 0; c < 5; c++) for (let r = 0; r < 5; r++) {
+    if (results[c][r] === SCATTER_SYMBOL) scatterPos.push({ col: c, row: r });
+  }
+  let bombFreeSpins = 0;
+  if (scatterPos.length >= 3) {
+    if (scatterPos.length === 3) bombFreeSpins = 5;
+    else if (scatterPos.length === 4) bombFreeSpins = 7;
+    else bombFreeSpins = 10;
+    slotState.freeSpins += bombFreeSpins;
+    slotState.isFreeSpin = true;
+    $('slotFreeSpin') && $('slotFreeSpin').classList.add('show');
+    scatterPos.forEach(p => {
+      winPositions.push(p);
+      const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
+      if (td) { const s = td.querySelector('.sym'); if (s) s.classList.add('scatter'); }
+    });
+  }
+  const allLines = [];
+  for (let row = 0; row < 5; row++) allLines.push({ positions: Array.from({length:5},(_,c)=>({col:c,row})), dir:'➡️' });
+  for (let col = 0; col < 5; col++) allLines.push({ positions: Array.from({length:5},(_,r)=>({col,row:r})), dir:'⬇️' });
+  allLines.push({ positions: [{col:0,row:0},{col:1,row:1},{col:2,row:2},{col:3,row:3},{col:4,row:4}], dir:'↘️' });
+  allLines.push({ positions: [{col:0,row:4},{col:1,row:3},{col:2,row:2},{col:3,row:1},{col:4,row:0}], dir:'↗️' });
+  allLines.forEach(line => {
+    const syms = line.positions.map(p => results[p.col][p.row]);
+    const firstSym = syms[0];
+    if (!firstSym || firstSym === SCATTER_SYMBOL) return;
+    let count = 1;
+    const positions = [0];
+    for (let i = 1; i < syms.length; i++) {
+      if (syms[i] === firstSym) { count++; positions.push(i); } else break;
+    }
+    if (PAYOUTS[firstSym] && count >= 3) {
+      const mult = PAYOUTS[firstSym][count];
+      if (mult) {
+        const amount = slotState.bet * mult;
+        totalWin += amount;
+        if (count >= 5) hasJackpot = true;
+        const mp = positions.map(p => line.positions[p]);
+        winLines.push({ positions: mp, symbol: firstSym, matchCount: count, winAmount: amount, dir: line.dir });
+        mp.forEach(p => winPositions.push(p));
+      }
+    }
+  });
+  if (totalWin > 0) {
+    slotState.credit += totalWin;
+    slotState.totalWins += totalWin;
+    totalWins += totalWin;
+    $('slotWinDisplay') && ($('slotWinDisplay').textContent = fmt(totalWin));
+    $('slotCredit') && ($('slotCredit').textContent = fmt(slotState.credit));
+    addCoins(totalWin, 'game_reward', { desc: '🎰 Slot Win', game: 'Slot' }).then(ok => {
+      if (ok) {
+        showCoinReward(totalWin, 'game_reward');
+        showPhoneNotification('🎉 WCCoin ရရှိပါပြီ!', '+' + fmt(totalWin) + ' WCCoin Slot ကနေ');
+      }
+    });
+    db.ref('users/' + currentUser.uid + '/total_wins').set(totalWins).catch(()=>{});
+    let winText = '🎉 WIN!', color = '#00ffcc';
+    if (hasJackpot) { winText = '🎰 JACKPOT!'; color = '#ff00ff'; }
+    else if (totalWin >= slotState.bet * 100) { winText = '💎 SUPER!'; color = '#ffcc00'; }
+    else if (totalWin >= slotState.bet * 30) { winText = '🌟 MEGA!'; color = '#00ffcc'; }
+    const eff = $('slotEffect');
+    if (eff) { eff.textContent = winText; eff.style.color = color; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
+    const linesHtml = winLines.map(l => `<span class="win-line">${l.dir} ${l.matchCount}×${fmt(l.winAmount)} WCCoin</span>`).join('');
+    $('slotMessage') && ($('slotMessage').innerHTML = `<div style="width:100%;text-align:center;margin-bottom:4px">${winText} = <span style="color:#ffcc00">${fmt(totalWin)} WCCoin</span></div><div style="width:100%;text-align:center">${linesHtml}</div>`);
+    winPositions.forEach(p => {
+      const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
+      if (td) { const s = td.querySelector('.sym'); if (s && !s.classList.contains('scatter')) s.classList.add('win'); }
+    });
+    coinBalance = slotState.credit;
+    updateAllUI();
+  }
+  if (bombFreeSpins > 0) {
+    const eff = $('slotEffect');
+    if (eff) { eff.textContent = '💣 FREE SPIN!'; eff.style.color = '#ff00ff'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
+    const bombMsg = `💣 <span style="color:#ff00ff">BOMB ${scatterPos.length}!</span> Free Spin ${bombFreeSpins} ခါ!`;
+    if ($('slotMessage')) {
+      if (totalWin > 0) $('slotMessage').innerHTML += `<div style="width:100%;text-align:center;margin-top:3px">${bombMsg}</div>`;
+      else $('slotMessage').innerHTML = bombMsg;
+    }
+  } else if (totalWin === 0) {
+    const eff = $('slotEffect');
+    if (eff) { eff.textContent = 'LOSE'; eff.style.color = '#ff4444'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 1500); }
+    $('slotMessage') && ($('slotMessage').innerHTML = '😢 <span style="color:#ff4444">LOSE!</span> ထပ်ကြိုးစားပါ');
+  }
+}
+
+function slotDailyBonus() {
+  const today = new Date().toDateString();
+  const st = slotState.checkinState;
+  if (st.lastCheckin === today) { toast('⚠️ ဒီနေ့ ယူပြီးပါပြီ', 'warn'); return; }
+  const dayIdx = new Date().getDate() % 4;
+  const reward = DAILY_REWARDS[dayIdx] || 10;
+  const yest = new Date(); yest.setDate(yest.getDate() - 1);
+  if (st.lastCheckin === yest.toDateString()) st.streak = (st.streak || 0) + 1;
+  else st.streak = 1;
+  st.lastCheckin = today;
+  addCoins(reward, 'daily_bonus', { desc: '🎁 Daily Bonus' }).then(ok => {
+    if (ok) {
+      showCoinReward(reward, 'daily_bonus');
+      toast('🎁 +' + fmt(reward) + ' WCCoin', 'success');
+      showPhoneNotification('🎁 Daily Bonus!', '+' + fmt(reward) + ' WCCoin ရရှိပါပြီ');
+    }
+  });
+}
+
+function refreshSlot() { syncSlotCredit(); updateSlotVIP(); toast('🔄 Refreshed', 'success'); }
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+function openAdminLogin() { $('adminLoginModal').classList.add('show'); }
+function doAdminLogin() {
+  const phone = $('admLoginPhone').value.trim();
+  const pass = $('admLoginPass').value;
+  $('admLoginErr').textContent = '';
+  if (cleanPhone(phone) !== cleanPhone(ADMIN_PHONE) || pass !== ADMIN_PASSWORD) {
+    $('admLoginErr').textContent = '⚠️ Invalid credentials';
+    return;
+  }
+  isAdmin = true;
+  closeModal('adminLoginModal');
+  showScreen('admin');
+  loadAdminData();
+}
+function closeAdmin() {
+  isAdmin = false;
+  if (currentUser) showScreen('app');
+  else showScreen('auth');
+}
+function loadAdminData() {
+  loadAdminUsers();
+  loadAdminBuyRequests();
+  loadAdminVersion();
+}
+function loadAdminUsers() {
+  db.ref('users').on('value', snap => {
+    const data = snap.val() || {};
+    window._adminUsers = data;
+    renderAdminUsers($('admSearch') ? $('admSearch').value : '');
+    // Fill select
+    const sel = $('admCoinUser');
+    if (sel) {
+      sel.innerHTML = '<option value="">— Select —</option>' + Object.entries(data).map(([uid, u]) => `<option value="${uid}">${esc(u.name || 'User')} (${esc(u.phone || '')}) — ${fmt(u.coin_balance || 0)} WCCoin</option>`).join('');
+    }
+  });
+}
+function renderAdminUsers(filter) {
+  const list = $('admUserList');
+  const data = window._adminUsers || {};
+  if (!list) return;
+  const f = (filter || '').toLowerCase().trim();
+  const entries = Object.entries(data).filter(([,u]) => !f || (u.name || '').toLowerCase().includes(f) || (u.phone || '').includes(f));
+  if (entries.length === 0) { list.innerHTML = '<div class="empty-state"><span class="em">👥</span><h3>No users</h3></div>'; return; }
+  list.innerHTML = entries.map(([uid, u]) => `
+    <div class="user-row">
+      <div class="ur-av">${esc((u.name || '?').charAt(0).toUpperCase())}</div>
+      <div class="ur-body">
+        <div class="ur-name">${esc(u.name || 'User')}</div>
+        <div class="ur-sub">${esc(u.phone || '')} · 🪙 ${fmt(u.coin_balance || 0)} WCCoin</div>
+      </div>
+    </div>
+  `).join('');
+}
+function loadAdminBuyRequests() {
+  db.ref('coin_buy_requests').on('value', snap => {
+    const data = snap.val() || {};
+    const wrap = $('admBuyReqList');
+    if (!wrap) return;
+    const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0));
+    if (list.length === 0) { wrap.innerHTML = '<div class="empty-state"><span class="em">🛒</span><h3>No requests</h3></div>'; return; }
+    wrap.innerHTML = list.map(([id, r]) => {
+      const status = r.status || 'pending';
+      const color = status === 'approved' ? '#00D9A3' : status === 'rejected' ? '#FF4757' : '#FFB800';
+      const showBtns = status === 'pending';
+      return `<div class="admin-card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <div><strong>${esc(r.userName || 'User')}</strong> · ${esc(r.phone || '')}</div>
+          <div style="color:${color};font-weight:800">${esc(status)}</div>
+        </div>
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:6px">
+          ${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ')' : ''} · ${esc(r.price || '')}
+        </div>
+        ${r.note ? `<div style="font-size:12px;padding:8px;background:var(--surface-2);border-radius:8px;margin-bottom:8px">${esc(r.note)}</div>` : ''}
+        <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${new Date(r.ts || Date.now()).toLocaleString()}</div>
+        ${showBtns ? `<div style="display:flex;gap:8px">
+          <button class="btn btn-primary" style="flex:1;padding:10px" onclick="approveBuyReq('${id}','${r.uid}',${(r.coins||0)+(r.bonus||0)})">✅ Approve</button>
+          <button class="btn btn-danger" style="flex:1;padding:10px" onclick="rejectBuyReq('${id}')">❌ Reject</button>
+        </div>` : ''}
+      </div>`;
+    }).join('');
+  });
+}
+async function approveBuyReq(reqId, uid, totalCoins) {
+  if (!confirm('Approve and add ' + totalCoins + ' WCCoin to user?')) return;
+  try {
+    const ok = await addCoinsToUser(uid, totalCoins, 'buy', { desc: '🛒 WCCoin Purchase approved', requestId: reqId });
+    if (!ok) throw new Error('Add failed');
+    await db.ref('coin_buy_requests/' + reqId).update({ status: 'approved', approvedAt: Date.now() });
+    toast('✅ Approved', 'success');
+  } catch(e) { toast('❌ ' + e.message, 'error'); }
+}
+async function rejectBuyReq(reqId) {
+  if (!confirm('Reject this request?')) return;
+  await db.ref('coin_buy_requests/' + reqId).update({ status: 'rejected', rejectedAt: Date.now() });
+  toast('Rejected', 'info');
+}
+async function adminApplyCoins() {
+  const uid = $('admCoinUser').value;
+  const amt = parseInt($('admCoinAmt').value, 10);
+  const reason = $('admCoinReason').value.trim() || 'Admin adjustment';
+  if (!uid) return toast('User ရွေးပါ', 'warn');
+  if (!amt || isNaN(amt)) return toast('ပမာဏ ထည့်ပါ', 'warn');
+  const ok = await addCoinsToUser(uid, amt, amt > 0 ? 'admin_add' : 'admin_deduct', { desc: '👑 ' + reason });
+  if (ok) { toast('✅ Done', 'success'); $('admCoinAmt').value = ''; $('admCoinReason').value = ''; }
+  else toast('❌ Failed', 'error');
+}
+function loadAdminVersion() {
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val() || {};
+    $('admLatest') && ($('admLatest').value = v.latest || '');
+    $('admNotes') && ($('admNotes').value = v.releaseNotes || '');
+    $('admForce') && ($('admForce').checked = !!v.forceUpdate);
+  });
+}
+async function adminSaveVersion() {
+  const latest = $('admLatest').value.trim();
+  if (!latest) return toast('Version ထည့်ပါ', 'warn');
+  await db.ref('app_config/version').set({
+    latest,
+    releaseNotes: $('admNotes').value.trim(),
+    forceUpdate: $('admForce').checked,
+    releaseDate: Date.now()
+  });
+  toast('✅ Version saved', 'success');
+}
+
+/* ============================================================
+   AUTO UPDATE
+   ============================================================ */
+function checkUpdate() {
+  if (!db) return;
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val();
+    if (!v || !v.latest) return;
+    const cmp = compareVersion(APP_VERSION, v.latest);
+    if (cmp >= 0) return;
+    const dismissed = localStorage.getItem('wc_version_dismissed');
+    if (dismissed === v.latest && !v.forceUpdate) return;
+    showUpdateModal(v);
+  }).catch(err => console.warn('[Update]', err.message));
+}
+function compareVersion(a, b) {
+  const pa = String(a || '0').split('.').map(n => parseInt(n, 10) || 0);
+  const pb = String(b || '0').split('.').map(n => parseInt(n, 10) || 0);
+  const len = Math.max(pa.length, pb.length);
+  for (let i = 0; i < len; i++) {
+    const x = pa[i] || 0, y = pb[i] || 0;
+    if (x > y) return 1;
+    if (x < y) return -1;
+  }
+  return 0;
+}
+function showUpdateModal(v) {
+  _updateVersion = v;
+  $('newVerLabel') && ($('newVerLabel').textContent = v.latest);
+  $('releaseNotes') && ($('releaseNotes').textContent = v.releaseNotes || 'Bug fixes and improvements');
+  $('updateModal').classList.add('show');
+}
+function applyUpdate() {
+  if (!_updateVersion) return;
+  localStorage.removeItem('wc_version_dismissed');
+  toast('🔄 Updating...', 'info');
+  setTimeout(() => location.reload(true), 500);
+}
+function checkUpdateManually() {
+  toast('🔄 Checking...', 'info');
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val();
+    if (!v || !v.latest) return toast('Version info မရှိပါ', 'warn');
+    const cmp = compareVersion(APP_VERSION, v.latest);
+    if (cmp >= 0) return toast('✅ Latest', 'success');
+    showUpdateModal(v);
+  }).catch(err => toast('Failed: ' + err.message, 'error'));
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  loadSettingsLocal();
+  applyCoinIcons();
+  generateReels();
+  renderPkgGrid();
+
+  // Auth tabs
+  $('tabLogin') && ($('tabLogin').onclick = () => showAuthTab('login'));
+  $('tabSignup') && ($('tabSignup').onclick = () => showAuthTab('signup'));
+
+  // Login form
+  $('loginForm') && ($('loginForm').onsubmit = async e => {
+    e.preventDefault();
+    const phone = $('loginPhone').value.trim();
+    const pass = $('loginPass').value;
+    const errEl = $('loginErr');
+    const btn = $('loginBtn');
+    errEl.textContent = '';
+    if (!phone) { errEl.textContent = '⚠️ ဖုန်းနံပါတ် ထည့်ပါ'; return; }
+    if (pass.length < 6) { errEl.textContent = '⚠️ Password ၆ လုံး'; return; }
+    btn.disabled = true; btn.textContent = 'Logging in...';
+    try {
+      await login(phone, pass);
+      toast('✅ Welcome back!', 'success');
+    } catch(err) {
+      errEl.textContent = '⚠️ ' + (err.message || 'Login failed');
+    } finally { btn.disabled = false; btn.textContent = 'Login'; }
+  });
+
+  // Signup form
+  $('signupForm') && ($('signupForm').onsubmit = async e => {
+    e.preventDefault();
+    const name = $('suName').value.trim();
+    const phone = $('suPhone').value.trim();
+    const pass = $('suPass').value;
+    const errEl = $('signupErr');
+    const btn = $('signupBtn');
+    errEl.textContent = '';
+    if (!name || name.length < 2) { errEl.textContent = '⚠️ Name ၂ လုံး'; return; }
+    if (!phone || phone.replace(/\D/g,'').length < 7) { errEl.textContent = '⚠️ ဖုန်းနံပါတ် မှန်ကန်စွာ ထည့်ပါ'; return; }
+    if (pass.length < 6) { errEl.textContent = '⚠️ Password ၆ လုံး'; return; }
+    btn.disabled = true; btn.textContent = 'Creating...';
+    try {
+      await signup(name, phone, pass);
+      toast('🎉 Account created! +100 WCCoin bonus', 'success');
+    } catch(err) {
+      errEl.textContent = '⚠️ ' + (err.message || 'Signup failed');
+    } finally { btn.disabled = false; btn.textContent = 'Sign Up'; }
+  });
+
+  // Nav
+  document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
+    btn.onclick = () => gotoPage(btn.dataset.page);
+  });
+
+  // Admin tabs
+  document.querySelectorAll('.admin-tab').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = $('admPanel-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+      if (btn.dataset.tab === 'buyreq') loadAdminBuyRequests();
+      if (btn.dataset.tab === 'version') loadAdminVersion();
+    };
+  });
+
+  // Modal overlay click
+  document.querySelectorAll('.modal-overlay').forEach(ov => {
+    ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('show'); });
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
+
+  // Auth state
+  auth.onAuthStateChanged(async user => {
+    if (user) {
+      const snap = await db.ref('users/' + user.uid).once('value');
+      const data = snap.val();
+      if (!data) { await auth.signOut(); showScreen('auth'); return; }
+      currentUser = { uid: user.uid, ...data };
+      settings.name = data.name || settings.name;
+      isAdmin = data.isAdmin === true || displayPhone(data.phone) === ADMIN_PHONE;
+      showScreen('app');
+      loadUserData();
+      loadHistory();
+      updateAllUI();
+      // Auto-detect admin
+      // Notification prompt
+      if (!localStorage.getItem('wc_notif_prompted_v2') && Notification.permission !== 'granted') {
+        setTimeout(() => { $('notificationPromptModal').classList.add('show'); localStorage.setItem('wc_notif_prompted_v2', '1'); }, 3000);
+      }
+    } else {
+      showScreen('auth');
+    }
+  });
+
+  // Auto update check
+  setTimeout(checkUpdate, 2000);
+  if (updateCheckInterval) clearInterval(updateCheckInterval);
+  updateCheckInterval = setInterval(checkUpdate, 10 * 60 * 1000);
+
+  console.log('✅ WC Wallet + Slot v' + APP_VERSION + ' initialized');
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+/* ============================================================
+   DEBUG
+   ============================================================ */
+window.WCDebug = {
+  state: () => ({ uid: currentUser?.uid, balance: coinBalance, version: APP_VERSION, isAdmin }),
+  addCoins: (n) => currentUser && addCoins(n, 'admin_add', { desc: 'Debug' }),
+  setCoinIcon: (url) => { localStorage.setItem('wc_coin_icon', url || ''); setTimeout(() => location.reload(), 300); },
+  reset: () => { localStorage.clear(); location.reload(); }
+};
 </script>
-
 </body>
 </html>

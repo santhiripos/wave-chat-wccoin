@@ -169,8 +169,8 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
 .wallet-balance .inline-coin img{width:100%;height:100%;object-fit:contain}
 .wallet-meta{font-size:13px;color:var(--text-2);margin-top:10px;font-weight:600;position:relative;z-index:2}
 
-/* ===== SLOT GAME (BIGGER) ===== */
-.slot-wrapper{background:linear-gradient(145deg,#1e0a36,#0d021a);border-radius:28px;padding:20px;box-shadow:0 16px 50px rgba(0,0,0,.4);border:3px solid var(--gold);max-width:850px;margin:0 auto}
+/* ===== SLOT GAME (BIGGER & ANIMATED) ===== */
+.slot-wrapper{background:linear-gradient(145deg,#1e0a36,#0d021a);border-radius:28px;padding:20px;box-shadow:0 16px 50px rgba(0,0,0,.4);border:3px solid var(--gold);max-width:850px;margin:0 auto;position:relative}
 .slot-top{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:14px 18px;margin-bottom:14px}
 .slot-credit{display:flex;align-items:center;gap:12px;color:var(--gold);font-weight:900;font-size:18px}
 .slot-credit .coin-icon{width:28px;height:28px}
@@ -180,7 +180,8 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
 .slot-top-right{display:flex;gap:8px}
 .slot-btn-sm{background:var(--gold);color:#1a0b2e;border:none;border-radius:8px;width:42px;height:42px;cursor:pointer;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.15s}
 .slot-btn-sm:active{transform:scale(.9)}
-.slot-title{text-align:center;font-size:44px;font-weight:900;color:var(--gold);text-shadow:0 0 25px var(--gold),0 0 50px var(--pink),0 2px 4px rgba(0,0,0,.6);letter-spacing:8px;margin:10px 0 6px}
+.slot-title{text-align:center;font-size:44px;font-weight:900;color:var(--gold);text-shadow:0 0 25px var(--gold),0 0 50px var(--pink),0 2px 4px rgba(0,0,0,.6);letter-spacing:8px;margin:10px 0 6px;animation:titleGlow 2s infinite alternate}
+@keyframes titleGlow{0%{text-shadow:0 0 20px var(--gold),0 0 40px var(--pink);}100%{text-shadow:0 0 40px var(--gold),0 0 80px var(--pink);}}
 .slot-subtitle{text-align:center;font-size:14px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;border:2px solid var(--cyan);border-radius:6px;padding:6px;background:rgba(0,255,204,.08);font-weight:800}
 .slot-info-row{display:flex;justify-content:space-between;background:var(--header);border:2px solid var(--gold);border-radius:10px;padding:12px 18px;margin-bottom:14px}
 .slot-info-item{display:flex;flex-direction:column;align-items:center;min-width:80px}
@@ -190,21 +191,25 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
 .slot-main{display:flex;gap:12px;margin-bottom:14px}
 .slot-ways{display:flex;flex-direction:column;justify-content:center;align-items:center;background:#4a0000;border:2px solid var(--gold);border-radius:10px;padding:8px 6px;width:46px;flex-shrink:0}
 .slot-ways span{writing-mode:vertical-rl;color:var(--gold);font-weight:900;font-size:12px;letter-spacing:2px}
-.slot-reels{flex:1;background:var(--reel);border:3px solid var(--gold);border-radius:10px;padding:8px;position:relative;display:flex;flex-direction:column;min-width:0}
+.slot-reels{flex:1;background:var(--reel);border:3px solid var(--gold);border-radius:10px;padding:8px;position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
 .reels-table{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}
 .reels-table td{background:var(--reel);border-radius:6px;border:2px solid var(--gold);text-align:center;vertical-align:middle;width:20%;height:20%;padding:0;position:relative;overflow:hidden;aspect-ratio:1}
 .sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:36px;color:var(--reel-text);transition:transform .1s}
 .sym svg{width:100%;height:100%;max-width:46px;max-height:46px;display:block;margin:auto}
 .sym.bomb{font-size:34px}
-.reels-table.spinning .sym{animation:spinSym .1s linear infinite}
-@keyframes spinSym{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
-.sym.win{background:linear-gradient(135deg,rgba(0,255,204,.9),rgba(255,204,0,.8));border-radius:6px;animation:wf .4s infinite alternate;box-shadow:0 0 15px #00ffcc,0 0 30px #ffcc00;z-index:2}
-.sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.9),rgba(255,100,0,.8));border-radius:6px;animation:sf .4s infinite alternate;box-shadow:0 0 20px #ff00ff,0 0 40px #ff6600;z-index:2}
-@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.08)}}
-@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.12)}}
+/* ပိုမြန်သော လည်ပတ်မှု Animation */
+.reels-table.spinning .sym{animation:spinSym .06s linear infinite}
+@keyframes spinSym{0%{transform:translateY(-120%)}100%{transform:translateY(120%)}}
+
+.sym.win{background:linear-gradient(135deg,rgba(0,255,204,.9),rgba(255,204,0,.8));border-radius:6px;animation:wf .3s infinite alternate;box-shadow:0 0 20px #00ffcc,0 0 40px #ffcc00;z-index:2}
+.sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.9),rgba(255,100,0,.8));border-radius:6px;animation:sf .3s infinite alternate;box-shadow:0 0 25px #ff00ff,0 0 50px #ff6600;z-index:2}
+@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.1)}}
+@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.15)}}
 .slot-btns{display:flex;flex-direction:column;gap:10px;width:110px;flex-shrink:0}
-.slot-btn{border-radius:12px;font-weight:900;cursor:pointer;text-transform:uppercase;border:3px solid rgba(255,255,255,.3);transition:.15s;font-family:inherit;padding:0;color:#1a0b2e}
+.slot-btn{border-radius:12px;font-weight:900;cursor:pointer;text-transform:uppercase;border:3px solid rgba(255,255,255,.3);transition:.15s;font-family:inherit;padding:0;color:#1a0b2e;position:relative;overflow:hidden;}
 .slot-btn:active{transform:scale(.95)}
+.slot-btn::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transition:.5s}
+.slot-btn:hover::after{left:150%;}
 .slot-spin{background:linear-gradient(180deg,#00ffcc,#00cc99);font-size:20px;padding:24px 0;box-shadow:0 0 25px var(--cyan);line-height:1.2}
 .slot-spin:disabled{opacity:.5;box-shadow:none;cursor:not-allowed}
 .slot-auto{background:linear-gradient(180deg,#ff00ff,#cc00cc);color:#fff;font-size:16px;padding:16px 0;line-height:1.2}
@@ -220,11 +225,13 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
 .q3x{background:linear-gradient(180deg,#ff6600,#cc4400)}
 .q5x{background:linear-gradient(180deg,#ff0066,#cc0044)}
 .daily-btn{background:#0f0;color:#1a0b2e;padding:12px 18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;font-size:20px;font-family:inherit}
-.slot-msg{background:#000;border:2px solid var(--gold);border-radius:10px;padding:14px;color:#ffcc00;font-size:16px;font-weight:800;min-height:60px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.5;flex-wrap:wrap;gap:6px;margin-top:14px}
-.slot-msg .win-line{background:rgba(255,204,0,.15);border:2px solid var(--gold);border-radius:6px;padding:4px 10px;margin:4px;display:inline-block;font-size:13px}
+.slot-msg{background:#000;border:2px solid var(--gold);border-radius:10px;padding:14px;color:#ffcc00;font-size:16px;font-weight:800;min-height:60px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.5;flex-wrap:wrap;gap:6px;margin-top:14px;overflow:hidden;position:relative;}
+.slot-msg .win-line{background:rgba(255,204,0,.15);border:2px solid var(--gold);border-radius:6px;padding:4px 10px;margin:4px;display:inline-block;font-size:13px;animation:popIn .3s ease-out;}
+@keyframes popIn{0%{transform:scale(0);}100%{transform:scale(1);}}
+
 .slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:64px;font-weight:900;text-shadow:0 0 40px currentColor,0 0 80px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
-.slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .5s infinite alternate}
-@keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.1)}}
+.slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .4s infinite alternate}
+@keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.15)}}
 .slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,255,.2),rgba(255,204,0,.2));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:10px}
 .slot-freespin.show{opacity:1}
 .slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:36px;font-weight:900;color:#ff00ff;text-shadow:0 0 25px #ff00ff,0 0 50px #ff00ff;animation:fsFlash .5s infinite alternate}
@@ -391,7 +398,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
       <p class="auth-err" id="signupErr"></p>
       <button type="submit" class="auth-btn" id="signupBtn">Sign Up</button>
     </form>
-    <div class="auth-footer">WC Wallet · v1.2.0</div>
+    <div class="auth-footer">WC Wallet · v1.2.1</div>
   </div>
 </div>
 
@@ -668,7 +675,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
     </div>
     <div class="admin-panel" id="admPanel-version">
       <div class="admin-card">
-        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.2.0"></div>
+        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.2.1"></div>
         <div class="info-row"><label>Release Notes</label><textarea id="admNotes" placeholder="Bug fixes..."></textarea></div>
         <div class="info-row" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="admForce" style="width:24px;height:24px"><label style="margin:0;font-size:16px;text-transform:none">Force Update</label></div>
         <button class="btn btn-primary btn-block" onclick="adminSaveVersion()">🚀 Save Version</button>
@@ -750,7 +757,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
 const COIN_ICON_URL = '';  // ← သင့် WCCoin icon link ဒီမှာထည့်ပါ
 const ADMIN_PHONE = '09672124213';  // ← Admin phone
 const ADMIN_PASSWORD = 'admin123';   // ← Admin password
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.2.1';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQJ4zzAxZ_aSuGBxwegTw_dtfaW8oLJnU",
@@ -1391,8 +1398,9 @@ function slotSpin() {
     results[0][row] = rs; results[1][row] = rs; results[2][row] = rs;
   }
   
-  const spinDur = slotState.turbo ? 400 : 1200;
-  const stopDelay = slotState.turbo ? 80 : 200;
+  // ✅ ပိုမြန်သော Spin Duration သတ်မှတ်ခြင်း
+  const spinDur = slotState.turbo ? 200 : 700; 
+  const stopDelay = slotState.turbo ? 50 : 150;
   
   for (let c = 0; c < 5; c++) {
     setTimeout(() => {
@@ -1412,7 +1420,7 @@ function slotSpin() {
           if($('slotAutoBtn')) $('slotAutoBtn').disabled = false;
           if (slotState.isFreeSpin) {
             slotState.freeSpins--;
-            if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1200);
+            if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1000);
             else { slotState.isFreeSpin = false; if($('slotFreeSpin')) $('slotFreeSpin').classList.remove('show'); }
           }
           if (slotState.auto && slotState.autoCount > 0) {
@@ -1774,7 +1782,7 @@ async function adminSaveVersion() {
 }
 
 /* ============================================================
-   AUTO UPDATE (Bug Fix)
+   AUTO UPDATE (BUG FIXED & IMMEDIATE)
    ============================================================ */
 function checkUpdate() {
   if (!db) return;
@@ -1784,8 +1792,8 @@ function checkUpdate() {
     const cmp = compareVersion(APP_VERSION, v.latest);
     if (cmp >= 0) return; // Latest ဖြစ်နေရင် ဘာမှမလုပ်
     
-    // localStorage မှာ သိမ်းထားပြီးသားဆိုရင် ပြန်မပြ
     const dismissed = localStorage.getItem('wc_version_dismissed');
+    // Force update မဟုတ်ရင် နှိပ်ပြီးသားဆိုရင် ပြန်မပြ
     if (dismissed === v.latest && !v.forceUpdate) return;
     
     showUpdateModal(v);
@@ -1810,15 +1818,21 @@ function showUpdateModal(v) {
 }
 function applyUpdate() {
   if (!_updateVersion) return;
-  localStorage.removeItem('wc_version_dismissed');
-  // Cache ရှင်းပြီး ပြန် Reload လုပ်မယ်
+  // 1. ဒီ version ကို နှိပ်ပြီးသားအဖြစ် သတ်မှတ်
+  localStorage.setItem('wc_version_dismissed', _updateVersion.latest);
+  
+  // 2. Cache တွေအကုန်ရှင်းမယ်
   if ('caches' in window) {
     caches.keys().then(names => {
       for (let name of names) caches.delete(name);
     });
   }
+  
+  // 3. ချက်ချင်း Hard Reload လုပ်မယ်
   toast('🔄 Updating App...', 'info');
-  setTimeout(() => location.reload(true), 800);
+  setTimeout(() => {
+    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
+  }, 500);
 }
 function checkUpdateManually() {
   toast('🔄 Checking...', 'info');

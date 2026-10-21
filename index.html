@@ -176,6 +176,13 @@ body.dark .btn-secondary{background:#1E2444;color:#48CAE4}
 .games-empty .em{font-size:60px;display:block;margin-bottom:14px;opacity:.5}
 .games-empty h3{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px}
 
+.game-edit-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface-2);border-radius:12px;margin-bottom:8px}
+.game-edit-thumb{width:48px;height:48px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0;overflow:hidden}
+.game-edit-thumb img{width:100%;height:100%;object-fit:cover}
+.game-edit-info{flex:1;min-width:0}
+.game-edit-name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game-edit-url{font-size:11px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+
 .story-bar{padding:14px 0 10px;overflow-x:auto;white-space:nowrap;display:flex;gap:12px;padding-left:16px;scrollbar-width:none}
 .story-bar::-webkit-scrollbar{display:none}
 .story-item{flex-shrink:0;width:68px;text-align:center;cursor:pointer;position:relative}
@@ -516,48 +523,6 @@ body.dark .modal-header h2{color:#48CAE4}
 .admin-coin-row .acr-title{font-size:13px;font-weight:800}
 .admin-coin-row .acr-sub{font-size:11px;color:var(--text-2);margin-top:2px}
 
-/* ============ TRIPAY WALLET ============ */
-.tp-wallet-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:2000000; display:none; align-items:center; justify-content:center; padding:20px; font-family:'Manrope','Padauk',sans-serif; }
-.tp-wallet-overlay.show { display:flex; }
-.tp-wallet-box { background:linear-gradient(165deg,#141722,#0B0D14); border:1px solid rgba(255,255,255,0.1); border-radius:24px; width:100%; max-width:400px; max-height:90vh; overflow-y:auto; padding:24px; color:#fff; position:relative; box-shadow:0 30px 80px rgba(0,0,0,0.8); animation:tpPopIn 0.3s cubic-bezier(0.16,1,0.3,1); }
-@keyframes tpPopIn { from { transform:scale(0.9); opacity:0; } to { transform:scale(1); opacity:1; } }
-.tp-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
-.tp-logo { width:44px; height:44px; border-radius:14px; background:linear-gradient(135deg,#FFC20E,#0066FF,#8A2BE2); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:16px; color:#fff; }
-.tp-title h2 { font-size:18px; font-weight:800; margin:0; color:#fff; }
-.tp-title p { font-size:10px; color:#7C8398; margin:0; text-transform:uppercase; letter-spacing:0.5px; }
-.tp-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.tp-close:hover { background:rgba(255,255,255,0.2); }
-.tp-balance { background:linear-gradient(135deg,#1B1F2E,#12141C); border-radius:20px; padding:20px; border:1px solid rgba(255,255,255,0.07); margin-bottom:20px; position:relative; overflow:hidden; }
-.tp-balance::before { content:''; position:absolute; top:-50%; right:-20%; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(255,194,14,0.15), transparent); }
-.tp-bal-label { font-size:12px; color:#7C8398; font-weight:600; margin-bottom:6px; position:relative; z-index:2; }
-.tp-bal-amount { font-size:32px; font-weight:900; letter-spacing:-1px; position:relative; z-index:2; }
-.tp-bal-amount small { font-size:16px; color:#7C8398; }
-.tp-bal-foot { margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; font-size:12px; color:#7C8398; font-weight:600; position:relative; z-index:2; }
-.tp-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-.tp-btn { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:0.2s; }
-.tp-btn:hover { background:rgba(255,255,255,0.08); }
-.tp-btn .ico { font-size:24px; }
-.tp-btn span { font-size:12px; font-weight:700; }
-.tp-form-group { margin-bottom:14px; }
-.tp-form-group label { display:block; font-size:11px; font-weight:700; color:#7C8398; margin-bottom:6px; text-transform:uppercase; }
-.tp-form-group input, .tp-form-group select { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; font-size:14px; font-family:inherit; outline:none; }
-.tp-form-group input:focus { border-color:#FFC20E; }
-.tp-submit { width:100%; padding:14px; border:none; border-radius:12px; font-size:14px; font-weight:800; cursor:pointer; color:#000; background:linear-gradient(135deg,#FFC20E,#FF8C00); }
-
-/* ============ SLOT GAME CSS ============ */
-.slot-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000000; display:none; align-items:center; justify-content:center; padding:20px; }
-.slot-overlay.show { display:flex; }
-.slot-box { background:linear-gradient(165deg,#1A1D28,#101219); border:1px solid rgba(255,255,255,0.1); border-radius:24px; width:100%; max-width:400px; padding:24px; color:#fff; position:relative; text-align:center; box-shadow:0 30px 80px rgba(0,0,0,0.8); }
-.slot-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; }
-.slot-title { font-size:22px; font-weight:900; color:#FFB800; margin-bottom:6px; }
-.slot-balance { font-size:14px; color:#7C8398; margin-bottom:20px; font-weight:700; }
-.slot-reels { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
-.slot-reel { width:80px; height:100px; background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.1); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:48px; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,0,0,0.5); }
-.slot-spin-btn { width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(135deg,#FF4757,#FF6B7A); color:#fff; font-size:18px; font-weight:900; cursor:pointer; box-shadow:0 10px 30px rgba(255,71,87,0.4); transition:transform .1s; }
-.slot-spin-btn:active { transform:scale(.95); }
-.slot-spin-btn:disabled { opacity:.5; cursor:not-allowed; }
-.slot-result { margin-top:16px; font-size:16px; font-weight:800; min-height:24px; }
-
 @media (max-width:480px){
   .msg{max-width:85%}
   .input-bar{padding:10px 12px 14px;gap:6px}
@@ -665,7 +630,6 @@ body.dark .modal-header h2{color:#48CAE4}
   <header class="header">
     <div class="brand"><div class="logo-mini">W</div><span id="headerTitle">Chats</span></div>
     <div class="header-actions">
-      <button type="button" class="hdr-btn" id="mainWalletBtn" style="background:linear-gradient(135deg,#FFB800,#FF8C00);" title="TriPay Wallet">💳</button>
       <button type="button" class="hdr-btn" id="inviteBtn" title="Invite">🔗</button>
       <button type="button" class="hdr-btn" id="newGroupBtn">👥</button>
       <button type="button" class="hdr-btn" id="adminIconBtn">⚙️</button>
@@ -733,7 +697,7 @@ body.dark .modal-header h2{color:#48CAE4}
           <div id="settingsStatusChipWrap"></div>
           <div class="profile-completeness" id="settingsCompleteness"></div>
           <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <button type="button" class="btn btn-sm" id="settingsWalletBtn">🪙 Coin Wallet</button>
+            <button type="button" class="btn btn-sm" id="settingsWalletBtn">🪙 Wallet</button>
             <button type="button" class="btn btn-sm btn-secondary" id="settingsGiftBtn">🎁 Gift</button>
           </div>
         </div>
@@ -1396,71 +1360,6 @@ body.dark .modal-header h2{color:#48CAE4}
   </div>
 </div>
 
-<!-- ==================== TRIPAY WALLET MODAL ==================== -->
-<div id="triPayWalletModal" class="tp-wallet-overlay">
-  <div class="tp-wallet-box">
-    <button class="tp-close" onclick="closeTriPayWallet()">✕</button>
-    <div class="tp-header">
-      <div class="tp-logo">3P</div>
-      <div class="tp-title">
-        <h2>TriPay Wallet</h2>
-        <p>Wave · KBZ · WCCoin</p>
-      </div>
-    </div>
-    <div class="tp-balance">
-      <div class="tp-bal-label">Total Balance</div>
-      <div class="tp-bal-amount" id="tp_balance">1,250,000 <small>Ks</small></div>
-      <div class="tp-bal-foot">
-        <div id="tp_acc">ACC · 3 Wallets Synced</div>
-        <div id="tp_cur">MMK / WC</div>
-      </div>
-    </div>
-    <div class="tp-actions">
-      <div class="tp-btn" style="color:#FFC20E" onclick="tp_showTransfer()">
-        <div class="ico">📤</div><span>လွှဲသည် (Send)</span>
-      </div>
-      <div class="tp-btn" style="color:#c084fc" onclick="tp_showReceive()">
-        <div class="ico">📥</div><span>လက်ခံသည် (Receive)</span>
-      </div>
-    </div>
-    <div id="tp_contentArea">
-      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
-        <div style="width:40px; height:40px; border-radius:10px; background:rgba(255,194,14,0.15); color:#FFC20E; display:flex; align-items:center; justify-content:center; font-weight:900;">W</div>
-        <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveMoney</div><div style="font-size:11px; color:#7C8398;">09 7xx xxx 890</div></div>
-        <div style="font-weight:800; color:#FFC20E;">620,000 Ks</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
-        <div style="width:40px; height:40px; border-radius:10px; background:rgba(0,102,255,0.15); color:#4d94ff; display:flex; align-items:center; justify-content:center; font-weight:900;">K</div>
-        <div style="flex:1;"><div style="font-weight:700; font-size:14px;">KBZPay</div><div style="font-size:11px; color:#7C8398;">09 9xx xxx 123</div></div>
-        <div style="font-weight:800; color:#4d94ff;">575,000 Ks</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; display:flex; align-items:center; gap:14px;">
-        <div style="width:40px; height:40px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #b066ff, #7a1bd6); display:flex; align-items:center; justify-content:center; font-weight:900; color:#fff;">W</div>
-        <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveCoin (WC)</div><div style="font-size:11px; color:#7C8398;">0x7A8c...5C9d</div></div>
-        <div style="font-weight:800; color:#c084fc;">1,420 WC</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLOT GAME MODAL ==================== -->
-<div id="slotGameModal" class="slot-overlay">
-  <div class="slot-box">
-    <button class="slot-close" onclick="closeSlotGame()">✕</button>
-    <div class="slot-title">🎰 Lucky Slot</div>
-    <div class="slot-balance">Your Coins: <span id="slot_coinBalance" style="color:#FFB800; font-size:18px;">0</span> 🪙</div>
-    
-    <div class="slot-reels">
-      <div class="slot-reel" id="reel1">🍒</div>
-      <div class="slot-reel" id="reel2">🍒</div>
-      <div class="slot-reel" id="reel3">🍒</div>
-    </div>
-    
-    <button class="slot-spin-btn" id="spinBtn" onclick="spinSlot()">SPIN (10 🪙)</button>
-    <div class="slot-result" id="slotResult">ကံစမ်းကြည့်ပါ!</div>
-  </div>
-</div>
-
 <!-- ==================== SCRIPTS ==================== -->
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -1596,6 +1495,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeText = (el, txt) => { if (el) el.textContent = txt == null ? '' : String(txt); };
 
+/* FIXED: cleanPhone handles +95, 95, 0 prefixes, and does not double-strip */
 const cleanPhone = p => {
   let s = String(p || '').replace(/\D/g, '');
   if (!s) return '';
@@ -1745,21 +1645,26 @@ function loadCoinState() {
   if (!currentUser) return;
   Object.keys(_coinRefs).forEach(k => { if (_coinRefs[k]) { try { _coinRefs[k].off(); } catch(e){} _coinRefs[k] = null; } });
   
+  // Coin Balance ကို Real-time ဖတ်ခြင်း
   _coinRefs.balance = db.ref('users/' + currentUser.uid + '/coin_balance');
   _coinRefs.balance.on('value', s => { 
     coinState.coins = s.val() || 0; 
     updateCoinUI(); 
   }, e => console.warn('[Coin]', e.message));
 
+  // Gift Catalog ဖတ်ခြင်း
   _coinRefs.gifts = db.ref('app_config/gift_catalog');
   _coinRefs.gifts.on('value', s => { giftCatalog = s.val() || {}; renderGiftCatalog(); });
   
+  // Exchange Catalog ဖတ်ခြင်း
   _coinRefs.exchange = db.ref('app_config/exchange_catalog');
   _coinRefs.exchange.on('value', s => { exchangeCatalog = s.val() || {}; renderExchangeCatalog(); });
   
+  // Coin Packages ဖတ်ခြင်း
   _coinRefs.packages = db.ref('app_config/coin_packages');
   _coinRefs.packages.on('value', s => { coinPackages = s.val() || {}; renderCoinPackages(); });
   
+  // Coin Transaction History ဖတ်ခြင်း
   _coinRefs.tx = db.ref('coin_transactions/' + currentUser.uid).limitToLast(30);
   _coinRefs.tx.on('child_added', s => {
     const tx = s.val(); if (!tx) return;
@@ -1772,6 +1677,7 @@ function loadCoinState() {
 }
 
 function updateCoinUI() {
+  // UI ပေါ်ရှိ Coin ပမာဏများကို Update လုပ်ခြင်း
   const a = document.querySelector('#coinChip .coin-chip-amount'); if (a) safeText(a, coinState.coins);
   safeText($('walletBalance'), coinState.coins);
   const g = $('giftShopBalance'); if (g) g.textContent = coinState.coins + ' 🪙';
@@ -1781,9 +1687,6 @@ function updateCoinUI() {
     el.classList.toggle('disabled', p > coinState.coins);
   });
   renderExchangeCatalog();
-  
-  // Slot Game UI Update
-  const slotBal = $('slot_coinBalance'); if (slotBal) slotBal.textContent = coinState.coins;
 }
 
 function injectCoinChip() {
@@ -1807,6 +1710,7 @@ function showCoinReward(amount, reason) {
   el._timer = setTimeout(() => { el.style.transform = 'translateX(-50%) translateY(-200px)'; }, 2500);
 }
 
+// Coin ထည့်ခြင်း / နှုတ်ခြင်း (အလွန်အရေးကြီးသော Function)
 async function addCoins(uid, amount, reason, meta) {
   if (!uid || !amount || isNaN(amount)) return false;
   amount = Math.round(amount); 
@@ -1815,11 +1719,12 @@ async function addCoins(uid, amount, reason, meta) {
   try {
     const r = await db.ref('users/' + uid + '/coin_balance').transaction(c => { 
       const n = (c || 0) + amount; 
-      if (n < 0) return; 
+      if (n < 0) return; // Coin အနုတ်မဖြစ်စေရန်
       return n; 
     });
     if (!r.committed) return false;
     
+    // မှတ်တမ်းတင်ခြင်း
     await db.ref('coin_transactions/' + uid).push({
       ts: Date.now(), amount, reason, type: reason,
       desc: (COIN_REASONS[reason] && COIN_REASONS[reason].label) || reason,
@@ -1829,6 +1734,30 @@ async function addCoins(uid, amount, reason, meta) {
   } catch (e) { console.error('[addCoins]', e); return false; }
 }
 
+// Slot Game ကနေ လွှဲပေးမည့် Data ကို လက်ခံခြင်း (Window Message)
+window.addEventListener('message', ev => {
+  if (!ev || !ev.data || typeof ev.data !== 'object') return;
+  
+  // Slot Game ကနေ Coin လွှဲပေးတဲ့အခါ
+  if (ev.data.type === 'wavechat_reward') {
+    const coins = Number(ev.data.coins) || 0;
+    const game = ev.data.game || 'Slot Game';
+    if (coins > 0 && currentUser) {
+      addCoins(currentUser.uid, coins, 'game_reward', { game: game }).then(ok => {
+        if (ok) showCoinReward(coins, 'game_reward');
+      });
+    }
+  }
+  
+  // Slot Game ကနေ Coin လက်ကျန်ကို မေးတဲ့အခါ
+  else if (ev.data.type === 'wavechat_get_balance') {
+    if (ev.source && ev.source.postMessage) {
+      ev.source.postMessage({ type:'wavechat_balance', balance: coinState.coins, uid: currentUser ? currentUser.uid : null }, '*');
+    }
+  }
+});
+
+// Game SDK (ဂိမ်းတွေကနေ အသုံးပြုရန်)
 window.WaveChatGame = {
   version: '12.0.0',
   reward: async function(coins, gameName) {
@@ -1864,6 +1793,7 @@ function openCoinWallet() {
   if (!currentUser) return;
   safeText($('walletBalance'), coinState.coins);
   
+  // ကစားနိုင်တဲ့ Game များကို ပြသခြင်း
   const gl = $('walletGamesList');
   if (gl) {
     const games = Object.entries(allGames || {}).filter(([,g]) => g && g.url && g.rewardCoins).slice(0, 5);
@@ -1874,6 +1804,7 @@ function openCoinWallet() {
     }
   }
   
+  // နောက်ဆုံး Transaction များကို ပြသခြင်း
   const rt = $('walletRecentTx');
   if (rt) {
     db.ref('coin_transactions/' + currentUser.uid).limitToLast(5).once('value').then(s => {
@@ -2080,98 +2011,6 @@ function watchIncomingGifts() {
   });
 }
 
-/* ============================================================
-   SLOT GAME LOGIC
-   ============================================================ */
-const slotIcons = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
-let slotSpinning = false;
-
-function openSlotGame() {
-  if (!currentUser) return;
-  const modal = $('slotGameModal');
-  if (modal) {
-    modal.classList.add('show');
-    $('slot_coinBalance').textContent = coinState.coins;
-    $('slotResult').textContent = '';
-    $('reel1').textContent = '🍒'; $('reel2').textContent = '🍒'; $('reel3').textContent = '🍒';
-  }
-}
-function closeSlotGame() {
-  const modal = $('slotGameModal');
-  if (modal) modal.classList.remove('show');
-}
-
-async function spinSlot() {
-  if (!currentUser || slotSpinning) return;
-  const cost = 10;
-  if (coinState.coins < cost) { toast('Coin မလုံလောက်ပါ', 'warn'); return; }
-
-  slotSpinning = true;
-  const spinBtn = $('spinBtn');
-  spinBtn.disabled = true;
-  $('slotResult').textContent = 'Spinning...';
-  SoundFX.game();
-
-  // Deduct Coins
-  const ok = await addCoins(currentUser.uid, -cost, 'game_reward', { game: 'Lucky Slot' });
-  if (!ok) {
-    toast('Coin ဖြတ်မရပါ', 'error');
-    slotSpinning = false; spinBtn.disabled = false; return;
-  }
-
-  // Animation
-  let ticks = 0;
-  const maxTicks = 20;
-  const r1 = $('reel1'), r2 = $('reel2'), r3 = $('reel3');
-  
-  const interval = setInterval(() => {
-    r1.textContent = slotIcons[Math.floor(Math.random() * slotIcons.length)];
-    r2.textContent = slotIcons[Math.floor(Math.random() * slotIcons.length)];
-    r3.textContent = slotIcons[Math.floor(Math.random() * slotIcons.length)];
-    ticks++;
-    if (ticks > maxTicks) {
-      clearInterval(interval);
-      finishSlotSpin();
-    }
-  }, 80);
-}
-
-async function finishSlotSpin() {
-  const r1 = $('reel1').textContent;
-  const r2 = $('reel2').textContent;
-  const r3 = $('reel3').textContent;
-  const resEl = $('slotResult');
-  
-  let winAmt = 0;
-  if (r1 === r2 && r2 === r3) {
-    // Jackpot
-    winAmt = 100;
-    resEl.innerHTML = '🎉 JACKPOT! You won 100 🪙!';
-    resEl.style.color = '#00D9A3';
-    SoundFX.success(); haptic([100, 50, 100, 50, 100]);
-  } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-    // Small win
-    winAmt = 20;
-    resEl.innerHTML = '✨ You won 20 🪙!';
-    resEl.style.color = '#FFB800';
-    SoundFX.success(); haptic(50);
-  } else {
-    // Lose
-    resEl.textContent = 'ကံမကောင်းပါ။ ထပ်စမ်းကြည့်ပါ။';
-    resEl.style.color = '#FF4757';
-    haptic(30);
-  }
-
-  if (winAmt > 0) {
-    await addCoins(currentUser.uid, winAmt, 'game_reward', { game: 'Lucky Slot' });
-    showCoinReward(winAmt, 'game_reward');
-  }
-
-  $('slot_coinBalance').textContent = coinState.coins;
-  slotSpinning = false;
-  $('spinBtn').disabled = false;
-}
-
 console.log('✅ WaveChat v12.0.0 — PART 2A loaded');
 </script>
 
@@ -2348,6 +2187,7 @@ async function uploadToUguu(base64, filename) {
   if (!json.success || !json.files || !json.files[0]) throw new Error('Uguu failed');
   return json.files[0].url;
 }
+/* FIXED: no base64 fallback — throws if all hosts fail */
 async function uploadImage(base64) {
   try { return await uploadToImgBB(base64); }
   catch(e) {
@@ -3224,6 +3064,7 @@ function openPublicProfile(uid) {
   const repBtn = $('pvReportBtn'); if (repBtn) repBtn.onclick = () => openReportModal(uid, u);
   $('publicProfileModal').classList.add('show');
 }
+/* FIXED: null-safe showQRCode */
 function showQRCode(uid, u) {
   if (!uid) return toast('Invalid user', 'error');
   u = u || {};
@@ -4725,11 +4566,13 @@ function bindAdmin() {
   bindGamesManager();
   ['buyreq','gifts','exchange','packages','addcoins'].forEach(tt => { const map = {buyreq:'acTabBuyReq',gifts:'acTabGifts',exchange:'acTabExchange',packages:'acTabPackages',addcoins:'acTabAddCoins'}, btn = $(map[tt]); if (btn) btn.onclick = () => switchAdminCoinTab(tt); });
 }
+/* FIXED: loadAdminUsers no longer overwrites main app's allUsers with admin data */
 function loadAdminUsers() {
   if (refs.adminUsers) { try { refs.adminUsers.off(); } catch(e){} refs.adminUsers = null; }
   refs.adminUsers = db.ref('users');
   refs.adminUsers.on('value', snap => {
     const adminUsers = snap.val() || {};
+    // Use a separate object for admin panel to avoid clobbering main app's allUsers
     adminUsersData = adminUsers;
     renderAdminUsers($('userSearch') ? $('userSearch').value : '', adminUsers);
     const total = Object.keys(adminUsers).length, online = Object.values(adminUsers).filter(u => isUserOnline(u)).length;
@@ -4901,10 +4744,6 @@ window.addEventListener('unhandledrejection', e => console.error('❌ Promise:',
   const sgb = $('sendGiftBtn'); if (sgb) sgb.onclick = sendGiftHandler;
   const swb = $('settingsWalletBtn'); if (swb) swb.onclick = openCoinWallet;
   const sgb2 = $('settingsGiftBtn'); if (sgb2) sgb2.onclick = () => openGiftShop();
-  
-  // Wallet & Slot Game Binding
-  const mwBtn = $('mainWalletBtn'); if (mwBtn) mwBtn.onclick = () => { $('triPayWalletModal').classList.add('show'); tp_resetView(); };
-  const slotBtn = $('slotGameBtn'); if (slotBtn) slotBtn.onclick = openSlotGame;
 
   const up = new URLSearchParams(location.search); const tu = up.get('u'); if (tu) setTimeout(() => { if (currentUser) openPublicProfile(tu); }, 2000);
   if (intervals.update) clearInterval(intervals.update);
@@ -4912,137 +4751,488 @@ window.addEventListener('unhandledrejection', e => console.error('❌ Promise:',
   secureAllExternalLinks(); showRoute(); applyLanguage(); console.log('✅ WaveChat Ultra v12.0.0 loaded');
 })();
 
-/* ==========================================
-   TRIPAY WALLET LOGIC
-   ========================================== */
-function closeTriPayWallet() {
-  const modal = document.getElementById('triPayWalletModal');
-  if (modal) { modal.classList.remove('show'); modal.style.display = 'none'; }
+/* Admin coin panel functions (referenced but must be defined) */
+function openAdminCoinPanel() {
+  $('adminCoinModal').classList.add('show');
+  switchAdminCoinTab('buyreq');
+}
+function switchAdminCoinTab(tab) {
+  _adminCoinTab = tab;
+  ['buyreq','gifts','exchange','packages','addcoins'].forEach(tt => {
+    const map = {buyreq:'acTabBuyReq',gifts:'acTabGifts',exchange:'acTabExchange',packages:'acTabPackages',addcoins:'acTabAddCoins'};
+    const btn = $(map[tt]); if (!btn) return;
+    btn.className = 'btn btn-sm ' + (tt === tab ? '' : 'btn-secondary');
+  });
+  const body = $('acBody'); if (!body) return;
+  body.innerHTML = '<p style="text-align:center;color:var(--text-2);padding:20px">Loading...</p>';
+  if (tab === 'buyreq') loadAdminBuyRequests();
+  else if (tab === 'gifts') renderAdminGiftCatalog();
+  else if (tab === 'exchange') renderAdminExchangeCatalog();
+  else if (tab === 'packages') renderAdminPackages();
+  else if (tab === 'addcoins') renderAdminAddCoins();
+}
+function loadAdminBuyRequests() {
+  const body = $('acBody'); if (!body) return;
+  db.ref('coin_buy_requests').once('value').then(s => {
+    const d = s.val() || {};
+    const items = Object.entries(d).sort((a,b) => (b[1].ts||0) - (a[1].ts||0));
+    if (items.length === 0) { body.innerHTML = '<div class="empty-state"><span class="em">🛒</span><h3>No requests</h3></div>'; return; }
+    body.innerHTML = items.map(([id, r]) =>
+      '<div class="admin-coin-row">' +
+        '<div class="acr-body">' +
+          '<div class="acr-title">' + esc(r.userName || 'User') + ' — ' + (r.coins || 0) + ' 🪙' + (r.bonus ? ' (+' + r.bonus + ')' : '') + '</div>' +
+          '<div class="acr-sub">' + esc(r.userPhone || '') + ' · ' + esc(r.priceLabel || '') + (r.note ? ' · ' + esc(r.note) : '') + '</div>' +
+          '<div class="acr-sub">' + new Date(r.ts).toLocaleString() + ' · <strong>' + esc(r.status || 'pending') + '</strong></div>' +
+        '</div>' +
+        (r.status === 'pending' && r.uid ?
+          '<button type="button" class="btn btn-sm" data-approve-buy="' + id + '" data-uid="' + r.uid + '" data-coins="' + ((r.coins||0)+(r.bonus||0)) + '">✅ Approve</button>' +
+          '<button type="button" class="btn btn-sm btn-danger" data-reject-buy="' + id + '">❌</button>' : '')
+      + '</div>'
+    ).join('');
+    body.querySelectorAll('[data-approve-buy]').forEach(b => {
+      b.onclick = async () => {
+        const reqId = b.dataset.approveBuy, uid = b.dataset.uid, coins = parseInt(b.dataset.coins, 10) || 0;
+        if (!uid) return toast('Invalid UID', 'error');
+        if (!confirm('Approve and add ' + coins + ' coins?')) return;
+        b.disabled = true;
+        try {
+          const ok = await addCoins(uid, coins, 'buy', { requestId: reqId });
+          if (!ok) throw new Error('Add failed');
+          await db.ref('coin_buy_requests/' + reqId).update({ status: 'approved', approvedAt: Date.now() });
+          toast('✅ Approved +' + coins + ' coins', 'success');
+          loadAdminBuyRequests();
+        } catch(e) { toast('Failed: ' + e.message, 'error'); b.disabled = false; }
+      };
+    });
+    body.querySelectorAll('[data-reject-buy]').forEach(b => {
+      b.onclick = async () => {
+        if (!confirm('Reject?')) return;
+        await db.ref('coin_buy_requests/' + b.dataset.rejectBuy).update({ status: 'rejected', rejectedAt: Date.now() });
+        toast('Rejected', 'info'); loadAdminBuyRequests();
+      };
+    });
+  }).catch(() => { body.innerHTML = '<p style="text-align:center;color:var(--danger);padding:20px">Load failed</p>'; });
+}
+function renderAdminGiftCatalog() {
+  const body = $('acBody'); if (!body) return;
+  const items = Object.entries(giftCatalog || {});
+  let html = '<div class="info-row"><label>Add New Gift</label>' +
+    '<div style="display:flex;gap:6px;margin-bottom:6px"><input type="text" id="agEmoji" placeholder="🎁" style="width:60px;text-align:center;font-size:20px" maxlength="2"><input type="text" id="agName" placeholder="Gift name" style="flex:1"></div>' +
+    '<div style="display:flex;gap:6px"><input type="number" id="agPrice" placeholder="Price (coins)" style="flex:1" min="1"><input type="number" id="agOrder" placeholder="Order" style="flex:1" min="0"></div>' +
+    '<button type="button" class="btn btn-sm" id="agAddBtn" style="width:100%;margin-top:8px">➕ Add Gift</button></div>';
+  html += '<div style="margin-top:16px">' + (items.length ? items.map(([id, g]) =>
+    '<div class="admin-coin-row">' +
+      '<div style="font-size:28px;width:40px;text-align:center">' + esc(g.emoji||'🎁') + '</div>' +
+      '<div class="acr-body"><div class="acr-title">' + esc(g.name) + '</div><div class="acr-sub">' + (g.price||0) + ' 🪙 · order ' + (g.order||0) + '</div></div>' +
+      '<button type="button" class="btn btn-sm btn-danger" data-del-gift="' + id + '">🗑</button>' +
+    '</div>'
+  ).join('') : '<p style="text-align:center;color:var(--text-2);padding:20px">No gifts</p>') + '</div>';
+  body.innerHTML = html;
+  const addBtn = $('agAddBtn');
+  if (addBtn) addBtn.onclick = async () => {
+    const emoji = $('agEmoji').value.trim() || '🎁';
+    const name = $('agName').value.trim();
+    const price = parseInt($('agPrice').value, 10) || 0;
+    const order = parseInt($('agOrder').value, 10) || 0;
+    if (!name) return toast('Name', 'error');
+    if (price <= 0) return toast('Price > 0', 'error');
+    addBtn.disabled = true;
+    try {
+      await db.ref('app_config/gift_catalog').push({ emoji, name, price, order, ts: Date.now() });
+      toast('✅ Gift added', 'success'); renderAdminGiftCatalog();
+    } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    finally { addBtn.disabled = false; }
+  };
+  body.querySelectorAll('[data-del-gift]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm('Delete this gift?')) return;
+      await db.ref('app_config/gift_catalog/' + b.dataset.delGift).remove();
+      toast('Deleted', 'success'); renderAdminGiftCatalog();
+    };
+  });
+}
+function renderAdminExchangeCatalog() {
+  const body = $('acBody'); if (!body) return;
+  const items = Object.entries(exchangeCatalog || {});
+  let html = '<div class="info-row"><label>Add Exchange Item</label>' +
+    '<div style="display:flex;gap:6px;margin-bottom:6px"><input type="text" id="aeEmoji" placeholder="🎁" style="width:60px;text-align:center;font-size:20px" maxlength="2"><input type="text" id="aeName" placeholder="Item name" style="flex:1"></div>' +
+    '<input type="text" id="aeDesc" placeholder="Description" style="width:100%;margin-bottom:6px">' +
+    '<div style="display:flex;gap:6px"><input type="number" id="aeCoins" placeholder="Coins required" style="flex:1" min="1"></div>' +
+    '<button type="button" class="btn btn-sm" id="aeAddBtn" style="width:100%;margin-top:8px">➕ Add Item</button></div>';
+  html += '<div style="margin-top:16px">' + (items.length ? items.map(([id, x]) =>
+    '<div class="admin-coin-row">' +
+      '<div style="font-size:28px;width:40px;text-align:center">' + esc(x.emoji||'🎁') + '</div>' +
+      '<div class="acr-body"><div class="acr-title">' + esc(x.name) + '</div><div class="acr-sub">' + (x.coinsRequired||0) + ' 🪙' + (x.description ? ' · ' + esc(x.description) : '') + '</div></div>' +
+      '<button type="button" class="btn btn-sm btn-danger" data-del-ex="' + id + '">🗑</button>' +
+    '</div>'
+  ).join('') : '<p style="text-align:center;color:var(--text-2);padding:20px">No items</p>') + '</div>';
+  body.innerHTML = html;
+  const addBtn = $('aeAddBtn');
+  if (addBtn) addBtn.onclick = async () => {
+    const emoji = $('aeEmoji').value.trim() || '🎁';
+    const name = $('aeName').value.trim();
+    const desc = $('aeDesc').value.trim();
+    const coinsReq = parseInt($('aeCoins').value, 10) || 0;
+    if (!name) return toast('Name', 'error');
+    if (coinsReq <= 0) return toast('Coins > 0', 'error');
+    addBtn.disabled = true;
+    try {
+      await db.ref('app_config/exchange_catalog').push({ emoji, name, description: desc, coinsRequired: coinsReq, ts: Date.now() });
+      toast('✅ Added', 'success'); renderAdminExchangeCatalog();
+    } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    finally { addBtn.disabled = false; }
+  };
+  body.querySelectorAll('[data-del-ex]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm('Delete?')) return;
+      await db.ref('app_config/exchange_catalog/' + b.dataset.delEx).remove();
+      toast('Deleted', 'success'); renderAdminExchangeCatalog();
+    };
+  });
+}
+function renderAdminPackages() {
+  const body = $('acBody'); if (!body) return;
+  const items = Object.entries(coinPackages || {});
+  let html = '<div class="info-row"><label>Add Coin Package</label>' +
+    '<div style="display:flex;gap:6px;margin-bottom:6px"><input type="number" id="apCoins" placeholder="Coins" style="flex:1" min="1"><input type="number" id="apBonus" placeholder="Bonus" style="flex:1" min="0"></div>' +
+    '<div style="display:flex;gap:6px"><input type="text" id="apPrice" placeholder="Price label e.g. 5,000 Ks" style="flex:1"><input type="number" id="apOrder" placeholder="Order" style="flex:1" min="0"></div>' +
+    '<button type="button" class="btn btn-sm" id="apAddBtn" style="width:100%;margin-top:8px">➕ Add Package</button></div>';
+  html += '<div style="margin-top:16px">' + (items.length ? items.map(([id, p]) =>
+    '<div class="admin-coin-row">' +
+      '<div style="font-size:24px;width:40px;text-align:center">🪙</div>' +
+      '<div class="acr-body"><div class="acr-title">' + (p.coins||0) + ' coins' + (p.bonus ? ' +' + p.bonus : '') + '</div><div class="acr-sub">' + esc(p.priceLabel||'') + ' · order ' + (p.order||0) + '</div></div>' +
+      '<button type="button" class="btn btn-sm btn-danger" data-del-pkg="' + id + '">🗑</button>' +
+    '</div>'
+  ).join('') : '<p style="text-align:center;color:var(--text-2);padding:20px">No packages</p>') + '</div>';
+  body.innerHTML = html;
+  const addBtn = $('apAddBtn');
+  if (addBtn) addBtn.onclick = async () => {
+    const coins = parseInt($('apCoins').value, 10) || 0;
+    const bonus = parseInt($('apBonus').value, 10) || 0;
+    const priceLabel = $('apPrice').value.trim();
+    const order = parseInt($('apOrder').value, 10) || 0;
+    if (coins <= 0) return toast('Coins > 0', 'error');
+    addBtn.disabled = true;
+    try {
+      await db.ref('app_config/coin_packages').push({ coins, bonus, priceLabel, order, ts: Date.now() });
+      toast('✅ Package added', 'success'); renderAdminPackages();
+    } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    finally { addBtn.disabled = false; }
+  };
+  body.querySelectorAll('[data-del-pkg]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm('Delete?')) return;
+      await db.ref('app_config/coin_packages/' + b.dataset.delPkg).remove();
+      toast('Deleted', 'success'); renderAdminPackages();
+    };
+  });
+}
+function renderAdminAddCoins() {
+  const body = $('acBody'); if (!body) return;
+  const users = Object.values(adminUsersData || allUsers || {}).sort((a,b) => (a.name||'').localeCompare(b.name||''));
+  body.innerHTML = '<div class="info-row"><label>Select User</label><select id="acUserSel" style="width:100%"><option value="">— Select —</option>' +
+    users.map(u => '<option value="' + u.uid + '">' + esc(u.name||'User') + ' (' + esc(u.phone||'') + ') — ' + (u.coin_balance||0) + ' 🪙</option>').join('') + '</select></div>' +
+    '<div class="info-row"><label>Amount (negative to deduct)</label><input type="number" id="acAmount" placeholder="e.g. 100 or -50"></div>' +
+    '<div class="info-row"><label>Reason</label><input type="text" id="acReason" placeholder="Bonus / Gift / etc."></div>' +
+    '<button type="button" class="btn" id="acApplyBtn" style="width:100%">✅ Apply</button>';
+  const btn = $('acApplyBtn');
+  if (btn) btn.onclick = async () => {
+    const uid = $('acUserSel').value;
+    const amount = parseInt($('acAmount').value, 10);
+    const reason = $('acReason').value.trim() || 'admin_add';
+    if (!uid) return toast('User ရွေးပါ', 'error');
+    if (!amount || isNaN(amount)) return toast('Amount', 'error');
+    btn.disabled = true;
+    try {
+      const ok = await addCoins(uid, amount, amount > 0 ? 'admin_add' : 'admin_deduct', { note: reason });
+      if (!ok) throw new Error('Transaction failed');
+      toast('✅ ' + (amount>0?'+':'') + amount + ' coins applied', 'success');
+      renderAdminAddCoins();
+    } catch(e) { toast('Failed: ' + e.message, 'error'); }
+    finally { btn.disabled = false; }
+  };
+}
+function watchIncomingGifts() {
+  if (!currentUser) return;
+  const ref = db.ref('gifts/' + currentUser.uid).limitToLast(10);
+  let first = true;
+  ref.on('child_added', snap => {
+    if (first) { first = false; return; }
+    const g = snap.val();
+    if (!g || g.seen) return;
+    if (Date.now() - g.ts < 60000) {
+      showGiftReceived(g);
+      db.ref('gifts/' + currentUser.uid + '/' + snap.key + '/seen').set(true).catch(()=>{});
+    }
+  });
 }
 
-document.getElementById('triPayWalletModal').addEventListener('click', function(e) {
-  if (e.target === this) closeTriPayWallet();
-});
-
-function tp_resetView() {
-  const bal = document.getElementById('tp_balance');
-  const acc = document.getElementById('tp_acc');
-  const area = document.getElementById('tp_contentArea');
-  
-  if(bal) bal.innerHTML = '1,250,000 <small>Ks</small>';
-  if(acc) acc.innerText = 'ACC · 3 Wallets Synced';
-  if(area) area.innerHTML = `
-    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
-      <div style="width:40px; height:40px; border-radius:10px; background:rgba(255,194,14,0.15); color:#FFC20E; display:flex; align-items:center; justify-content:center; font-weight:900;">W</div>
-      <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveMoney</div><div style="font-size:11px; color:#7C8398;">09 7xx xxx 890</div></div>
-      <div style="font-weight:800; color:#FFC20E;">620,000 Ks</div>
-    </div>
-    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px;">
-      <div style="width:40px; height:40px; border-radius:10px; background:rgba(0,102,255,0.15); color:#4d94ff; display:flex; align-items:center; justify-content:center; font-weight:900;">K</div>
-      <div style="flex:1;"><div style="font-weight:700; font-size:14px;">KBZPay</div><div style="font-size:11px; color:#7C8398;">09 9xx xxx 123</div></div>
-      <div style="font-weight:800; color:#4d94ff;">575,000 Ks</div>
-    </div>
-    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px; display:flex; align-items:center; gap:14px;">
-      <div style="width:40px; height:40px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #b066ff, #7a1bd6); display:flex; align-items:center; justify-content:center; font-weight:900; color:#fff;">W</div>
-      <div style="flex:1;"><div style="font-weight:700; font-size:14px;">WaveCoin (WC)</div><div style="font-size:11px; color:#7C8398;">0x7A8c...5C9d</div></div>
-      <div style="font-weight:800; color:#c084fc;">1,420 WC</div>
-    </div>
-  `;
-}
-
-function tp_showTransfer() {
-  const area = document.getElementById('tp_contentArea');
-  if(!area) return;
-  area.innerHTML = `
-    <div class="tp-form-group">
-      <label>ပို့မည့် Wallet</label>
-      <select id="tp_fromWallet" onchange="tp_updateForm()">
-        <option value="wave">💛 WaveMoney (Fiat)</option>
-        <option value="kpay">💙 KBZPay (Fiat)</option>
-        <option value="wc">🟣 WaveCoin (Crypto)</option>
-      </select>
-    </div>
-    <div class="tp-form-group">
-      <label id="tp_toLabel">လက်ခံမည့်သူ ဖုန်းနံပါတ်</label>
-      <input type="text" id="tp_toAccount" placeholder="09xxxxxxxxx">
-    </div>
-    <div class="tp-form-group">
-      <label>ပမာဏ</label>
-      <input type="number" id="tp_amount" placeholder="0">
-    </div>
-    <button class="tp-submit" onclick="tp_doTransfer()">လွှဲမည် →</button>
-    <button onclick="tp_resetView()" style="width:100%; background:transparent; border:none; color:#7C8398; margin-top:12px; font-size:13px; cursor:pointer;">← နောက်သို့</button>
-  `;
-  tp_updateForm();
-}
-
-function tp_updateForm() {
-  const w = document.getElementById('tp_fromWallet').value;
-  const label = document.getElementById('tp_toLabel');
-  const input = document.getElementById('tp_toAccount');
-  if (w === 'wc') {
-    label.innerText = 'Crypto Address (0x...)';
-    input.placeholder = '0x...';
-  } else {
-    label.innerText = 'ဖုန်းနံပါတ်';
-    input.placeholder = '09xxxxxxxxx';
-  }
-}
-
-function tp_doTransfer() {
-  const to = document.getElementById('tp_toAccount').value;
-  const amt = document.getElementById('tp_amount').value;
-  if(!to || !amt) {
-    if (typeof toast === 'function') toast('⚠️ အချက်အလက်များ ဖြည့်ပါ', 'warn');
-    else alert('အချက်အလက်များ ဖြည့်ပါ');
-    return;
-  }
-  
-  if (typeof SoundFX !== 'undefined') SoundFX.success();
-  if (typeof toast === 'function') toast('✅ ငွေလွှဲပြီးပါပြီ', 'success');
-  
-  setTimeout(() => {
-    tp_resetView();
-  }, 1000);
-}
-
-function tp_showReceive() {
-  const area = document.getElementById('tp_contentArea');
-  if(!area) return;
-  area.innerHTML = `
-    <div class="tp-form-group">
-      <label>လက်ခံမည့် Wallet</label>
-      <select id="tp_recvWallet" onchange="tp_updateRecvForm()">
-        <option value="wave">💛 WaveMoney (Fiat)</option>
-        <option value="kpay">💙 KBZPay (Fiat)</option>
-        <option value="wc">🟣 WaveCoin (Crypto)</option>
-      </select>
-    </div>
-    <div class="tp-form-group">
-      <label>သင့် Account / Address</label>
-      <input type="text" id="tp_myAccount" readonly style="background:rgba(255,255,255,0.02); color:#7C8398;">
-    </div>
-    <button class="tp-submit" style="background:linear-gradient(135deg,#a855f7,#7a1bd6); color:#fff;" onclick="tp_doReceive()">တောင်းခံမည် →</button>
-    <button onclick="tp_resetView()" style="width:100%; background:transparent; border:none; color:#7C8398; margin-top:12px; font-size:13px; cursor:pointer;">← နောက်သို့</button>
-  `;
-  tp_updateRecvForm();
-}
-
-function tp_updateRecvForm() {
-  const w = document.getElementById('tp_recvWallet').value;
-  const acc = document.getElementById('tp_myAccount');
-  if (w === 'wc') acc.value = '0x7A8c9E4f2B1d5C3a8F6b0E9d2A4c7B1f8E2a5C9d';
-  else if (w === 'wave') acc.value = '09 7xx xxx 890';
-  else acc.value = '09 9xx xxx 123';
-}
-
-function tp_doReceive() {
-  if (typeof SoundFX !== 'undefined') SoundFX.success();
-  if (typeof toast === 'function') toast('✅ တောင်းခံပြီးပါပြီ', 'success');
-  setTimeout(() => tp_resetView(), 1000);
-}
-
-console.log('✅ WaveChat Ultra v12.0.0 — Wallet & Slot Game loaded');
+window.WaveChatDebug = {
+  version: APP_VERSION,
+  state: () => ({ version: APP_VERSION, currentUser: currentUser ? currentUser.uid : null, currentChat: currentChat ? currentChat.id : null, allUsersCount: Object.keys(allUsers || {}).length, myChatsCount: Object.keys(myChats || {}).length, storiesCount: Object.keys(allStories || {}).length, gamesCount: Object.keys(allGames || {}).length, giftsCount: Object.keys(giftCatalog || {}).length, exchangeCount: Object.keys(exchangeCatalog || {}).length, packagesCount: Object.keys(coinPackages || {}).length, coinBalance: coinState.coins, callActive: callState.active, appLock: appLockEnabled, theme: currentTheme, language: currentLang, dark: document.body.classList.contains('dark'), platform: currentPlatform }),
+  phone: input => ({raw:input, clean:cleanPhone(input), email:toEmail(input)}),
+  testExternal: () => openExternal('https://www.google.com'),
+  testCoin: async (amt) => { const ok = await addCoins(currentUser.uid, amt || 10, 'admin_add', {note:'debug'}); console.log('Coin result:', ok); return ok; },
+  clearAll: clearAllListeners,
+  reset: () => { localStorage.clear(); location.reload(); }
+};
+console.log('🔧 Debug: WaveChatDebug.state()');
+console.log('✅ WaveChat Ultra v12.0.0 — PART 2C loaded (ALL SCRIPTS)');
 </script>
+<!-- ===== WALLET PATCH  TriPay Integration ===== -->
+<script>
+(function() {
+  'use strict';
+  
+  console.log('[WalletPatch] Loading...');
+  
+  // ===== Wait for Firebase to be ready =====
+  function waitForFirebase(cb) {
+    if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+      cb();
+    } else {
+      setTimeout(function() { waitForFirebase(cb); }, 300);
+    }
+  }
+  
+  waitForFirebase(function() {
+    console.log('[WalletPatch] Firebase ready');
+    
+    var db = firebase.database();
+    var walletData = null;
+    var walletListener = null;
+    var autoUpdateTimer = null;
+    var currentUid = null;
+    
+    var $ = function(id) { return document.getElementById(id); };
+    var esc = function(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    };
+    
+    // ===== Get current user UID =====
+    function getUid() {
+      if (typeof currentUser !== 'undefined' && currentUser && currentUser.uid) return currentUser.uid;
+      if (firebase.auth().currentUser) return firebase.auth().currentUser.uid;
+      return null;
+    }
+    
+    // ===== Load wallet balances =====
+    function loadWalletBalances() {
+      var uid = getUid();
+      if (!uid) return;
+      if (uid === currentUid && walletListener) return;
+      currentUid = uid;
+      
+      if (walletListener) { try { walletListener.off(); } catch(e){} }
+      walletListener = db.ref('wallets/' + uid);
+      walletListener.on('value', function(snap) {
+        walletData = snap.val() || { wave: 0, kpay: 0, wc: 0, transactions: {}, profile: {} };
+        updatePreview();
+        if ($('walletModal') && $('walletModal').classList.contains('show')) {
+          renderModal();
+        }
+      }, function(err) {
+        console.log('[WalletPatch] load error:', err.message);
+      });
+    }
+    
+    // ===== Update preview in settings =====
+    function updatePreview() {
+      var el = $('walletBalancePreview');
+      if (!el || !walletData) return;
+      var total = (walletData.wave || 0) + (walletData.kpay || 0);
+      el.textContent = Number(total).toLocaleString() + ' Ks';
+    }
+    
+    // ===== Render wallet modal =====
+    function renderModal() {
+      var container = $('walletCardsContainer');
+      var txContainer = $('walletTxContainer');
+      if (!container) return;
+      
+      if (!walletData) {
+        container.innerHTML = '<p style="text-align:center;color:var(--text-2);padding:30px">Loading...</p>';
+        return;
+      }
+      
+      var w = walletData;
+      var totalKs = (w.wave || 0) + (w.kpay || 0);
+      
+      var cardHtml = function(icon, name, balance, symbol, color, bg) {
+        return '<div style="background:' + bg + ';border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px">' +
+          '<div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;font-size:20px">' + icon + '</div>' +
+          '<div style="flex:1">' +
+            '<div style="font-size:11px;font-weight:800;color:' + color + ';text-transform:uppercase">' + name + '</div>' +
+            '<div style="font-size:17px;font-weight:900;color:' + color + ';margin-top:2px">' + Number(balance).toLocaleString() + ' <span style="font-size:11px">' + symbol + '</span></div>' +
+          '</div>' +
+        '</div>';
+      };
+      
+      container.innerHTML =
+        '<div style="background:linear-gradient(135deg,#F5D76E,#E8B84B);border-radius:16px;padding:20px;color:#5A4A0E;margin-bottom:14px">' +
+          '<div style="font-size:11px;font-weight:800;text-transform:uppercase;opacity:0.7">Total Balance</div>' +
+          '<div style="font-size:28px;font-weight:900;margin-top:4px">' + Number(totalKs).toLocaleString() + ' <span style="font-size:14px">Ks</span></div>' +
+        '</div>' +
+        cardHtml('', 'WaveMoney', w.wave || 0, 'Ks', '#C9A63E', '#FDF6E3') +
+        cardHtml('', 'KBZPay', w.kpay || 0, 'Ks', '#6A9FD8', '#EEF4FC') +
+        cardHtml('', 'WCCoin Pay', w.wc || 0, 'WC', '#6BBF9A', '#EAF9F3');
+      
+      if (!txContainer) return;
+      
+      var txs = w.transactions || {};
+      var entries = Object.keys(txs).map(function(k) { return txs[k]; })
+        .filter(function(t) { return t && t.label; })
+        .sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); })
+        .slice(0, 5);
+      
+      if (entries.length === 0) {
+        txContainer.innerHTML = '<div style="text-align:center;color:var(--text-2);padding:16px;font-size:13px">Transaction မရှိသေးပါ</div>';
+      } else {
+        txContainer.innerHTML = '<div style="font-size:11px;font-weight:800;color:var(--text-2);text-transform:uppercase;margin-bottom:8px"> မကြာသေးမီ ငွေလွှဲမှု</div>' +
+          entries.map(function(t) {
+            var isIn = t.dir === 'in';
+            var color = isIn ? '#5EA862' : '#D16B6B';
+            return '<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface-2);border-radius:12px;margin-bottom:6px">' +
+              '<div style="flex:1;min-width:0">' +
+                '<div style="font-size:13px;font-weight:700">' + esc(t.label || '') + '</div>' +
+                '<div style="font-size:10.5px;color:var(--text-2)">' + esc(t.time || '') + '</div>' +
+              '</div>' +
+              '<div style="font-size:13px;font-weight:800;color:' + color + '">' + (isIn ? '+' : '-') + Number(t.amount || 0).toLocaleString() + '</div>' +
+            '</div>';
+          }).join('');
+      }
+    }
+    
+    // ===== Inject wallet modal HTML =====
+    function injectModal() {
+      if ($('walletModal')) return;
+      var html = '<div class="modal-overlay" id="walletModal">' +
+        '<div class="modal modal-wide">' +
+          '<div class="modal-header">' +
+            '<h2> My Wallets</h2>' +
+            '<button type="button" class="modal-close" id="walletModalClose"></button>' +
+          '</div>' +
+          '<div class="modal-body">' +
+            '<div id="walletCardsContainer"><p style="text-align:center;color:var(--text-2);padding:30px">Loading...</p></div>' +
+            '<div id="walletTxContainer" style="margin-top:16px"></div>' +
+          '</div>' +
+          '<div class="modal-footer">' +
+            '<button type="button" class="btn btn-secondary" id="walletCloseBtn">Close</button>' +
+            '<button type="button" class="btn" id="openTriPayBtn">Open TriPay </button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+      document.body.insertAdjacentHTML('beforeend', html);
+      
+      var close = function() { $('walletModal').classList.remove('show'); };
+      $('walletModalClose').onclick = close;
+      $('walletCloseBtn').onclick = close;
+      $('walletModal').addEventListener('click', function(e) {
+        if (e.target === $('walletModal')) close();
+      });
+      
+      $('openTriPayBtn').onclick = function() {
+        if (typeof openExternal === 'function') {
+          openExternal('Wellet(WCCoin).html');
+        } else {
+          window.open('Wellet(WCCoin).html', '_blank');
+        }
+      };
+      
+      console.log('[WalletPatch] Modal injected');
+    }
+    
+    // ===== Inject wallet button into settings =====
+    function injectSettingsButton() {
+      var list = $('settingsList');
+      if (!list) return;
+      if (list.querySelector('[data-set="wallet"]')) return;
+      
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'settings-item';
+      btn.setAttribute('data-set', 'wallet');
+      btn.innerHTML = '<div class="settings-icon" style="background:linear-gradient(135deg,#F5D76E,#A8E6CF);color:#fff"></div>' +
+        '<div class="settings-text">My Wallet</div>' +
+        '<div class="settings-arrow" id="walletBalancePreview"></div>';
+      
+      var profileBtn = list.querySelector('[data-set="profile"]');
+      if (profileBtn && profileBtn.nextSibling) {
+        list.insertBefore(btn, profileBtn.nextSibling);
+      } else {
+        list.insertBefore(btn, list.firstChild);
+      }
+      
+      btn.onclick = function() {
+        if (typeof SoundFX !== 'undefined') { try { SoundFX.click(); } catch(e){} }
+        if (typeof haptic === 'function') { try { haptic(20); } catch(e){} }
+        renderModal();
+        $('walletModal').classList.add('show');
+        loadWalletBalances();
+      };
+      
+      console.log('[WalletPatch] Settings button injected');
+    }
+    
+    // ===== Start auto-update =====
+    function startAutoUpdate() {
+      if (autoUpdateTimer) clearInterval(autoUpdateTimer);
+      autoUpdateTimer = setInterval(function() {
+        if (getUid() && !document.hidden) loadWalletBalances();
+      }, 30000);
+    }
+    
+    // ===== Watch for user login =====
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        currentUid = user.uid;
+        console.log('[WalletPatch] User logged in:', user.uid);
+        setTimeout(function() {
+          injectModal();
+          loadWalletBalances();
+          injectSettingsButton();
+          startAutoUpdate();
+        }, 2000);
+      } else {
+        currentUid = null;
+        if (walletListener) { try { walletListener.off(); } catch(e){} walletListener = null; }
+        if (autoUpdateTimer) { clearInterval(autoUpdateTimer); autoUpdateTimer = null; }
+      }
+    });
+    
+    // ===== Watch for settings rebuild =====
+    var observer = new MutationObserver(function() {
+      if ($('settingsList') && getUid()) {
+        injectSettingsButton();
+      }
+    });
+    
+    // ===== Initialize =====
+    function init() {
+      injectModal();
+      setTimeout(function() {
+        if (getUid()) {
+          loadWalletBalances();
+          injectSettingsButton();
+          startAutoUpdate();
+        }
+      }, 2000);
+      observer.observe(document.body, { childList: true, subtree: true });
+      console.log('[WalletPatch] Initialized');
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    
+  });
+  
+})();
+</script>
+<!-- ===== END WALLET PATCH ===== -->
 </body>
 </html>

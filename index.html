@@ -176,13 +176,6 @@ body.dark .btn-secondary{background:#1E2444;color:#48CAE4}
 .games-empty .em{font-size:60px;display:block;margin-bottom:14px;opacity:.5}
 .games-empty h3{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px}
 
-.game-edit-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface-2);border-radius:12px;margin-bottom:8px}
-.game-edit-thumb{width:48px;height:48px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0;overflow:hidden}
-.game-edit-thumb img{width:100%;height:100%;object-fit:cover}
-.game-edit-info{flex:1;min-width:0}
-.game-edit-name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.game-edit-url{font-size:11px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-
 .story-bar{padding:14px 0 10px;overflow-x:auto;white-space:nowrap;display:flex;gap:12px;padding-left:16px;scrollbar-width:none}
 .story-bar::-webkit-scrollbar{display:none}
 .story-item{flex-shrink:0;width:68px;text-align:center;cursor:pointer;position:relative}
@@ -524,7 +517,7 @@ body.dark .modal-header h2{color:#48CAE4}
 .admin-coin-row .acr-sub{font-size:11px;color:var(--text-2);margin-top:2px}
 
 /* ============ TRIPAY WALLET ============ */
-.tp-wallet-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:999999; display:none; align-items:center; justify-content:center; padding:20px; font-family:'Manrope','Padauk',sans-serif; }
+.tp-wallet-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(5px); z-index:2000000; display:none; align-items:center; justify-content:center; padding:20px; font-family:'Manrope','Padauk',sans-serif; }
 .tp-wallet-overlay.show { display:flex; }
 .tp-wallet-box { background:linear-gradient(165deg,#141722,#0B0D14); border:1px solid rgba(255,255,255,0.1); border-radius:24px; width:100%; max-width:400px; max-height:90vh; overflow-y:auto; padding:24px; color:#fff; position:relative; box-shadow:0 30px 80px rgba(0,0,0,0.8); animation:tpPopIn 0.3s cubic-bezier(0.16,1,0.3,1); }
 @keyframes tpPopIn { from { transform:scale(0.9); opacity:0; } to { transform:scale(1); opacity:1; } }
@@ -550,6 +543,20 @@ body.dark .modal-header h2{color:#48CAE4}
 .tp-form-group input, .tp-form-group select { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px; color:#fff; font-size:14px; font-family:inherit; outline:none; }
 .tp-form-group input:focus { border-color:#FFC20E; }
 .tp-submit { width:100%; padding:14px; border:none; border-radius:12px; font-size:14px; font-weight:800; cursor:pointer; color:#000; background:linear-gradient(135deg,#FFC20E,#FF8C00); }
+
+/* ============ SLOT GAME CSS ============ */
+.slot-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000000; display:none; align-items:center; justify-content:center; padding:20px; }
+.slot-overlay.show { display:flex; }
+.slot-box { background:linear-gradient(165deg,#1A1D28,#101219); border:1px solid rgba(255,255,255,0.1); border-radius:24px; width:100%; max-width:400px; padding:24px; color:#fff; position:relative; text-align:center; box-shadow:0 30px 80px rgba(0,0,0,0.8); }
+.slot-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; }
+.slot-title { font-size:22px; font-weight:900; color:#FFB800; margin-bottom:6px; }
+.slot-balance { font-size:14px; color:#7C8398; margin-bottom:20px; font-weight:700; }
+.slot-reels { display:flex; justify-content:center; gap:10px; margin-bottom:24px; }
+.slot-reel { width:80px; height:100px; background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.1); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:48px; overflow:hidden; box-shadow:inset 0 0 20px rgba(0,0,0,0.5); }
+.slot-spin-btn { width:100%; padding:16px; border:none; border-radius:16px; background:linear-gradient(135deg,#FF4757,#FF6B7A); color:#fff; font-size:18px; font-weight:900; cursor:pointer; box-shadow:0 10px 30px rgba(255,71,87,0.4); transition:transform .1s; }
+.slot-spin-btn:active { transform:scale(.95); }
+.slot-spin-btn:disabled { opacity:.5; cursor:not-allowed; }
+.slot-result { margin-top:16px; font-size:16px; font-weight:800; min-height:24px; }
 
 @media (max-width:480px){
   .msg{max-width:85%}
@@ -658,6 +665,7 @@ body.dark .modal-header h2{color:#48CAE4}
   <header class="header">
     <div class="brand"><div class="logo-mini">W</div><span id="headerTitle">Chats</span></div>
     <div class="header-actions">
+      <button type="button" class="hdr-btn" id="mainWalletBtn" style="background:linear-gradient(135deg,#FFB800,#FF8C00);" title="TriPay Wallet">💳</button>
       <button type="button" class="hdr-btn" id="inviteBtn" title="Invite">🔗</button>
       <button type="button" class="hdr-btn" id="newGroupBtn">👥</button>
       <button type="button" class="hdr-btn" id="adminIconBtn">⚙️</button>
@@ -727,7 +735,6 @@ body.dark .modal-header h2{color:#48CAE4}
           <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
             <button type="button" class="btn btn-sm" id="settingsWalletBtn">🪙 Coin Wallet</button>
             <button type="button" class="btn btn-sm btn-secondary" id="settingsGiftBtn">🎁 Gift</button>
-            <button type="button" class="btn btn-sm" id="settingsTriPayBtn" style="background:linear-gradient(135deg,#FFB800,#FF8C00);border:none;color:#fff;box-shadow:0 4px 12px rgba(255,184,0,0.3);">💳 TriPay Wallet</button>
           </div>
         </div>
       </div>
@@ -1436,6 +1443,24 @@ body.dark .modal-header h2{color:#48CAE4}
   </div>
 </div>
 
+<!-- ==================== SLOT GAME MODAL ==================== -->
+<div id="slotGameModal" class="slot-overlay">
+  <div class="slot-box">
+    <button class="slot-close" onclick="closeSlotGame()">✕</button>
+    <div class="slot-title">🎰 Lucky Slot</div>
+    <div class="slot-balance">Your Coins: <span id="slot_coinBalance" style="color:#FFB800; font-size:18px;">0</span> 🪙</div>
+    
+    <div class="slot-reels">
+      <div class="slot-reel" id="reel1">🍒</div>
+      <div class="slot-reel" id="reel2">🍒</div>
+      <div class="slot-reel" id="reel3">🍒</div>
+    </div>
+    
+    <button class="slot-spin-btn" id="spinBtn" onclick="spinSlot()">SPIN (10 🪙)</button>
+    <div class="slot-result" id="slotResult">ကံစမ်းကြည့်ပါ!</div>
+  </div>
+</div>
+
 <!-- ==================== SCRIPTS ==================== -->
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -1571,7 +1596,6 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeText = (el, txt) => { if (el) el.textContent = txt == null ? '' : String(txt); };
 
-/* FIXED: cleanPhone handles +95, 95, 0 prefixes, and does not double-strip */
 const cleanPhone = p => {
   let s = String(p || '').replace(/\D/g, '');
   if (!s) return '';
@@ -1721,26 +1745,21 @@ function loadCoinState() {
   if (!currentUser) return;
   Object.keys(_coinRefs).forEach(k => { if (_coinRefs[k]) { try { _coinRefs[k].off(); } catch(e){} _coinRefs[k] = null; } });
   
-  // Coin Balance ကို Real-time ဖတ်ခြင်း
   _coinRefs.balance = db.ref('users/' + currentUser.uid + '/coin_balance');
   _coinRefs.balance.on('value', s => { 
     coinState.coins = s.val() || 0; 
     updateCoinUI(); 
   }, e => console.warn('[Coin]', e.message));
 
-  // Gift Catalog ဖတ်ခြင်း
   _coinRefs.gifts = db.ref('app_config/gift_catalog');
   _coinRefs.gifts.on('value', s => { giftCatalog = s.val() || {}; renderGiftCatalog(); });
   
-  // Exchange Catalog ဖတ်ခြင်း
   _coinRefs.exchange = db.ref('app_config/exchange_catalog');
   _coinRefs.exchange.on('value', s => { exchangeCatalog = s.val() || {}; renderExchangeCatalog(); });
   
-  // Coin Packages ဖတ်ခြင်း
   _coinRefs.packages = db.ref('app_config/coin_packages');
   _coinRefs.packages.on('value', s => { coinPackages = s.val() || {}; renderCoinPackages(); });
   
-  // Coin Transaction History ဖတ်ခြင်း
   _coinRefs.tx = db.ref('coin_transactions/' + currentUser.uid).limitToLast(30);
   _coinRefs.tx.on('child_added', s => {
     const tx = s.val(); if (!tx) return;
@@ -1753,7 +1772,6 @@ function loadCoinState() {
 }
 
 function updateCoinUI() {
-  // UI ပေါ်ရှိ Coin ပမာဏများကို Update လုပ်ခြင်း
   const a = document.querySelector('#coinChip .coin-chip-amount'); if (a) safeText(a, coinState.coins);
   safeText($('walletBalance'), coinState.coins);
   const g = $('giftShopBalance'); if (g) g.textContent = coinState.coins + ' 🪙';
@@ -1763,6 +1781,9 @@ function updateCoinUI() {
     el.classList.toggle('disabled', p > coinState.coins);
   });
   renderExchangeCatalog();
+  
+  // Slot Game UI Update
+  const slotBal = $('slot_coinBalance'); if (slotBal) slotBal.textContent = coinState.coins;
 }
 
 function injectCoinChip() {
@@ -1786,7 +1807,6 @@ function showCoinReward(amount, reason) {
   el._timer = setTimeout(() => { el.style.transform = 'translateX(-50%) translateY(-200px)'; }, 2500);
 }
 
-// Coin ထည့်ခြင်း / နှုတ်ခြင်း (အလွန်အရေးကြီးသော Function)
 async function addCoins(uid, amount, reason, meta) {
   if (!uid || !amount || isNaN(amount)) return false;
   amount = Math.round(amount); 
@@ -1795,12 +1815,11 @@ async function addCoins(uid, amount, reason, meta) {
   try {
     const r = await db.ref('users/' + uid + '/coin_balance').transaction(c => { 
       const n = (c || 0) + amount; 
-      if (n < 0) return; // Coin အနုတ်မဖြစ်စေရန်
+      if (n < 0) return; 
       return n; 
     });
     if (!r.committed) return false;
     
-    // မှတ်တမ်းတင်ခြင်း
     await db.ref('coin_transactions/' + uid).push({
       ts: Date.now(), amount, reason, type: reason,
       desc: (COIN_REASONS[reason] && COIN_REASONS[reason].label) || reason,
@@ -1810,30 +1829,6 @@ async function addCoins(uid, amount, reason, meta) {
   } catch (e) { console.error('[addCoins]', e); return false; }
 }
 
-// Slot Game ကနေ လွှဲပေးမည့် Data ကို လက်ခံခြင်း (Window Message)
-window.addEventListener('message', ev => {
-  if (!ev || !ev.data || typeof ev.data !== 'object') return;
-  
-  // Slot Game ကနေ Coin လွှဲပေးတဲ့အခါ
-  if (ev.data.type === 'wavechat_reward') {
-    const coins = Number(ev.data.coins) || 0;
-    const game = ev.data.game || 'Slot Game';
-    if (coins > 0 && currentUser) {
-      addCoins(currentUser.uid, coins, 'game_reward', { game: game }).then(ok => {
-        if (ok) showCoinReward(coins, 'game_reward');
-      });
-    }
-  }
-  
-  // Slot Game ကနေ Coin လက်ကျန်ကို မေးတဲ့အခါ
-  else if (ev.data.type === 'wavechat_get_balance') {
-    if (ev.source && ev.source.postMessage) {
-      ev.source.postMessage({ type:'wavechat_balance', balance: coinState.coins, uid: currentUser ? currentUser.uid : null }, '*');
-    }
-  }
-});
-
-// Game SDK (ဂိမ်းတွေကနေ အသုံးပြုရန်)
 window.WaveChatGame = {
   version: '12.0.0',
   reward: async function(coins, gameName) {
@@ -1869,7 +1864,6 @@ function openCoinWallet() {
   if (!currentUser) return;
   safeText($('walletBalance'), coinState.coins);
   
-  // ကစားနိုင်တဲ့ Game များကို ပြသခြင်း
   const gl = $('walletGamesList');
   if (gl) {
     const games = Object.entries(allGames || {}).filter(([,g]) => g && g.url && g.rewardCoins).slice(0, 5);
@@ -1880,7 +1874,6 @@ function openCoinWallet() {
     }
   }
   
-  // နောက်ဆုံး Transaction များကို ပြသခြင်း
   const rt = $('walletRecentTx');
   if (rt) {
     db.ref('coin_transactions/' + currentUser.uid).limitToLast(5).once('value').then(s => {
@@ -2087,6 +2080,98 @@ function watchIncomingGifts() {
   });
 }
 
+/* ============================================================
+   SLOT GAME LOGIC
+   ============================================================ */
+const slotIcons = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
+let slotSpinning = false;
+
+function openSlotGame() {
+  if (!currentUser) return;
+  const modal = $('slotGameModal');
+  if (modal) {
+    modal.classList.add('show');
+    $('slot_coinBalance').textContent = coinState.coins;
+    $('slotResult').textContent = '';
+    $('reel1').textContent = '🍒'; $('reel2').textContent = '🍒'; $('reel3').textContent = '🍒';
+  }
+}
+function closeSlotGame() {
+  const modal = $('slotGameModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function spinSlot() {
+  if (!currentUser || slotSpinning) return;
+  const cost = 10;
+  if (coinState.coins < cost) { toast('Coin မလုံလောက်ပါ', 'warn'); return; }
+
+  slotSpinning = true;
+  const spinBtn = $('spinBtn');
+  spinBtn.disabled = true;
+  $('slotResult').textContent = 'Spinning...';
+  SoundFX.game();
+
+  // Deduct Coins
+  const ok = await addCoins(currentUser.uid, -cost, 'game_reward', { game: 'Lucky Slot' });
+  if (!ok) {
+    toast('Coin ဖြတ်မရပါ', 'error');
+    slotSpinning = false; spinBtn.disabled = false; return;
+  }
+
+  // Animation
+  let ticks = 0;
+  const maxTicks = 20;
+  const r1 = $('reel1'), r2 = $('reel2'), r3 = $('reel3');
+  
+  const interval = setInterval(() => {
+    r1.textContent = slotIcons[Math.floor(Math.random() * slotIcons.length)];
+    r2.textContent = slotIcons[Math.floor(Math.random() * slotIcons.length)];
+    r3.textContent = slotIcons[Math.floor(Math.random() * slotIcons.length)];
+    ticks++;
+    if (ticks > maxTicks) {
+      clearInterval(interval);
+      finishSlotSpin();
+    }
+  }, 80);
+}
+
+async function finishSlotSpin() {
+  const r1 = $('reel1').textContent;
+  const r2 = $('reel2').textContent;
+  const r3 = $('reel3').textContent;
+  const resEl = $('slotResult');
+  
+  let winAmt = 0;
+  if (r1 === r2 && r2 === r3) {
+    // Jackpot
+    winAmt = 100;
+    resEl.innerHTML = '🎉 JACKPOT! You won 100 🪙!';
+    resEl.style.color = '#00D9A3';
+    SoundFX.success(); haptic([100, 50, 100, 50, 100]);
+  } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+    // Small win
+    winAmt = 20;
+    resEl.innerHTML = '✨ You won 20 🪙!';
+    resEl.style.color = '#FFB800';
+    SoundFX.success(); haptic(50);
+  } else {
+    // Lose
+    resEl.textContent = 'ကံမကောင်းပါ။ ထပ်စမ်းကြည့်ပါ။';
+    resEl.style.color = '#FF4757';
+    haptic(30);
+  }
+
+  if (winAmt > 0) {
+    await addCoins(currentUser.uid, winAmt, 'game_reward', { game: 'Lucky Slot' });
+    showCoinReward(winAmt, 'game_reward');
+  }
+
+  $('slot_coinBalance').textContent = coinState.coins;
+  slotSpinning = false;
+  $('spinBtn').disabled = false;
+}
+
 console.log('✅ WaveChat v12.0.0 — PART 2A loaded');
 </script>
 
@@ -2263,7 +2348,6 @@ async function uploadToUguu(base64, filename) {
   if (!json.success || !json.files || !json.files[0]) throw new Error('Uguu failed');
   return json.files[0].url;
 }
-/* FIXED: no base64 fallback — throws if all hosts fail */
 async function uploadImage(base64) {
   try { return await uploadToImgBB(base64); }
   catch(e) {
@@ -3140,7 +3224,6 @@ function openPublicProfile(uid) {
   const repBtn = $('pvReportBtn'); if (repBtn) repBtn.onclick = () => openReportModal(uid, u);
   $('publicProfileModal').classList.add('show');
 }
-/* FIXED: null-safe showQRCode */
 function showQRCode(uid, u) {
   if (!uid) return toast('Invalid user', 'error');
   u = u || {};
@@ -4642,13 +4725,11 @@ function bindAdmin() {
   bindGamesManager();
   ['buyreq','gifts','exchange','packages','addcoins'].forEach(tt => { const map = {buyreq:'acTabBuyReq',gifts:'acTabGifts',exchange:'acTabExchange',packages:'acTabPackages',addcoins:'acTabAddCoins'}, btn = $(map[tt]); if (btn) btn.onclick = () => switchAdminCoinTab(tt); });
 }
-/* FIXED: loadAdminUsers no longer overwrites main app's allUsers with admin data */
 function loadAdminUsers() {
   if (refs.adminUsers) { try { refs.adminUsers.off(); } catch(e){} refs.adminUsers = null; }
   refs.adminUsers = db.ref('users');
   refs.adminUsers.on('value', snap => {
     const adminUsers = snap.val() || {};
-    // Use a separate object for admin panel to avoid clobbering main app's allUsers
     adminUsersData = adminUsers;
     renderAdminUsers($('userSearch') ? $('userSearch').value : '', adminUsers);
     const total = Object.keys(adminUsers).length, online = Object.values(adminUsers).filter(u => isUserOnline(u)).length;
@@ -4820,8 +4901,10 @@ window.addEventListener('unhandledrejection', e => console.error('❌ Promise:',
   const sgb = $('sendGiftBtn'); if (sgb) sgb.onclick = sendGiftHandler;
   const swb = $('settingsWalletBtn'); if (swb) swb.onclick = openCoinWallet;
   const sgb2 = $('settingsGiftBtn'); if (sgb2) sgb2.onclick = () => openGiftShop();
-
-  const tpBtn = $('settingsTriPayBtn'); if (tpBtn) tpBtn.onclick = () => { $('triPayWalletModal').classList.add('show'); tp_resetView(); };
+  
+  // Wallet & Slot Game Binding
+  const mwBtn = $('mainWalletBtn'); if (mwBtn) mwBtn.onclick = () => { $('triPayWalletModal').classList.add('show'); tp_resetView(); };
+  const slotBtn = $('slotGameBtn'); if (slotBtn) slotBtn.onclick = openSlotGame;
 
   const up = new URLSearchParams(location.search); const tu = up.get('u'); if (tu) setTimeout(() => { if (currentUser) openPublicProfile(tu); }, 2000);
   if (intervals.update) clearInterval(intervals.update);
@@ -4829,10 +4912,12 @@ window.addEventListener('unhandledrejection', e => console.error('❌ Promise:',
   secureAllExternalLinks(); showRoute(); applyLanguage(); console.log('✅ WaveChat Ultra v12.0.0 loaded');
 })();
 
-/* ==================== TRIPAY WALLET LOGIC ==================== */
+/* ==========================================
+   TRIPAY WALLET LOGIC
+   ========================================== */
 function closeTriPayWallet() {
   const modal = document.getElementById('triPayWalletModal');
-  if (modal) modal.classList.remove('show');
+  if (modal) { modal.classList.remove('show'); modal.style.display = 'none'; }
 }
 
 document.getElementById('triPayWalletModal').addEventListener('click', function(e) {
@@ -4957,7 +5042,7 @@ function tp_doReceive() {
   setTimeout(() => tp_resetView(), 1000);
 }
 
-console.log('✅ WaveChat Ultra v12.0.0 — Wallet Module loaded');
+console.log('✅ WaveChat Ultra v12.0.0 — Wallet & Slot Game loaded');
 </script>
 </body>
 </html>

@@ -14,327 +14,327 @@
   --border:#E2E8F0;--green:#00D9A3;--red:#FF4757;--warn:#FFB800;
   --grad:linear-gradient(135deg,#00B4D8,#0077B6);
   --grad-gold:linear-gradient(135deg,#FFB800,#FF8C00);
-  --r:14px;--r-pill:999px;
-  --sh-sm:0 1px 3px rgba(0,0,0,.06);--sh-md:0 4px 16px rgba(0,0,0,.08);
+  --r:16px;--r-pill:999px;
+  --sh-sm:0 2px 6px rgba(0,0,0,.06);--sh-md:0 6px 20px rgba(0,0,0,.08);
   --sh-lg:0 12px 32px rgba(0,0,0,.12);
   --slot-bg:#0d021a;--panel:#1a0b2e;--header:#2a0845;
   --gold:#ffcc00;--cyan:#00ffcc;--pink:#ff00ff;
   --reel:#fff8e7;--reel-text:#333;
 }
-body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:15px}
 .hidden{display:none!important}
 
 /* ===== LOADING ===== */
 .loading{position:fixed;inset:0;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(4px)}
 .loading.show{display:flex}
-.spinner{width:48px;height:48px;border:4px solid rgba(0,180,216,.15);border-top-color:var(--wc-blue);border-radius:50%;animation:spin .8s linear infinite}
+.spinner{width:50px;height:50px;border:5px solid rgba(0,180,216,.15);border-top-color:var(--wc-blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ===== AUTH SCREEN ===== */
 #authScreen{display:none;min-height:100vh;background:linear-gradient(135deg,#00B4D8 0%,#0077B6 50%,#03045E 100%);align-items:center;justify-content:center;padding:20px;position:fixed;inset:0;z-index:1000;overflow-y:auto}
 #authScreen.active{display:flex}
-.auth-logo{position:absolute;top:30px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:10}
-.auth-logo-mark{width:52px;height:52px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#0077B6;box-shadow:0 10px 32px rgba(0,0,0,.2);letter-spacing:-0.5px}
-.auth-logo-text{font-size:26px;font-weight:900;color:#fff;letter-spacing:-0.8px}
+.auth-logo{position:absolute;top:30px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:10}
+.auth-logo-mark{width:60px;height:60px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#0077B6;box-shadow:0 10px 32px rgba(0,0,0,.2);letter-spacing:-1px}
+.auth-logo-text{font-size:32px;font-weight:900;color:#fff;letter-spacing:-1px}
 .auth-logo-text span{color:#48CAE4}
-.auth-box{background:#FFF;padding:40px 32px 32px;border-radius:26px;box-shadow:0 30px 80px rgba(0,0,0,.3);width:400px;max-width:100%;position:relative;z-index:5;margin:80px 0 20px}
-.auth-box h1{font-size:26px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;letter-spacing:-0.5px}
-.auth-box .subtitle{text-align:center;color:var(--text-2);font-size:13.5px;margin-bottom:22px;font-weight:600}
-.auth-tabs{display:flex;background:var(--surface-2);border-radius:var(--r-pill);padding:5px;margin-bottom:22px}
-.auth-tab{flex:1;padding:11px;border:none;background:transparent;cursor:pointer;font-weight:800;font-size:13.5px;color:var(--text-2);border-radius:var(--r-pill);font-family:inherit;transition:.2s}
+.auth-box{background:#FFF;padding:44px 32px 36px;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.3);width:420px;max-width:100%;position:relative;z-index:5;margin:80px 0 20px}
+.auth-box h1{font-size:32px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:8px}
+.auth-box .subtitle{text-align:center;color:var(--text-2);font-size:16px;margin-bottom:26px;font-weight:600}
+.auth-tabs{display:flex;background:var(--surface-2);border-radius:var(--r-pill);padding:6px;margin-bottom:24px}
+.auth-tab{flex:1;padding:14px;border:none;background:transparent;cursor:pointer;font-weight:800;font-size:16px;color:var(--text-2);border-radius:var(--r-pill);font-family:inherit;transition:.2s}
 .auth-tab.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
-.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-form{display:flex;flex-direction:column;gap:16px}
 .auth-input-group{position:relative;display:flex;align-items:center}
-.auth-input-group .ico{position:absolute;left:16px;font-size:16px;pointer-events:none;z-index:1}
-.auth-form input{width:100%;padding:14px 16px 14px 44px;border:2px solid var(--border);border-radius:12px;font-size:14px;background:var(--surface-2);transition:.2s;outline:none;color:var(--text);font-family:inherit;font-weight:600}
+.auth-input-group .ico{position:absolute;left:18px;font-size:20px;pointer-events:none;z-index:1}
+.auth-form input{width:100%;padding:16px 18px 16px 52px;border:2px solid var(--border);border-radius:14px;font-size:16px;background:var(--surface-2);transition:.2s;outline:none;color:var(--text);font-family:inherit;font-weight:600}
 .auth-form input:focus{border-color:var(--wc-blue);background:#FFF;box-shadow:0 0 0 4px rgba(0,180,216,.1)}
-.auth-form input::placeholder{color:var(--text-2);font-weight:500}
-.auth-btn{background:var(--grad);color:#fff;padding:14px;border:none;border-radius:12px;font-weight:900;cursor:pointer;font-size:15px;font-family:inherit;transition:.2s;box-shadow:0 6px 20px rgba(0,180,216,.3);margin-top:4px}
+.auth-btn{background:var(--grad);color:#fff;padding:16px;border:none;border-radius:14px;font-weight:900;cursor:pointer;font-size:18px;font-family:inherit;transition:.2s;box-shadow:0 6px 20px rgba(0,180,216,.3);margin-top:8px}
 .auth-btn:hover{transform:translateY(-2px)}
 .auth-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.auth-err{color:var(--red);font-size:13px;text-align:center;min-height:18px;font-weight:700}
-.auth-hint{font-size:11.5px;color:var(--text-2);text-align:center;margin-top:-6px;font-weight:600}
-.auth-footer{margin-top:20px;text-align:center;font-size:11.5px;color:var(--text-2);font-weight:600}
+.auth-err{color:var(--red);font-size:15px;text-align:center;min-height:22px;font-weight:700}
+.auth-footer{margin-top:24px;text-align:center;font-size:14px;color:var(--text-2);font-weight:600}
 
 /* ===== TOASTS ===== */
 .toast-container{position:fixed;top:20px;right:20px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:calc(100vw - 40px)}
-.toast{background:#FFF;padding:13px 18px;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.15);border-left:4px solid var(--wc-blue);font-size:13.5px;font-weight:700;color:var(--text);min-width:220px;max-width:320px;pointer-events:auto;display:flex;align-items:center;gap:10px;animation:slideRight .3s ease-out}
+.toast{background:#FFF;padding:16px 22px;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.15);border-left:6px solid var(--wc-blue);font-size:16px;font-weight:700;color:var(--text);min-width:260px;max-width:380px;pointer-events:auto;display:flex;align-items:center;gap:12px;animation:slideRight .3s ease-out}
 .toast.success{border-left-color:var(--green)}
 .toast.error{border-left-color:var(--red)}
 .toast.warn{border-left-color:var(--warn)}
 @keyframes slideRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-.coin-reward{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-200px);background:var(--grad-gold);color:#fff;padding:13px 24px;border-radius:30px;font-weight:900;font-size:16px;box-shadow:0 12px 32px rgba(255,184,0,.4);z-index:99998;transition:transform .4s cubic-bezier(.4,0,.2,1);pointer-events:none;display:flex;align-items:center;gap:8px}
+.coin-reward{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-200px);background:var(--grad-gold);color:#fff;padding:16px 28px;border-radius:36px;font-weight:900;font-size:20px;box-shadow:0 12px 32px rgba(255,184,0,.4);z-index:99998;transition:transform .4s cubic-bezier(.4,0,.2,1);pointer-events:none;display:flex;align-items:center;gap:10px}
 .coin-reward.show{transform:translateX(-50%) translateY(0)}
-.coin-reward .coin-icon{width:24px;height:24px}
+.coin-reward .coin-icon{width:30px;height:30px}
 .coin-reward .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
 
 /* ===== APP SHELL ===== */
 .app-shell{display:none;min-height:100vh}
 .app-shell.active{display:flex}
-.sidebar{width:230px;background:#FFF;border-right:1px solid var(--border);padding:20px 14px;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20;overflow-y:auto}
-.sidebar-logo{display:flex;align-items:center;gap:11px;padding:0 8px;margin-bottom:26px}
-.logo-mark{width:42px;height:42px;border-radius:14px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.35);letter-spacing:-0.5px}
-.sidebar-logo h1{font-size:16px;font-weight:900;letter-spacing:-0.4px}
-.sidebar-logo p{font-size:9px;color:var(--text-2);letter-spacing:1.2px;text-transform:uppercase;font-weight:700;margin-top:2px}
-.nav-section{font-size:9.5px;color:var(--text-2);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:0 12px;margin:18px 0 8px}
-.nav-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;cursor:pointer;transition:.2s;color:var(--text-2);font-size:13px;font-weight:700;margin-bottom:3px;border:none;background:transparent;width:100%;text-align:left;font-family:inherit}
-.nav-item .ni-icon{font-size:17px;width:20px;text-align:center}
+.sidebar{width:240px;background:#FFF;border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20;overflow-y:auto}
+.sidebar-logo{display:flex;align-items:center;gap:12px;padding:0 8px;margin-bottom:30px}
+.logo-mark{width:48px;height:48px;border-radius:16px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.35);letter-spacing:-1px}
+.sidebar-logo h1{font-size:20px;font-weight:900;letter-spacing:-0.5px}
+.sidebar-logo p{font-size:11px;color:var(--text-2);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-top:2px}
+.nav-section{font-size:12px;color:var(--text-2);font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:0 12px;margin:20px 0 10px}
+.nav-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;cursor:pointer;transition:.2s;color:var(--text-2);font-size:15px;font-weight:700;margin-bottom:4px;border:none;background:transparent;width:100%;text-align:left;font-family:inherit}
+.nav-item .ni-icon{font-size:20px;width:24px;text-align:center}
 .nav-item:hover{background:var(--surface-2);color:var(--text)}
-.nav-item.active{background:linear-gradient(90deg,rgba(0,180,216,.15),rgba(0,180,216,.03));color:var(--wc-blue-dark);border-left:2px solid var(--wc-blue)}
-.nav-wallet{margin-top:6px}
-.wallet-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;cursor:pointer;transition:.2s;margin-bottom:4px}
+.nav-item.active{background:linear-gradient(90deg,rgba(0,180,216,.15),rgba(0,180,216,.03));color:var(--wc-blue-dark);border-left:4px solid var(--wc-blue)}
+.nav-wallet{margin-top:8px}
+.wallet-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;cursor:pointer;transition:.2s;margin-bottom:6px}
 .wallet-row:hover{background:var(--surface-2)}
-.wallet-row .wr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.wallet-row .wr-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
 .wallet-row .wr-meta{flex:1;min-width:0}
-.wallet-row .wr-meta h5{font-size:12px;font-weight:800;margin-bottom:1px}
-.wallet-row .wr-meta p{font-size:10px;color:var(--text-2);font-weight:600}
-.sb-user{margin-top:auto;display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);cursor:pointer;transition:.2s}
+.wallet-row .wr-meta h5{font-size:15px;font-weight:800;margin-bottom:2px}
+.wallet-row .wr-meta p{font-size:12px;color:var(--text-2);font-weight:600}
+.sb-user{margin-top:auto;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:var(--surface-2);border:1px solid var(--border);cursor:pointer;transition:.2s}
 .sb-user:hover{background:#FFF}
-.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
-.sb-user h5{font-size:12px;font-weight:800}
-.sb-user p{font-size:9.5px;color:var(--text-2);font-weight:600}
+.sb-avatar{width:44px;height:44px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;flex-shrink:0}
+.sb-user h5{font-size:15px;font-weight:800}
+.sb-user p{font-size:12px;color:var(--text-2);font-weight:600}
 
-.main-content{flex:1;margin-left:230px;padding:24px 28px 40px;position:relative;z-index:2}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;gap:16px;flex-wrap:wrap}
-.topbar-left h2{font-size:23px;font-weight:900;letter-spacing:-0.6px}
-.topbar-left p{font-size:12.5px;color:var(--text-2);margin-top:3px;font-weight:600}
-.topbar-right{display:flex;align-items:center;gap:10px}
-.avatar-btn{width:42px;height:42px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;cursor:pointer;box-shadow:var(--sh-sm);position:relative;border:none;font-family:inherit}
-.avatar-btn .status-dot{position:absolute;bottom:1px;right:1px;width:11px;height:11px;background:var(--green);border:2px solid #FFF;border-radius:50%}
-.logout-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--red);transition:.2s}
+.main-content{flex:1;margin-left:240px;padding:30px 36px 50px;position:relative;z-index:2}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:16px;flex-wrap:wrap}
+.topbar-left h2{font-size:28px;font-weight:900;letter-spacing:-1px}
+.topbar-left p{font-size:15px;color:var(--text-2);margin-top:4px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.avatar-btn{width:48px;height:48px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;cursor:pointer;box-shadow:var(--sh-sm);position:relative;border:none;font-family:inherit}
+.avatar-btn .status-dot{position:absolute;bottom:2px;right:2px;width:14px;height:14px;background:var(--green);border:3px solid #FFF;border-radius:50%}
+.logout-btn{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:12px 18px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--red);transition:.2s}
 .logout-btn:hover{background:#FFF0F1;border-color:var(--red)}
 
 /* ===== PAGE VIEWS ===== */
 .page-view{display:none}
-.page-view.active{display:block;animation:fadeUp .25s ease-out}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page-view.active{display:block;animation:fadeUp .3s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
 /* ===== BALANCE / STATS / ACTIONS ===== */
-.balance-card{background:linear-gradient(135deg,#00B4D8 0%,#0077B6 100%);border-radius:24px;padding:26px 24px;color:#fff;position:relative;overflow:hidden;margin-bottom:22px;box-shadow:0 12px 32px rgba(0,180,216,.28)}
-.balance-card::before{content:'';position:absolute;top:-50%;right:-30%;width:280px;height:280px;background:rgba(255,255,255,.08);border-radius:50%}
-.balance-card::after{content:'';position:absolute;bottom:-60%;left:-20%;width:220px;height:220px;background:rgba(255,255,255,.05);border-radius:50%}
-.balance-label{font-size:11.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.85;margin-bottom:10px;position:relative;z-index:2}
-.balance-amount{font-size:38px;font-weight:900;letter-spacing:-1.5px;line-height:1.1;position:relative;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.balance-amount .coin-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.balance-amount .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
-.balance-amount small{font-size:16px;font-weight:800;opacity:.9}
-.balance-sub{font-size:12.5px;margin-top:10px;font-weight:600;opacity:.85;position:relative;z-index:2;display:flex;align-items:center;gap:6px}
-.balance-actions{display:flex;gap:10px;margin-top:20px;position:relative;z-index:2}
-.balance-action{flex:1;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);color:#fff;padding:12px 10px;border-radius:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s;backdrop-filter:blur(10px)}
+.balance-card{background:linear-gradient(135deg,#00B4D8 0%,#0077B6 100%);border-radius:28px;padding:32px 30px;color:#fff;position:relative;overflow:hidden;margin-bottom:28px;box-shadow:0 12px 32px rgba(0,180,216,.28)}
+.balance-card::before{content:'';position:absolute;top:-50%;right:-30%;width:320px;height:320px;background:rgba(255,255,255,.08);border-radius:50%}
+.balance-card::after{content:'';position:absolute;bottom:-60%;left:-20%;width:260px;height:260px;background:rgba(255,255,255,.05);border-radius:50%}
+.balance-label{font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.85;margin-bottom:12px;position:relative;z-index:2}
+.balance-amount{font-size:48px;font-weight:900;letter-spacing:-2px;line-height:1.1;position:relative;z-index:2;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.balance-amount .coin-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.balance-amount .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.balance-amount small{font-size:20px;font-weight:800;opacity:.9}
+.balance-sub{font-size:15px;margin-top:12px;font-weight:600;opacity:.85;position:relative;z-index:2;display:flex;align-items:center;gap:8px}
+.balance-actions{display:flex;gap:14px;margin-top:24px;position:relative;z-index:2}
+.balance-action{flex:1;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.35);color:#fff;padding:16px 12px;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;backdrop-filter:blur(10px)}
 .balance-action:hover{background:rgba(255,255,255,.3);transform:translateY(-2px)}
 
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
-.stat-box{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:18px 20px;box-shadow:var(--sh-sm);transition:.25s}
-.stat-box:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
-.stat-box .sb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.stat-box .sb-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:30px}
+.stat-box{background:#FFF;border:1px solid var(--border);border-radius:22px;padding:22px 24px;box-shadow:var(--sh-sm);transition:.25s}
+.stat-box:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.stat-box .sb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.stat-box .sb-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
 .sb-wave .sb-icon{background:linear-gradient(135deg,#FFF3D0,#FFE29A)}
 .sb-kpay .sb-icon{background:linear-gradient(135deg,#DDEEFF,#B8DCFF)}
 .sb-wc .sb-icon{background:linear-gradient(135deg,#D0F9E8,#A8EFD3)}
 .sb-total .sb-icon{background:linear-gradient(135deg,#E0F2FE,#BAE6FD)}
-.stat-box .sb-label{font-size:11.5px;color:var(--text-2);font-weight:700;margin-bottom:6px}
-.stat-box .sb-value{font-size:22px;font-weight:900;letter-spacing:-0.8px;line-height:1.15;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.stat-box .sb-value small{font-size:12px;font-weight:800;color:var(--text-2)}
-.stat-box .sb-value .inline-coin{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-box .sb-label{font-size:14px;color:var(--text-2);font-weight:700;margin-bottom:8px}
+.stat-box .sb-value{font-size:28px;font-weight:900;letter-spacing:-1px;line-height:1.15;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stat-box .sb-value small{font-size:15px;font-weight:800;color:var(--text-2)}
+.stat-box .sb-value .inline-coin{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .stat-box .sb-value .inline-coin img{width:100%;height:100%;object-fit:contain}
-.stat-box .sb-foot{font-size:10.5px;color:var(--text-2);margin-top:8px;font-weight:600}
+.stat-box .sb-foot{font-size:13px;color:var(--text-2);margin-top:10px;font-weight:600}
 
-.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:26px}
-.action-tile{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm);font-family:inherit;border:none}
-.action-tile:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:rgba(0,180,216,.3)}
-.action-tile .at-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:30px}
+.action-tile{background:#FFF;border:1px solid var(--border);border-radius:22px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm);font-family:inherit;border:none}
+.action-tile:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:rgba(0,180,216,.3)}
+.action-tile .at-icon{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px}
 .at-play .at-icon{background:linear-gradient(135deg,#FFE4B8,#FFC97A)}
 .at-receive .at-icon{background:linear-gradient(135deg,#D0F9E8,#A8EFD3)}
 .at-history .at-icon{background:linear-gradient(135deg,#DDEEFF,#B8DCFF)}
 .at-buy .at-icon{background:linear-gradient(135deg,#F3E4FF,#E0C8FF)}
-.action-tile h4{font-size:13.5px;font-weight:800;color:var(--text);text-align:center;line-height:1.2}
-.action-tile p{font-size:10.5px;color:var(--text-2);font-weight:600;text-align:center}
+.action-tile h4{font-size:16px;font-weight:800;color:var(--text);text-align:center;line-height:1.2}
+.action-tile p{font-size:13px;color:var(--text-2);font-weight:600;text-align:center}
 
 /* ===== WALLET CARDS ===== */
-.wallets-section{margin-bottom:24px}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.section-header h3{font-size:17px;font-weight:900;letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
-.section-header a{font-size:12.5px;color:var(--wc-blue-dark);font-weight:800;cursor:pointer;text-decoration:none}
-.wallet-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.wallet-card{background:#FFF;border:1px solid var(--border);border-radius:20px;padding:20px;position:relative;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm)}
-.wallet-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
-.wallet-card::before{content:'';position:absolute;top:-40%;right:-20%;width:180px;height:180px;border-radius:50%;opacity:.12;filter:blur(20px);background:#00B4D8}
-.wallet-card-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:2}
-.wallet-logo{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;flex-shrink:0;background:var(--grad);letter-spacing:-0.5px}
+.wallets-section{margin-bottom:28px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.section-header h3{font-size:22px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:10px}
+.section-header a{font-size:14px;color:var(--wc-blue-dark);font-weight:800;cursor:pointer;text-decoration:none}
+.wallet-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.wallet-card{background:#FFF;border:1px solid var(--border);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm)}
+.wallet-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.wallet-card::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;opacity:.12;filter:blur(20px);background:#00B4D8}
+.wallet-card-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;position:relative;z-index:2}
+.wallet-logo{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;flex-shrink:0;background:var(--grad);letter-spacing:-1px}
 .wallet-card-head .wc-name{flex:1;min-width:0}
-.wallet-card-head .wc-name h4{font-size:14.5px;font-weight:900;margin-bottom:2px}
-.wallet-card-head .wc-name p{font-size:11px;color:var(--text-2);font-weight:600}
-.wallet-balance{font-size:28px;font-weight:900;letter-spacing:-1px;position:relative;z-index:2;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.wallet-balance small{font-size:13px;font-weight:800;color:var(--text-2)}
-.wallet-balance .inline-coin{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.wallet-card-head .wc-name h4{font-size:18px;font-weight:900;margin-bottom:4px}
+.wallet-card-head .wc-name p{font-size:13px;color:var(--text-2);font-weight:600}
+.wallet-balance{font-size:34px;font-weight:900;letter-spacing:-1.5px;position:relative;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wallet-balance small{font-size:16px;font-weight:800;color:var(--text-2)}
+.wallet-balance .inline-coin{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .wallet-balance .inline-coin img{width:100%;height:100%;object-fit:contain}
-.wallet-meta{font-size:11px;color:var(--text-2);margin-top:6px;font-weight:600;position:relative;z-index:2}
+.wallet-meta{font-size:13px;color:var(--text-2);margin-top:10px;font-weight:600;position:relative;z-index:2}
 
-/* ===== SLOT ===== */
-.slot-wrapper{background:linear-gradient(145deg,#1e0a36,#0d021a);border-radius:24px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.3);border:2px solid var(--gold);max-width:780px;margin:0 auto}
-.slot-top{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:10px 14px;margin-bottom:10px}
-.slot-credit{display:flex;align-items:center;gap:8px;color:var(--gold);font-weight:900;font-size:15px}
-.slot-credit .coin-icon{width:22px;height:22px}
+/* ===== SLOT GAME (BIGGER) ===== */
+.slot-wrapper{background:linear-gradient(145deg,#1e0a36,#0d021a);border-radius:28px;padding:20px;box-shadow:0 16px 50px rgba(0,0,0,.4);border:3px solid var(--gold);max-width:850px;margin:0 auto}
+.slot-top{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:2px solid var(--gold);border-radius:12px;padding:14px 18px;margin-bottom:14px}
+.slot-credit{display:flex;align-items:center;gap:12px;color:var(--gold);font-weight:900;font-size:18px}
+.slot-credit .coin-icon{width:28px;height:28px}
 .slot-credit .coin-icon img{width:100%;height:100%;object-fit:contain}
-.slot-credit .lbl{font-size:11px;opacity:.75;margin-right:2px}
-.slot-credit .val{color:var(--cyan);font-size:18px;text-shadow:0 0 8px rgba(0,255,204,.5)}
-.slot-top-right{display:flex;gap:6px}
-.slot-btn-sm{background:var(--gold);color:#1a0b2e;border:none;border-radius:6px;width:34px;height:34px;cursor:pointer;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.slot-credit .lbl{font-size:14px;opacity:.75;margin-right:4px}
+.slot-credit .val{color:var(--cyan);font-size:24px;text-shadow:0 0 10px rgba(0,255,204,.6)}
+.slot-top-right{display:flex;gap:8px}
+.slot-btn-sm{background:var(--gold);color:#1a0b2e;border:none;border-radius:8px;width:42px;height:42px;cursor:pointer;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.15s}
 .slot-btn-sm:active{transform:scale(.9)}
-.slot-title{text-align:center;font-size:34px;font-weight:900;color:var(--gold);text-shadow:0 0 20px var(--gold),0 0 40px var(--pink),0 2px 4px rgba(0,0,0,.5);letter-spacing:6px;margin:6px 0 4px}
-.slot-subtitle{text-align:center;font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;border:1px solid var(--cyan);border-radius:4px;padding:4px;background:rgba(0,255,204,.08);font-weight:800}
-.slot-info-row{display:flex;justify-content:space-between;background:var(--header);border:1px solid var(--gold);border-radius:8px;padding:8px 14px;margin-bottom:10px}
-.slot-info-item{display:flex;flex-direction:column;align-items:center;min-width:70px}
-.slot-info-item .lbl{font-size:10px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.slot-info-item .val{font-size:17px;color:#fff;font-weight:900;margin-top:2px}
-.slot-info-item.vip .val{color:#ffaa00}
-.slot-main{display:flex;gap:8px;margin-bottom:10px}
-.slot-ways{display:flex;flex-direction:column;justify-content:center;align-items:center;background:#4a0000;border:1px solid var(--gold);border-radius:8px;padding:6px 4px;width:36px;flex-shrink:0}
-.slot-ways span{writing-mode:vertical-rl;color:var(--gold);font-weight:900;font-size:10px;letter-spacing:1px}
-.slot-reels{flex:1;background:var(--reel);border:2px solid var(--gold);border-radius:8px;padding:6px;position:relative;display:flex;flex-direction:column;min-width:0}
-.reels-table{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed}
-.reels-table td{background:var(--reel);border-radius:5px;border:1px solid var(--gold);text-align:center;vertical-align:middle;width:20%;height:20%;padding:0;position:relative;overflow:hidden;aspect-ratio:1}
-.sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:28px;color:var(--reel-text);transition:transform .1s}
-.sym svg{width:100%;height:100%;max-width:34px;max-height:34px;display:block;margin:auto}
-.sym.bomb{font-size:26px}
-.reels-table.spinning .sym{animation:spinSym .08s linear infinite}
+.slot-title{text-align:center;font-size:44px;font-weight:900;color:var(--gold);text-shadow:0 0 25px var(--gold),0 0 50px var(--pink),0 2px 4px rgba(0,0,0,.6);letter-spacing:8px;margin:10px 0 6px}
+.slot-subtitle{text-align:center;font-size:14px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;border:2px solid var(--cyan);border-radius:6px;padding:6px;background:rgba(0,255,204,.08);font-weight:800}
+.slot-info-row{display:flex;justify-content:space-between;background:var(--header);border:2px solid var(--gold);border-radius:10px;padding:12px 18px;margin-bottom:14px}
+.slot-info-item{display:flex;flex-direction:column;align-items:center;min-width:80px}
+.slot-info-item .lbl{font-size:12px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.slot-info-item .val{font-size:22px;color:#fff;font-weight:900;margin-top:4px}
+.slot-info-item.vip .val{color:#ffaa00;font-size:26px}
+.slot-main{display:flex;gap:12px;margin-bottom:14px}
+.slot-ways{display:flex;flex-direction:column;justify-content:center;align-items:center;background:#4a0000;border:2px solid var(--gold);border-radius:10px;padding:8px 6px;width:46px;flex-shrink:0}
+.slot-ways span{writing-mode:vertical-rl;color:var(--gold);font-weight:900;font-size:12px;letter-spacing:2px}
+.slot-reels{flex:1;background:var(--reel);border:3px solid var(--gold);border-radius:10px;padding:8px;position:relative;display:flex;flex-direction:column;min-width:0}
+.reels-table{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}
+.reels-table td{background:var(--reel);border-radius:6px;border:2px solid var(--gold);text-align:center;vertical-align:middle;width:20%;height:20%;padding:0;position:relative;overflow:hidden;aspect-ratio:1}
+.sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:36px;color:var(--reel-text);transition:transform .1s}
+.sym svg{width:100%;height:100%;max-width:46px;max-height:46px;display:block;margin:auto}
+.sym.bomb{font-size:34px}
+.reels-table.spinning .sym{animation:spinSym .1s linear infinite}
 @keyframes spinSym{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
-.sym.win{background:linear-gradient(135deg,rgba(0,255,204,.9),rgba(255,204,0,.8));border-radius:4px;animation:wf .4s infinite alternate;box-shadow:0 0 12px #00ffcc,0 0 24px #ffcc00;z-index:2}
-.sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.9),rgba(255,100,0,.8));border-radius:4px;animation:sf .4s infinite alternate;box-shadow:0 0 16px #ff00ff,0 0 32px #ff6600;z-index:2}
-@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.06)}}
-@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.1)}}
-.slot-btns{display:flex;flex-direction:column;gap:8px;width:92px;flex-shrink:0}
-.slot-btn{border-radius:10px;font-weight:900;cursor:pointer;text-transform:uppercase;border:2px solid rgba(255,255,255,.3);transition:.15s;font-family:inherit;padding:0;color:#1a0b2e}
+.sym.win{background:linear-gradient(135deg,rgba(0,255,204,.9),rgba(255,204,0,.8));border-radius:6px;animation:wf .4s infinite alternate;box-shadow:0 0 15px #00ffcc,0 0 30px #ffcc00;z-index:2}
+.sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.9),rgba(255,100,0,.8));border-radius:6px;animation:sf .4s infinite alternate;box-shadow:0 0 20px #ff00ff,0 0 40px #ff6600;z-index:2}
+@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.08)}}
+@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.12)}}
+.slot-btns{display:flex;flex-direction:column;gap:10px;width:110px;flex-shrink:0}
+.slot-btn{border-radius:12px;font-weight:900;cursor:pointer;text-transform:uppercase;border:3px solid rgba(255,255,255,.3);transition:.15s;font-family:inherit;padding:0;color:#1a0b2e}
 .slot-btn:active{transform:scale(.95)}
-.slot-spin{background:linear-gradient(180deg,#00ffcc,#00cc99);font-size:16px;padding:20px 0;box-shadow:0 0 20px var(--cyan);line-height:1.2}
+.slot-spin{background:linear-gradient(180deg,#00ffcc,#00cc99);font-size:20px;padding:24px 0;box-shadow:0 0 25px var(--cyan);line-height:1.2}
 .slot-spin:disabled{opacity:.5;box-shadow:none;cursor:not-allowed}
-.slot-auto{background:linear-gradient(180deg,#ff00ff,#cc00cc);color:#fff;font-size:13px;padding:12px 0;line-height:1.2}
-.slot-turbo{background:linear-gradient(180deg,#ffaa00,#cc8800);font-size:13px;padding:12px 0;line-height:1.2}
-.slot-bet-row{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:2px solid var(--gold);border-radius:8px;padding:8px 10px;gap:8px;flex-wrap:wrap}
-.bet-ctrl{display:flex;align-items:center;gap:5px;background:#4a0000;padding:4px 8px;border-radius:6px;border:1px solid var(--gold)}
-.bet-ctrl button{background:var(--gold);border:none;width:30px;height:30px;border-radius:5px;font-weight:900;cursor:pointer;font-size:16px;color:#1a0b2e}
-.bet-ctrl .bv{color:#fff;font-weight:900;font-size:16px;min-width:46px;text-align:center}
-.bet-ctrl .bl{color:var(--gold);font-size:9px;font-weight:800;text-transform:uppercase}
-.quick-bets{display:flex;gap:5px}
-.quick-bets button{border:none;border-radius:6px;font-weight:900;cursor:pointer;color:#fff;font-size:14px;padding:9px 12px;min-width:44px;font-family:inherit}
+.slot-auto{background:linear-gradient(180deg,#ff00ff,#cc00cc);color:#fff;font-size:16px;padding:16px 0;line-height:1.2}
+.slot-turbo{background:linear-gradient(180deg,#ffaa00,#cc8800);font-size:16px;padding:16px 0;line-height:1.2}
+.slot-bet-row{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:2px solid var(--gold);border-radius:10px;padding:10px 14px;gap:10px;flex-wrap:wrap}
+.bet-ctrl{display:flex;align-items:center;gap:8px;background:#4a0000;padding:6px 10px;border-radius:8px;border:2px solid var(--gold)}
+.bet-ctrl button{background:var(--gold);border:none;width:38px;height:38px;border-radius:6px;font-weight:900;cursor:pointer;font-size:20px;color:#1a0b2e}
+.bet-ctrl .bv{color:#fff;font-weight:900;font-size:22px;min-width:60px;text-align:center}
+.bet-ctrl .bl{color:var(--gold);font-size:11px;font-weight:800;text-transform:uppercase}
+.quick-bets{display:flex;gap:6px}
+.quick-bets button{border:none;border-radius:8px;font-weight:900;cursor:pointer;color:#fff;font-size:16px;padding:12px 16px;min-width:54px;font-family:inherit}
 .q2x{background:linear-gradient(180deg,#ffaa00,#cc8800)}
 .q3x{background:linear-gradient(180deg,#ff6600,#cc4400)}
 .q5x{background:linear-gradient(180deg,#ff0066,#cc0044)}
-.daily-btn{background:#0f0;color:#1a0b2e;padding:9px 14px;border:none;border-radius:6px;font-weight:900;cursor:pointer;font-size:16px;font-family:inherit}
-.slot-msg{background:#000;border:1px solid var(--gold);border-radius:6px;padding:9px;color:#ffcc00;font-size:12.5px;font-weight:800;min-height:44px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.4;flex-wrap:wrap;gap:4px;margin-top:10px}
-.slot-msg .win-line{background:rgba(255,204,0,.15);border:1px solid var(--gold);border-radius:4px;padding:2px 7px;margin:2px;display:inline-block;font-size:10px}
-.slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:52px;font-weight:900;text-shadow:0 0 30px currentColor,0 0 60px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
+.daily-btn{background:#0f0;color:#1a0b2e;padding:12px 18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;font-size:20px;font-family:inherit}
+.slot-msg{background:#000;border:2px solid var(--gold);border-radius:10px;padding:14px;color:#ffcc00;font-size:16px;font-weight:800;min-height:60px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.5;flex-wrap:wrap;gap:6px;margin-top:14px}
+.slot-msg .win-line{background:rgba(255,204,0,.15);border:2px solid var(--gold);border-radius:6px;padding:4px 10px;margin:4px;display:inline-block;font-size:13px}
+.slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:64px;font-weight:900;text-shadow:0 0 40px currentColor,0 0 80px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
 .slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .5s infinite alternate}
 @keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.1)}}
-.slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,255,.2),rgba(255,204,0,.2));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:8px}
+.slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,255,.2),rgba(255,204,0,.2));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:10px}
 .slot-freespin.show{opacity:1}
-.slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:28px;font-weight:900;color:#ff00ff;text-shadow:0 0 20px #ff00ff,0 0 40px #ff00ff;animation:fsFlash .5s infinite alternate}
+.slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:36px;font-weight:900;color:#ff00ff;text-shadow:0 0 25px #ff00ff,0 0 50px #ff00ff;animation:fsFlash .5s infinite alternate}
 @keyframes fsFlash{0%{opacity:.5}100%{opacity:1}}
 
 /* ===== TRANSFER / BUY / HISTORY LIST ===== */
-.tab-bar{display:flex;gap:8px;background:var(--surface-2);border-radius:var(--r-pill);padding:5px;margin-bottom:18px;overflow-x:auto}
-.tab-bar button{padding:10px 16px;border:none;background:transparent;font-weight:800;font-size:12.5px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
+.tab-bar{display:flex;gap:10px;background:var(--surface-2);border-radius:var(--r-pill);padding:6px;margin-bottom:22px;overflow-x:auto}
+.tab-bar button{padding:12px 20px;border:none;background:transparent;font-weight:800;font-size:15px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
 .tab-bar button.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
 
-.info-row{margin-bottom:16px}
-.info-row label{display:block;font-size:11.5px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
-.info-row input,.info-row select,.info-row textarea{width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;font-size:14.5px;background:var(--surface-2);outline:none;color:var(--text);font-family:inherit;font-weight:600;transition:.15s}
+.info-row{margin-bottom:20px}
+.info-row label{display:block;font-size:14px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.info-row input,.info-row select,.info-row textarea{width:100%;padding:16px 20px;border:2px solid var(--border);border-radius:14px;font-size:16px;background:var(--surface-2);outline:none;color:var(--text);font-family:inherit;font-weight:600;transition:.15s}
 .info-row input:focus,.info-row select:focus,.info-row textarea:focus{border-color:var(--wc-blue);background:#FFF;box-shadow:0 0 0 4px rgba(0,180,216,.1)}
-.info-row textarea{resize:vertical;min-height:80px}
+.info-row textarea{resize:vertical;min-height:100px}
 
-.btn{padding:13px 20px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn{padding:16px 24px;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.3)}
-.btn-secondary{background:var(--surface-2);color:var(--text);border:1.5px solid var(--border)}
+.btn-secondary{background:var(--surface-2);color:var(--text);border:2px solid var(--border)}
 .btn-danger{background:linear-gradient(135deg,#FF4757,#FF6B7A);color:#fff}
 .btn-gold{background:var(--grad-gold);color:#fff;box-shadow:0 4px 14px rgba(255,184,0,.3)}
 .btn-block{width:100%}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-.history-list{display:flex;flex-direction:column;gap:8px}
-.tx-row{background:#FFF;border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh-sm);transition:.2s}
-.tx-row:hover{transform:translateX(3px);box-shadow:var(--sh-md)}
-.tx-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--surface-2)}
+.history-list{display:flex;flex-direction:column;gap:12px}
+.tx-row{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:18px;box-shadow:var(--sh-sm);transition:.2s}
+.tx-row:hover{transform:translateX(4px);box-shadow:var(--sh-md)}
+.tx-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:var(--surface-2)}
 .tx-icon.plus{background:linear-gradient(135deg,#D0F9E8,#A8EFD3);color:#00A378}
 .tx-icon.minus{background:linear-gradient(135deg,#FFE4E4,#FFC8C8);color:#E63946}
 .tx-body{flex:1;min-width:0}
-.tx-body .tx-title{font-size:13.5px;font-weight:800;margin-bottom:2px}
-.tx-body .tx-desc{font-size:11.5px;color:var(--text-2);font-weight:600}
-.tx-amount{font-size:15px;font-weight:900;flex-shrink:0;display:flex;align-items:center;gap:5px}
+.tx-body .tx-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.tx-body .tx-desc{font-size:13px;color:var(--text-2);font-weight:600}
+.tx-amount{font-size:20px;font-weight:900;flex-shrink:0;display:flex;align-items:center;gap:6px}
 .tx-amount.plus{color:#00A378}
 .tx-amount.minus{color:#E63946}
-.tx-amount .coin-icon{width:18px;height:18px}
+.tx-amount .coin-icon{width:24px;height:24px}
 .tx-amount .coin-icon img{width:100%;height:100%;object-fit:contain}
 
-.empty-state{text-align:center;padding:50px 20px;color:var(--text-2)}
-.empty-state .em{font-size:56px;display:block;margin-bottom:14px;opacity:.5}
-.empty-state h3{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px}
-.empty-state p{font-size:13px;font-weight:600}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-2)}
+.empty-state .em{font-size:72px;display:block;margin-bottom:20px;opacity:.5}
+.empty-state h3{font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px}
+.empty-state p{font-size:15px;font-weight:600}
 
 /* ===== PACKAGE / REQUEST CARDS ===== */
-.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px}
-.pkg-card{background:#FFF;border:2px solid var(--border);border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;position:relative;transition:.2s}
-.pkg-card:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
-.pkg-card.selected{border-color:var(--wc-gold);background:rgba(255,184,0,.06);box-shadow:0 6px 20px rgba(255,184,0,.2)}
-.pkg-coins{font-size:22px;font-weight:900;color:#FF8C00;line-height:1.1;margin-bottom:6px}
-.pkg-price{font-size:13px;color:var(--text-2);font-weight:800}
-.pkg-bonus{position:absolute;top:-8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px}
-.req-card{background:#FFF;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.pkg-card{background:#FFF;border:3px solid var(--border);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;position:relative;transition:.2s}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.pkg-card.selected{border-color:var(--wc-gold);background:rgba(255,184,0,.06);box-shadow:0 8px 24px rgba(255,184,0,.2)}
+.pkg-coins{font-size:28px;font-weight:900;color:#FF8C00;line-height:1.1;margin-bottom:8px}
+.pkg-price{font-size:16px;color:var(--text-2);font-weight:800}
+.pkg-bonus{position:absolute;top:-10px;right:12px;background:var(--red);color:#fff;font-size:12px;font-weight:900;padding:4px 12px;border-radius:14px}
+.req-card{background:#FFF;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px}
 .req-card .req-body{flex:1;min-width:0}
-.req-card .req-title{font-size:13.5px;font-weight:800;margin-bottom:2px}
-.req-card .req-sub{font-size:11.5px;color:var(--text-2);font-weight:600}
+.req-card .req-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.req-card .req-sub{font-size:13px;color:var(--text-2);font-weight:600}
 
 /* ===== MODALS ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(10,14,39,.6);display:none;align-items:center;justify-content:center;z-index:9000;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,14,39,.7);display:none;align-items:center;justify-content:center;z-index:9000;padding:20px;backdrop-filter:blur(6px)}
 .modal-overlay.show{display:flex}
-.modal{background:#FFF;border-radius:22px;width:100%;max-width:440px;max-height:88vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:popIn .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
-.modal.modal-lg{max-width:560px}
+.modal{background:#FFF;border-radius:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:popIn .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+.modal.modal-lg{max-width:600px}
 @keyframes popIn{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
-.modal-head{padding:20px 22px;border-bottom:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.modal-head h3{font-size:18px;font-weight:900;letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
-.modal-close{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--text-2);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:inherit}
+.modal-head{padding:24px 26px;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-head h3{font-size:22px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:10px}
+.modal-close{background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--text-2);width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:inherit}
 .modal-close:hover{background:var(--surface-2)}
-.modal-body{padding:22px;flex:1;overflow-y:auto}
-.modal-foot{padding:16px 22px 22px;display:flex;gap:10px;flex-shrink:0}
+.modal-body{padding:26px;flex:1;overflow-y:auto}
+.modal-foot{padding:20px 26px 26px;display:flex;gap:12px;flex-shrink:0}
 
 /* ===== ADMIN ===== */
 #adminScreen{display:none;min-height:100vh;background:var(--bg);position:fixed;inset:0;z-index:1000;overflow-y:auto}
 #adminScreen.active{display:block}
-.admin-header{background:var(--grad);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
-.admin-header h2{font-size:18px;font-weight:900}
-.admin-body{padding:24px;max-width:1200px;margin:0 auto}
-.admin-tabs{display:flex;gap:8px;background:#FFF;border-radius:var(--r-pill);padding:6px;margin-bottom:18px;overflow-x:auto;box-shadow:var(--sh-sm)}
-.admin-tab{padding:11px 18px;border:none;background:transparent;font-weight:800;font-size:12.5px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
+.admin-header{background:var(--grad);color:#fff;padding:20px 28px;display:flex;justify-content:space-between;align-items:center}
+.admin-header h2{font-size:24px;font-weight:900}
+.admin-body{padding:30px;max-width:1200px;margin:0 auto}
+.admin-tabs{display:flex;gap:10px;background:#FFF;border-radius:var(--r-pill);padding:8px;margin-bottom:24px;overflow-x:auto;box-shadow:var(--sh-sm)}
+.admin-tab{padding:14px 22px;border:none;background:transparent;font-weight:800;font-size:15px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
 .admin-tab.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
 .admin-panel{display:none}
 .admin-panel.active{display:block}
-.admin-card{background:#FFF;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh-sm)}
-.user-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface-2);border-radius:12px;margin-bottom:8px}
-.user-row .ur-av{width:42px;height:42px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}
+.admin-card{background:#FFF;border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:18px;box-shadow:var(--sh-sm)}
+.user-row{display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface-2);border-radius:16px;margin-bottom:10px}
+.user-row .ur-av{width:52px;height:52px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0}
 .user-row .ur-body{flex:1;min-width:0}
-.user-row .ur-name{font-size:14px;font-weight:800;margin-bottom:2px}
-.user-row .ur-sub{font-size:11.5px;color:var(--text-2);font-weight:600}
+.user-row .ur-name{font-size:16px;font-weight:800;margin-bottom:4px}
+.user-row .ur-sub{font-size:13px;color:var(--text-2);font-weight:600}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .sidebar{width:70px;padding:18px 8px}
+  .sidebar{width:80px;padding:20px 10px}
   .sidebar-logo h1,.sidebar-logo p,.nav-section,.nav-item span:not(.ni-icon),.wallet-row .wr-meta,.sb-user h5,.sb-user p{display:none}
   .sidebar-logo{justify-content:center;padding:0}
-  .nav-item,.wallet-row{justify-content:center;padding:12px 8px}
-  .main-content{margin-left:70px;padding:18px 14px 30px}
+  .nav-item,.wallet-row{justify-content:center;padding:14px 10px}
+  .main-content{margin-left:80px;padding:20px 18px 40px}
 }
 @media(max-width:600px){
-  .slot-wrapper{padding:12px;border-radius:18px}
-  .slot-title{font-size:26px;letter-spacing:4px}
-  .sym{font-size:22px}.sym svg{max-width:26px;max-height:26px}
-  .slot-btns{width:78px}
-  .slot-spin{font-size:14px;padding:16px 0}
-  .slot-auto,.slot-turbo{font-size:11.5px;padding:10px 0}
-  .balance-amount{font-size:32px}
-  .balance-amount .coin-icon{width:28px;height:28px}
-  .balance-action{padding:10px 8px;font-size:12px}
-  .auth-box{padding:30px 22px 24px}
+  .slot-wrapper{padding:14px;border-radius:20px}
+  .slot-title{font-size:32px;letter-spacing:5px}
+  .sym{font-size:26px}.sym svg{max-width:32px;max-height:32px}
+  .slot-btns{width:85px}
+  .slot-spin{font-size:16px;padding:20px 0}
+  .slot-auto,.slot-turbo{font-size:13px;padding:12px 0}
+  .balance-amount{font-size:38px}
+  .balance-amount .coin-icon{width:34px;height:34px}
+  .balance-action{padding:12px 10px;font-size:14px}
+  .auth-box{padding:32px 24px 28px}
+  .auth-box h1{font-size:26px}
+  .reels-table td{border-width:1px}
 }
 </style>
 </head>
@@ -391,7 +391,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
       <p class="auth-err" id="signupErr"></p>
       <button type="submit" class="auth-btn" id="signupBtn">Sign Up</button>
     </form>
-    <div class="auth-footer">WC Wallet · v1.1.0</div>
+    <div class="auth-footer">WC Wallet · v1.2.0</div>
   </div>
 </div>
 
@@ -514,7 +514,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
           </div>
         </div>
         <div class="slot-title">SLOT</div>
-        <div class="slot-subtitle">WCCoin · 5×5 · WIN 30%</div>
+        <div class="slot-subtitle">WCCoin · 5×5 · WIN 40%</div>
         <div class="slot-info-row">
           <div class="slot-info-item"><div class="lbl">Bet</div><div class="val" id="slotBetDisplay">10</div></div>
           <div class="slot-info-item"><div class="lbl">Win</div><div class="val" id="slotWinDisplay">0</div></div>
@@ -566,9 +566,9 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
           <label>မှတ်ချက် (optional)</label>
           <input type="text" id="trNote" placeholder="မှတ်ချက်">
         </div>
-        <div style="background:var(--surface-2);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;font-size:13px;font-weight:700">
+        <div style="background:var(--surface-2);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;justify-content:space-between;font-size:16px;font-weight:700">
           <span>သင့်လက်ကျန်:</span>
-          <span style="color:var(--wc-blue)"><span id="trBalance">0</span> WCCoin</span>
+          <span style="color:var(--wc-blue);display:flex;align-items:center;gap:6px"><span id="trBalance">0</span> WCCoin</span>
         </div>
         <button class="btn btn-primary btn-block" id="doTransferBtn" onclick="doTransfer()">💸 လွှဲပို့မည်</button>
       </div>
@@ -577,7 +577,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
     <!-- BUY WCCoin -->
     <div class="page-view" id="page-buy">
       <div class="section-header"><h3>🛒 Buy WCCoin</h3></div>
-      <p style="font-size:13px;color:var(--text-2);font-weight:600;margin-bottom:16px">Package ရွေးပြီး request ပို့ပါ။ Admin approve လုပ်ပြီး WCCoin ထည့်ပေးပါမယ်။</p>
+      <p style="font-size:15px;color:var(--text-2);font-weight:600;margin-bottom:20px">Package ရွေးပြီး request ပို့ပါ။ Admin approve လုပ်ပြီး WCCoin ထည့်ပေးပါမယ်။</p>
       <div class="pkg-grid" id="pkgGrid"></div>
       <div class="admin-card">
         <div class="info-row">
@@ -586,7 +586,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
         </div>
         <button class="btn btn-gold btn-block" id="reqBuyBtn" onclick="requestBuyCoins()">🛒 Buy Request ပို့မည်</button>
       </div>
-      <div class="section-header" style="margin-top:24px"><h3>📋 ကျွန်ုပ်၏ Requests</h3></div>
+      <div class="section-header" style="margin-top:30px"><h3>📋 ကျွန်ုပ်၏ Requests</h3></div>
       <div id="myBuyRequests"></div>
     </div>
 
@@ -618,13 +618,6 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
             <option value="off">🔕 Disabled</option>
           </select>
         </div>
-        <div class="info-row">
-          <label>Language</label>
-          <select id="setLang">
-            <option value="my">မြန်မာ</option>
-            <option value="en">English</option>
-          </select>
-        </div>
         <button class="btn btn-primary btn-block" onclick="saveSettings()">💾 Save</button>
       </div>
       <div class="admin-card">
@@ -633,7 +626,7 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
           <input type="text" id="setVersion" readonly>
         </div>
         <button class="btn btn-secondary btn-block" onclick="checkUpdateManually()">🔄 Check for Update</button>
-        <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="openAdminLogin()">👑 Admin Panel</button>
+        <button class="btn btn-secondary btn-block" style="margin-top:12px" onclick="openAdminLogin()">👑 Admin Panel</button>
       </div>
     </div>
   </main>
@@ -643,13 +636,14 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
 <div id="adminScreen">
   <div class="admin-header">
     <h2>👑 WC Admin</h2>
-    <button class="logout-btn" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3)" onclick="closeAdmin()">Close</button>
+    <button class="logout-btn" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);font-size:16px" onclick="closeAdmin()">Close</button>
   </div>
   <div class="admin-body">
     <div class="admin-tabs">
       <button class="admin-tab active" data-tab="users">👥 Users</button>
       <button class="admin-tab" data-tab="buyreq">🛒 Buy Requests</button>
-      <button class="admin-tab" data-tab="coin">💰 Add/Deduct WCCoin</button>
+      <button class="admin-tab" data-tab="coin">💰 Add/Deduct</button>
+      <button class="admin-tab" data-tab="packages">📦 Packages</button>
       <button class="admin-tab" data-tab="version">🚀 Version</button>
     </div>
     <div class="admin-panel active" id="admPanel-users">
@@ -667,11 +661,16 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
         <button class="btn btn-primary btn-block" onclick="adminApplyCoins()">✅ အတည်ပြု</button>
       </div>
     </div>
+    <div class="admin-panel" id="admPanel-packages">
+      <div class="admin-card" id="pkgEditor">
+        <!-- Packages Editor Rendered by JS -->
+      </div>
+    </div>
     <div class="admin-panel" id="admPanel-version">
       <div class="admin-card">
-        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.0.1"></div>
+        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.2.0"></div>
         <div class="info-row"><label>Release Notes</label><textarea id="admNotes" placeholder="Bug fixes..."></textarea></div>
-        <div class="info-row" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="admForce" style="width:20px;height:20px"><label style="margin:0">Force Update</label></div>
+        <div class="info-row" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="admForce" style="width:24px;height:24px"><label style="margin:0;font-size:16px;text-transform:none">Force Update</label></div>
         <button class="btn btn-primary btn-block" onclick="adminSaveVersion()">🚀 Save Version</button>
       </div>
     </div>
@@ -704,12 +703,12 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
       <button class="modal-close" onclick="closeModal('updateModal')">✕</button>
     </div>
     <div class="modal-body" style="text-align:center">
-      <div style="width:90px;height:90px;border-radius:26px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:42px;color:#fff;margin-bottom:16px;animation:pulseUpdate 2s infinite">🚀</div>
-      <h2 style="font-size:22px;font-weight:900;margin-bottom:6px">ဗားရှင်းအသစ် ထွက်ပါပြီ</h2>
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Version <strong id="newVerLabel" style="color:var(--wc-blue)">1.0.0</strong></p>
+      <div style="width:100px;height:100px;border-radius:30px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:48px;color:#fff;margin-bottom:20px;animation:pulseUpdate 2s infinite">🚀</div>
+      <h2 style="font-size:26px;font-weight:900;margin-bottom:8px">ဗားရှင်းအသစ် ထွက်ပါပြီ</h2>
+      <p style="font-size:15px;color:var(--text-2);margin-bottom:20px">Version <strong id="newVerLabel" style="color:var(--wc-blue)">1.0.0</strong></p>
       <div class="info-row" style="text-align:left">
         <label>Release Notes</label>
-        <div id="releaseNotes" style="font-size:13px;line-height:1.7;padding:12px;background:var(--surface-2);border-radius:10px;min-height:60px"></div>
+        <div id="releaseNotes" style="font-size:15px;line-height:1.7;padding:16px;background:var(--surface-2);border-radius:12px;min-height:80px"></div>
       </div>
     </div>
     <div class="modal-foot" style="flex-direction:column">
@@ -727,9 +726,9 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
       <button class="modal-close" onclick="closeModal('notificationPromptModal')">✕</button>
     </div>
     <div class="modal-body" style="text-align:center">
-      <div style="font-size:64px;margin-bottom:16px">🔔</div>
-      <h2 style="font-size:18px;font-weight:900;margin-bottom:8px">WCCoin ရောက်တဲ့အခါ အသိပေးမယ်</h2>
-      <p style="font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:16px">Notification ဖွင့်ထားရင် WCCoin ရတဲ့အခါ ဖုန်းပေါ်မှာ အသိပေးပါမယ်</p>
+      <div style="font-size:72px;margin-bottom:20px">🔔</div>
+      <h2 style="font-size:20px;font-weight:900;margin-bottom:10px">WCCoin ရောက်တဲ့အခါ အသိပေးမယ်</h2>
+      <p style="font-size:15px;color:var(--text-2);line-height:1.6;margin-bottom:20px">Notification ဖွင့်ထားရင် WCCoin ရတဲ့အခါ ဖုန်းပေါ်မှာ အသိပေးပါမယ်</p>
     </div>
     <div class="modal-foot" style="flex-direction:column">
       <button class="btn btn-primary btn-block" onclick="enableNotifications()">🔔 Enable Notifications</button>
@@ -749,9 +748,9 @@ body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--te
    CONFIG
    ============================================================ */
 const COIN_ICON_URL = '';  // ← သင့် WCCoin icon link ဒီမှာထည့်ပါ
-const ADMIN_PHONE = '09672124213';  // ← Admin phone (လိုအပ်ရင် ပြောင်း)
-const ADMIN_PASSWORD = 'admin123';   // ← Admin password (လိုအပ်ရင် ပြောင်း)
-const APP_VERSION = '1.1.0';
+const ADMIN_PHONE = '09672124213';  // ← Admin phone
+const ADMIN_PASSWORD = 'admin123';   // ← Admin password
+const APP_VERSION = '1.2.0';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQJ4zzAxZ_aSuGBxwegTw_dtfaW8oLJnU",
@@ -769,7 +768,7 @@ const db = firebase.database();
 
 const SLOT_MIN_BET = 5;
 const SLOT_MAX_BET = 5000;
-const SLOT_WIN_RATE = 30;
+const SLOT_WIN_RATE = 40; // ✅ အနိုင်ရနိုင်ခြေ ၄၀% သတ်မှတ်ထား
 const DAILY_REWARDS = [10, 30, 50, 100];
 
 /* ============================================================
@@ -794,7 +793,6 @@ function applyCoinIcons() {
   });
 }
 
-// Normalize phone to email for Firebase Auth
 function toEmail(phone) {
   const digits = String(phone || '').replace(/\D/g, '');
   return digits + '@wcwallet.app';
@@ -812,24 +810,19 @@ function displayPhone(p) {
 /* ============================================================
    STATE
    ============================================================ */
-let currentUser = null;  // { uid, name, phone, coin_balance }
+let currentUser = null; 
 let coinBalance = 0;
 let todayEarned = 0;
 let totalGamesPlayed = 0;
 let totalWins = 0;
 let txHistory = [];
-let settings = { name: 'Player', notifications: 'on', lang: 'my' };
+let settings = { name: 'Player', notifications: 'on' };
 let userDataRef = null;
 let txRef = null;
 let isAdmin = false;
 
 let selectedPkgId = null;
-let allCoinPackages = {
-  pkg100: { coins: 100, price: '1,000 Ks', bonus: 0, order: 1 },
-  pkg500: { coins: 500, price: '4,500 Ks', bonus: 50, order: 2 },
-  pkg1000: { coins: 1000, price: '8,500 Ks', bonus: 150, order: 3 },
-  pkg5000: { coins: 5000, price: '40,000 Ks', bonus: 1000, order: 4 }
-};
+let allCoinPackages = {}; // Database ကနေ ဆွဲယူမည်
 
 let slotState = {
   credit: 0, bet: 10, baseBet: 10, spinning: false, auto: false, turbo: false,
@@ -851,10 +844,10 @@ function toast(msg, type = 'info') {
   const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
   el.innerHTML = '<span>' + icon + '</span><span>' + esc(msg) + '</span>';
   c.appendChild(el);
-  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3200);
+  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3500);
 }
 
-function showCoinReward(amount, reason) {
+function showCoinReward(amount) {
   const el = $('coinReward'), txt = $('coinRewardText'), icn = $('coinRewardIcon');
   if (!el || !txt) return;
   if (icn) icn.src = getCoinSrc();
@@ -879,7 +872,7 @@ function showPhoneNotification(title, body) {
   try {
     const n = new Notification(title, { body, icon: getCoinSrc(), badge: getCoinSrc(), tag: 'wccoin', renotify: true, vibrate: [200,100,200] });
     setTimeout(() => { try { n.close(); } catch(e){} }, 6000);
-  } catch(e) { console.warn('Notif err:', e); }
+  } catch(e) {}
 }
 
 async function enableNotifications() {
@@ -889,7 +882,6 @@ async function enableNotifications() {
     toast('🔔 Notifications enabled!', 'success');
     settings.notifications = 'on';
     saveSettingsLocal();
-    if ($('setNotif')) $('setNotif').value = 'on';
   } else toast('⚠️ Permission denied', 'error');
 }
 
@@ -931,7 +923,6 @@ async function signup(name, phone, password) {
   const email = toEmail(phone);
   const cred = await auth.createUserWithEmailAndPassword(email, password);
   const uid = cred.user.uid;
-  // Create user record
   await db.ref('users/' + uid).set({
     uid, name, phone: displayPhone(phone),
     coin_balance: 100, today_earned: 0, games_played: 0, total_wins: 0,
@@ -983,7 +974,7 @@ function loadUserData() {
     settings.name = data.name || settings.name;
     isAdmin = data.isAdmin === true || displayPhone(currentUser.phone) === ADMIN_PHONE;
     updateAllUI();
-  }, err => console.warn('[userData]', err.message));
+  });
 }
 
 function loadHistory() {
@@ -994,7 +985,7 @@ function loadHistory() {
     const data = snap.val() || {};
     txHistory = Object.entries(data).map(([id, tx]) => Object.assign({ id }, tx)).sort((a,b) => (b.ts||0) - (a.ts||0));
     renderHistoryList();
-  }, err => console.warn('[tx]', err.message));
+  });
 }
 
 async function addCoins(amount, reason, meta = {}) {
@@ -1013,7 +1004,7 @@ async function addCoins(amount, reason, meta = {}) {
       await db.ref('users/' + currentUser.uid + '/today_earned').transaction(c => (c || 0) + amount).catch(()=>{});
     }
     return true;
-  } catch(e) { console.error('[addCoins]', e); return false; }
+  } catch(e) { return false; }
 }
 
 /* ============================================================
@@ -1021,30 +1012,29 @@ async function addCoins(amount, reason, meta = {}) {
    ============================================================ */
 function updateAllUI() {
   const fmtCoins = fmt(coinBalance);
-  $('mainBalance') && ($('mainBalance').textContent = fmtCoins);
-  $('slotCredit') && ($('slotCredit').textContent = fmtCoins);
-  $('statTotal') && ($('statTotal').textContent = fmtCoins);
-  $('statToday') && ($('statToday').textContent = fmt(todayEarned));
-  $('statGames') && ($('statGames').textContent = fmt(totalGamesPlayed));
-  $('statWins') && ($('statWins').textContent = fmt(totalWins));
-  $('trBalance') && ($('trBalance').textContent = fmtCoins);
-  $('balanceSub') && ($('balanceSub').textContent = todayEarned > 0 ? '📈 ယနေ့ +' + fmt(todayEarned) + ' WCCoin' : '💎 သင်ရဲ့ လက်ကျန် WCCoin');
+  if($('mainBalance')) $('mainBalance').textContent = fmtCoins;
+  if($('slotCredit')) $('slotCredit').textContent = fmtCoins;
+  if($('statTotal')) $('statTotal').textContent = fmtCoins;
+  if($('statToday')) $('statToday').textContent = fmt(todayEarned);
+  if($('statGames')) $('statGames').textContent = fmt(totalGamesPlayed);
+  if($('statWins')) $('statWins').textContent = fmt(totalWins);
+  if($('trBalance')) $('trBalance').textContent = fmtCoins;
+  if($('balanceSub')) $('balanceSub').textContent = todayEarned > 0 ? '📈 ယနေ့ +' + fmt(todayEarned) + ' WCCoin' : '💎 သင်ရဲ့ လက်ကျန် WCCoin';
+  
   const name = currentUser ? (currentUser.name || 'Player') : 'Player';
-  $('userName') && ($('userName').textContent = name);
-  $('sbAvatar') && ($('sbAvatar').textContent = name.charAt(0).toUpperCase());
-  $('topAvatar') && ($('topAvatar').textContent = name.charAt(0).toUpperCase());
-  $('userPhone') && ($('userPhone').textContent = currentUser ? currentUser.phone || '-' : '-');
-  $('setName') && ($('setName').value = currentUser ? currentUser.name || '' : '');
-  $('setPhone') && ($('setPhone').value = currentUser ? currentUser.phone || '' : '');
-  $('setNotif') && ($('setNotif').value = settings.notifications);
-  $('setLang') && ($('setLang').value = settings.lang);
-  $('setVersion') && ($('setVersion').value = APP_VERSION);
+  if($('userName')) $('userName').textContent = name;
+  if($('sbAvatar')) $('sbAvatar').textContent = name.charAt(0).toUpperCase();
+  if($('topAvatar')) $('topAvatar').textContent = name.charAt(0).toUpperCase();
+  if($('userPhone')) $('userPhone').textContent = currentUser ? currentUser.phone || '-' : '-';
+  if($('setName')) $('setName').value = currentUser ? currentUser.name || '' : '';
+  if($('setPhone')) $('setPhone').value = currentUser ? currentUser.phone || '' : '';
+  if($('setNotif')) $('setNotif').value = settings.notifications;
+  if($('setVersion')) $('setVersion').value = APP_VERSION;
+  
   slotState.credit = coinBalance;
   renderSidebarWallets();
   renderWalletCards();
   renderPkgGrid();
-  // Admin button visibility
-  document.querySelectorAll('[data-admin-only]').forEach(el => el.style.display = isAdmin ? '' : 'none');
   updateSlotVIP();
 }
 
@@ -1095,7 +1085,11 @@ function renderHistoryList() {
 function renderPkgGrid() {
   const wrap = $('pkgGrid');
   if (!wrap) return;
-  const items = Object.entries(allCoinPackages).sort((a,b) => a[1].order - b[1].order);
+  const items = Object.entries(allCoinPackages).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  if (items.length === 0) {
+    wrap.innerHTML = '<p style="color:var(--text-2);font-size:15px;padding:20px 0;grid-column:1/-1;text-align:center">Package မရှိသေးပါ။ (Admin မှ ထည့်သွင်းပါ)</p>';
+    return;
+  }
   wrap.innerHTML = items.map(([id, p]) => `
     <div class="pkg-card ${selectedPkgId === id ? 'selected' : ''}" data-pkg="${id}">
       ${p.bonus ? `<span class="pkg-bonus">+${p.bonus}</span>` : ''}
@@ -1118,7 +1112,7 @@ function updateSlotVIP() {
   else if (c >= 20000) icon = '👑';
   else if (c >= 5000) icon = '🥇';
   else if (c >= 1000) icon = '🥈';
-  $('slotVipDisplay') && ($('slotVipDisplay').textContent = icon);
+  if($('slotVipDisplay')) $('slotVipDisplay').textContent = icon;
 }
 
 /* ============================================================
@@ -1141,8 +1135,8 @@ function gotoPage(page) {
   const nav = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (nav) nav.classList.add('active');
   const meta = PAGE_TITLES[page] || { title: 'WC Wallet', sub: '' };
-  $('pageTitle') && ($('pageTitle').textContent = meta.title);
-  $('pageSubtitle') && ($('pageSubtitle').textContent = meta.sub);
+  if($('pageTitle')) $('pageTitle').textContent = meta.title;
+  if($('pageSubtitle')) $('pageSubtitle').textContent = meta.sub;
   if (page === 'history') loadHistory();
   if (page === 'play') syncSlotCredit();
   if (page === 'buy') { renderPkgGrid(); loadMyBuyRequests(); }
@@ -1158,8 +1152,7 @@ function closeAllModals() { document.querySelectorAll('.modal-overlay.show').for
 async function saveSettings() {
   const name = $('setName').value.trim() || 'Player';
   const notif = $('setNotif').value;
-  const lang = $('setLang').value;
-  settings = Object.assign(settings, { name, notifications: notif, lang });
+  settings = Object.assign(settings, { name, notifications: notif });
   saveSettingsLocal();
   if (currentUser) await db.ref('users/' + currentUser.uid).update({ name }).catch(()=>{});
   updateAllUI();
@@ -1183,27 +1176,23 @@ async function doTransfer() {
   const btn = $('doTransferBtn');
   btn.disabled = true;
   try {
-    // Find recipient
     const usersSnap = await db.ref('users').orderByChild('phone').equalTo(displayPhone(phoneInput)).once('value');
     let recipient = null;
     usersSnap.forEach(child => { if (!recipient) recipient = Object.assign({ _key: child.key }, child.val()); });
     if (!recipient) throw new Error('လက်ခံမည့်သူ မတွေ့ပါ');
     if (recipient.uid === currentUser.uid) throw new Error('ကိုယ့်ကိုယ် လွှဲလို့မရ');
     
-    // Deduct from sender
     const ok = await addCoins(-amt, 'transfer_sent', { desc: '💸 Transfer to ' + recipient.name, to: recipient.uid, toName: recipient.name, note });
     if (!ok) throw new Error('လွှဲမရပါ');
     
-    // Add to recipient
     const ok2 = await addCoinsToUser(recipient.uid, amt, 'transfer_received', { desc: '💸 Transfer from ' + currentUser.name, from: currentUser.uid, fromName: currentUser.name, note });
     if (!ok2) {
-      // Rollback
       await addCoins(amt, 'transfer_refund', { desc: 'Transfer failed - refund' });
       throw new Error('လွှဲမရပါ (rollback)');
     }
     
     toast('✅ ' + fmt(amt) + ' WCCoin လွှဲပြီး', 'success');
-    showCoinReward(-amt, 'transfer_sent');
+    showCoinReward(-amt);
     showPhoneNotification('💸 Transfer sent', '-' + fmt(amt) + ' WCCoin to ' + recipient.name);
     $('trPhone').value = '';
     $('trAmount').value = '';
@@ -1271,7 +1260,7 @@ function loadMyBuyRequests() {
       const statusColor = r.status === 'approved' ? '#00D9A3' : r.status === 'rejected' ? '#FF4757' : '#FFB800';
       const statusIcon = r.status === 'approved' ? '✅' : r.status === 'rejected' ? '❌' : '⏳';
       return `<div class="req-card">
-        <div style="font-size:24px">${statusIcon}</div>
+        <div style="font-size:28px">${statusIcon}</div>
         <div class="req-body">
           <div class="req-title">${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ' bonus)' : ''} · ${esc(r.price || '')}</div>
           <div class="req-sub">${new Date(r.ts || Date.now()).toLocaleString()} · <span style="color:${statusColor};font-weight:800">${esc(r.status || 'pending')}</span></div>
@@ -1282,7 +1271,7 @@ function loadMyBuyRequests() {
 }
 
 /* ============================================================
-   SLOT GAME (unchanged core)
+   SLOT GAME
    ============================================================ */
 const SYMBOLS = ['cherry','lemon','orange','plum','watermelon','bell','seven','diamond','BAR','star','grapes','coin','crown','horseshoe','clover'];
 const SCATTER_SYMBOL = 'bomb';
@@ -1314,9 +1303,9 @@ const SVG_ICONS = {
 
 function syncSlotCredit() {
   slotState.credit = coinBalance;
-  $('slotCredit') && ($('slotCredit').textContent = fmt(coinBalance));
-  $('slotBetValue') && ($('slotBetValue').textContent = fmt(slotState.bet));
-  $('slotBetDisplay') && ($('slotBetDisplay').textContent = fmt(slotState.bet));
+  if($('slotCredit')) $('slotCredit').textContent = fmt(coinBalance);
+  if($('slotBetValue')) $('slotBetValue').textContent = fmt(slotState.bet);
+  if($('slotBetDisplay')) $('slotBetDisplay').textContent = fmt(slotState.bet);
   updateSlotVIP();
 }
 
@@ -1348,20 +1337,21 @@ function slotSpin() {
   }
   if (!slotState.isFreeSpin) {
     slotState.credit -= slotState.bet;
-    $('slotCredit') && ($('slotCredit').textContent = fmt(slotState.credit));
+    if($('slotCredit')) $('slotCredit').textContent = fmt(slotState.credit);
     addCoins(-slotState.bet, 'bet', { desc: '🎰 Slot Bet', game: 'Slot' });
   }
-  $('slotWinDisplay') && ($('slotWinDisplay').textContent = '0');
+  if($('slotWinDisplay')) $('slotWinDisplay').textContent = '0';
   slotState.spinning = true;
-  $('slotSpinBtn') && ($('slotSpinBtn').disabled = true);
-  $('slotAutoBtn') && ($('slotAutoBtn').disabled = true);
-  $('slotMessage') && ($('slotMessage').textContent = slotState.isFreeSpin ? `🎁 Free Spin! (${slotState.freeSpins})` : '🎰 လှည့်နေသည်...');
+  if($('slotSpinBtn')) $('slotSpinBtn').disabled = true;
+  if($('slotAutoBtn')) $('slotAutoBtn').disabled = true;
+  if($('slotMessage')) $('slotMessage').textContent = slotState.isFreeSpin ? `🎁 Free Spin! (${slotState.freeSpins})` : '🎰 လှည့်နေသည်...';
   slotState.totalSpins++;
   totalGamesPlayed++;
   db.ref('users/' + currentUser.uid + '/games_played').set(totalGamesPlayed).catch(()=>{});
-  $('slotEffect') && $('slotEffect').classList.remove('show');
-  $('slotFreeSpin') && $('slotFreeSpin').classList.remove('show');
+  if($('slotEffect')) $('slotEffect').classList.remove('show');
+  if($('slotFreeSpin')) $('slotFreeSpin').classList.remove('show');
   document.querySelectorAll('.sym').forEach(el => el.classList.remove('win', 'scatter'));
+  
   const cols = [];
   for (let c = 0; c < 5; c++) {
     const col = [];
@@ -1372,9 +1362,11 @@ function slotSpin() {
     }
     cols.push(col);
   }
+  
   const results = [];
   let bombCount = 0;
   const winChance = Math.random() * 100 < SLOT_WIN_RATE;
+  
   for (let i = 0; i < 5; i++) {
     const colRes = [];
     for (let j = 0; j < 5; j++) {
@@ -1391,14 +1383,17 @@ function slotSpin() {
     }
     results.push(colRes);
   }
+  
   if (winChance && !slotState.isFreeSpin) {
     const low = ['cherry','lemon','orange','plum','watermelon'];
     const rs = low[Math.floor(Math.random() * low.length)];
     const row = Math.floor(Math.random() * 5);
     results[0][row] = rs; results[1][row] = rs; results[2][row] = rs;
   }
+  
   const spinDur = slotState.turbo ? 400 : 1200;
   const stopDelay = slotState.turbo ? 80 : 200;
+  
   for (let c = 0; c < 5; c++) {
     setTimeout(() => {
       for (let r = 0; r < 5; r++) {
@@ -1413,16 +1408,16 @@ function slotSpin() {
         setTimeout(() => {
           slotCheckWin(results);
           slotState.spinning = false;
-          $('slotSpinBtn') && ($('slotSpinBtn').disabled = false);
-          $('slotAutoBtn') && ($('slotAutoBtn').disabled = false);
+          if($('slotSpinBtn')) $('slotSpinBtn').disabled = false;
+          if($('slotAutoBtn')) $('slotAutoBtn').disabled = false;
           if (slotState.isFreeSpin) {
             slotState.freeSpins--;
             if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1200);
-            else { slotState.isFreeSpin = false; $('slotFreeSpin') && $('slotFreeSpin').classList.remove('show'); }
+            else { slotState.isFreeSpin = false; if($('slotFreeSpin')) $('slotFreeSpin').classList.remove('show'); }
           }
           if (slotState.auto && slotState.autoCount > 0) {
             slotState.autoCount--;
-            $('slotAutoBtn') && ($('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`);
+            if($('slotAutoBtn')) $('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`;
             if (slotState.autoCount > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1000);
             else slotStopAuto();
           }
@@ -1435,7 +1430,7 @@ function slotSpin() {
 function slotStopAuto() {
   slotState.auto = false;
   slotState.autoCount = 0;
-  $('slotAutoBtn') && ($('slotAutoBtn').innerHTML = '🔄<br>AUTO', $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff00ff,#cc00cc)');
+  if($('slotAutoBtn')) { $('slotAutoBtn').innerHTML = '🔄<br>AUTO'; $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff00ff,#cc00cc)'; }
 }
 
 function slotToggleAuto() {
@@ -1443,19 +1438,19 @@ function slotToggleAuto() {
   slotState.auto = !slotState.auto;
   if (slotState.auto) {
     slotState.autoCount = 10;
-    $('slotAutoBtn') && ($('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`, $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff0000,#cc0000)');
-    $('slotMessage') && ($('slotMessage').textContent = '🔄 Auto Spin!');
+    if($('slotAutoBtn')) { $('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`; $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff0000,#cc0000)'; }
+    if($('slotMessage')) $('slotMessage').textContent = '🔄 Auto Spin!';
     setTimeout(() => { if (!slotState.spinning && slotState.auto) slotSpin(); }, 300);
   } else {
     slotStopAuto();
-    $('slotMessage') && ($('slotMessage').textContent = 'Auto ရပ်');
+    if($('slotMessage')) $('slotMessage').textContent = 'Auto ရပ်';
   }
 }
 
 function slotToggleTurbo() {
   slotState.turbo = !slotState.turbo;
-  $('slotTurboBtn') && ($('slotTurboBtn').style.background = slotState.turbo ? 'linear-gradient(180deg,#ff0000,#cc0000)' : 'linear-gradient(180deg,#ffaa00,#cc8800)');
-  $('slotMessage') && ($('slotMessage').textContent = slotState.turbo ? '⚡ Turbo ON!' : 'Turbo OFF');
+  if($('slotTurboBtn')) $('slotTurboBtn').style.background = slotState.turbo ? 'linear-gradient(180deg,#ff0000,#cc0000)' : 'linear-gradient(180deg,#ffaa00,#cc8800)';
+  if($('slotMessage')) $('slotMessage').textContent = slotState.turbo ? '⚡ Turbo ON!' : 'Turbo OFF';
 }
 
 function slotChangeBet(delta) {
@@ -1463,7 +1458,7 @@ function slotChangeBet(delta) {
   let nb = slotState.bet + delta;
   if (nb < SLOT_MIN_BET) nb = SLOT_MIN_BET;
   if (nb > SLOT_MAX_BET) nb = SLOT_MAX_BET;
-  if (nb > coinBalance) { $('slotMessage') && ($('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'); return; }
+  if (nb > coinBalance) { if($('slotMessage')) $('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
   slotState.bet = nb;
   slotState.baseBet = nb;
   syncSlotCredit();
@@ -1473,10 +1468,10 @@ function slotQuickBet(mult) {
   if (slotState.spinning) return;
   const nb = slotState.baseBet * mult;
   if (nb > SLOT_MAX_BET) return;
-  if (nb > coinBalance) { $('slotMessage') && ($('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'); return; }
+  if (nb > coinBalance) { if($('slotMessage')) $('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
   slotState.bet = nb;
   syncSlotCredit();
-  $('slotMessage') && ($('slotMessage').textContent = `💰 ${fmt(nb)} WCCoin (${mult}×)`);
+  if($('slotMessage')) $('slotMessage').textContent = `💰 ${fmt(nb)} WCCoin (${mult}×)`;
 }
 
 function slotCheckWin(results) {
@@ -1495,7 +1490,7 @@ function slotCheckWin(results) {
     else bombFreeSpins = 10;
     slotState.freeSpins += bombFreeSpins;
     slotState.isFreeSpin = true;
-    $('slotFreeSpin') && $('slotFreeSpin').classList.add('show');
+    if($('slotFreeSpin')) $('slotFreeSpin').classList.add('show');
     scatterPos.forEach(p => {
       winPositions.push(p);
       const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
@@ -1507,6 +1502,7 @@ function slotCheckWin(results) {
   for (let col = 0; col < 5; col++) allLines.push({ positions: Array.from({length:5},(_,r)=>({col,row:r})), dir:'⬇️' });
   allLines.push({ positions: [{col:0,row:0},{col:1,row:1},{col:2,row:2},{col:3,row:3},{col:4,row:4}], dir:'↘️' });
   allLines.push({ positions: [{col:0,row:4},{col:1,row:3},{col:2,row:2},{col:3,row:1},{col:4,row:0}], dir:'↗️' });
+  
   allLines.forEach(line => {
     const syms = line.positions.map(p => results[p.col][p.row]);
     const firstSym = syms[0];
@@ -1528,15 +1524,16 @@ function slotCheckWin(results) {
       }
     }
   });
+  
   if (totalWin > 0) {
     slotState.credit += totalWin;
     slotState.totalWins += totalWin;
     totalWins += totalWin;
-    $('slotWinDisplay') && ($('slotWinDisplay').textContent = fmt(totalWin));
-    $('slotCredit') && ($('slotCredit').textContent = fmt(slotState.credit));
+    if($('slotWinDisplay')) $('slotWinDisplay').textContent = fmt(totalWin);
+    if($('slotCredit')) $('slotCredit').textContent = fmt(slotState.credit);
     addCoins(totalWin, 'game_reward', { desc: '🎰 Slot Win', game: 'Slot' }).then(ok => {
       if (ok) {
-        showCoinReward(totalWin, 'game_reward');
+        showCoinReward(totalWin);
         showPhoneNotification('🎉 WCCoin ရရှိပါပြီ!', '+' + fmt(totalWin) + ' WCCoin Slot ကနေ');
       }
     });
@@ -1548,7 +1545,7 @@ function slotCheckWin(results) {
     const eff = $('slotEffect');
     if (eff) { eff.textContent = winText; eff.style.color = color; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
     const linesHtml = winLines.map(l => `<span class="win-line">${l.dir} ${l.matchCount}×${fmt(l.winAmount)} WCCoin</span>`).join('');
-    $('slotMessage') && ($('slotMessage').innerHTML = `<div style="width:100%;text-align:center;margin-bottom:4px">${winText} = <span style="color:#ffcc00">${fmt(totalWin)} WCCoin</span></div><div style="width:100%;text-align:center">${linesHtml}</div>`);
+    if($('slotMessage')) $('slotMessage').innerHTML = `<div style="width:100%;text-align:center;margin-bottom:4px">${winText} = <span style="color:#ffcc00">${fmt(totalWin)} WCCoin</span></div><div style="width:100%;text-align:center">${linesHtml}</div>`;
     winPositions.forEach(p => {
       const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
       if (td) { const s = td.querySelector('.sym'); if (s && !s.classList.contains('scatter')) s.classList.add('win'); }
@@ -1556,6 +1553,7 @@ function slotCheckWin(results) {
     coinBalance = slotState.credit;
     updateAllUI();
   }
+  
   if (bombFreeSpins > 0) {
     const eff = $('slotEffect');
     if (eff) { eff.textContent = '💣 FREE SPIN!'; eff.style.color = '#ff00ff'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
@@ -1567,7 +1565,7 @@ function slotCheckWin(results) {
   } else if (totalWin === 0) {
     const eff = $('slotEffect');
     if (eff) { eff.textContent = 'LOSE'; eff.style.color = '#ff4444'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 1500); }
-    $('slotMessage') && ($('slotMessage').innerHTML = '😢 <span style="color:#ff4444">LOSE!</span> ထပ်ကြိုးစားပါ');
+    if($('slotMessage')) $('slotMessage').innerHTML = '😢 <span style="color:#ff4444">LOSE!</span> ထပ်ကြိုးစားပါ';
   }
 }
 
@@ -1583,7 +1581,7 @@ function slotDailyBonus() {
   st.lastCheckin = today;
   addCoins(reward, 'daily_bonus', { desc: '🎁 Daily Bonus' }).then(ok => {
     if (ok) {
-      showCoinReward(reward, 'daily_bonus');
+      showCoinReward(reward);
       toast('🎁 +' + fmt(reward) + ' WCCoin', 'success');
       showPhoneNotification('🎁 Daily Bonus!', '+' + fmt(reward) + ' WCCoin ရရှိပါပြီ');
     }
@@ -1617,6 +1615,7 @@ function closeAdmin() {
 function loadAdminData() {
   loadAdminUsers();
   loadAdminBuyRequests();
+  loadAdminPackages();
   loadAdminVersion();
 }
 function loadAdminUsers() {
@@ -1624,7 +1623,6 @@ function loadAdminUsers() {
     const data = snap.val() || {};
     window._adminUsers = data;
     renderAdminUsers($('admSearch') ? $('admSearch').value : '');
-    // Fill select
     const sel = $('admCoinUser');
     if (sel) {
       sel.innerHTML = '<option value="">— Select —</option>' + Object.entries(data).map(([uid, u]) => `<option value="${uid}">${esc(u.name || 'User')} (${esc(u.phone || '')}) — ${fmt(u.coin_balance || 0)} WCCoin</option>`).join('');
@@ -1664,14 +1662,14 @@ function loadAdminBuyRequests() {
           <div><strong>${esc(r.userName || 'User')}</strong> · ${esc(r.phone || '')}</div>
           <div style="color:${color};font-weight:800">${esc(status)}</div>
         </div>
-        <div style="font-size:13px;color:var(--text-2);margin-bottom:6px">
+        <div style="font-size:15px;color:var(--text-2);margin-bottom:10px">
           ${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ')' : ''} · ${esc(r.price || '')}
         </div>
-        ${r.note ? `<div style="font-size:12px;padding:8px;background:var(--surface-2);border-radius:8px;margin-bottom:8px">${esc(r.note)}</div>` : ''}
-        <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">${new Date(r.ts || Date.now()).toLocaleString()}</div>
-        ${showBtns ? `<div style="display:flex;gap:8px">
-          <button class="btn btn-primary" style="flex:1;padding:10px" onclick="approveBuyReq('${id}','${r.uid}',${(r.coins||0)+(r.bonus||0)})">✅ Approve</button>
-          <button class="btn btn-danger" style="flex:1;padding:10px" onclick="rejectBuyReq('${id}')">❌ Reject</button>
+        ${r.note ? `<div style="font-size:14px;padding:10px;background:var(--surface-2);border-radius:8px;margin-bottom:10px">${esc(r.note)}</div>` : ''}
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:12px">${new Date(r.ts || Date.now()).toLocaleString()}</div>
+        ${showBtns ? `<div style="display:flex;gap:12px">
+          <button class="btn btn-primary" style="flex:1;padding:12px" onclick="approveBuyReq('${id}','${r.uid}',${(r.coins||0)+(r.bonus||0)})">✅ Approve</button>
+          <button class="btn btn-danger" style="flex:1;padding:12px" onclick="rejectBuyReq('${id}')">❌ Reject</button>
         </div>` : ''}
       </div>`;
     }).join('');
@@ -1701,12 +1699,66 @@ async function adminApplyCoins() {
   if (ok) { toast('✅ Done', 'success'); $('admCoinAmt').value = ''; $('admCoinReason').value = ''; }
   else toast('❌ Failed', 'error');
 }
+
+// ✅ Admin Package Management
+function loadAdminPackages() {
+  db.ref('app_config/coin_packages').on('value', snap => {
+    allCoinPackages = snap.val() || {};
+    renderPkgGrid();
+    renderAdminPackages();
+  });
+}
+function renderAdminPackages() {
+  const wrap = $('pkgEditor');
+  if (!wrap) return;
+  const items = Object.entries(allCoinPackages).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  wrap.innerHTML = `<h4 style="font-size:18px;margin-bottom:16px">Add New Package</h4>
+    <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+      <input type="number" id="pkgCoins" placeholder="Coins (e.g. 100)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
+      <input type="text" id="pkgPrice" placeholder="Price (e.g. 1,000 Ks)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <input type="number" id="pkgBonus" placeholder="Bonus (optional)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
+      <input type="number" id="pkgOrder" placeholder="Order (1,2,3)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:20px" onclick="adminAddPkg()">➕ Add Package</button>
+    <h4 style="font-size:18px;margin-bottom:16px">Existing Packages</h4>
+    <div id="pkgList"></div>`;
+  
+  const list = $('pkgList');
+  if (items.length === 0) { list.innerHTML = '<p style="color:var(--text-2)">No packages</p>'; return; }
+  list.innerHTML = items.map(([id, p]) => `
+    <div style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--surface-2);border-radius:12px;margin-bottom:10px">
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:16px">${fmt(p.coins)} WCCoin ${p.bonus ? `(+${p.bonus})` : ''}</div>
+        <div style="font-size:14px;color:var(--text-2)">Price: ${esc(p.price)} · Order: ${p.order||0}</div>
+      </div>
+      <button class="btn btn-danger" style="padding:10px" onclick="adminDelPkg('${id}')">🗑</button>
+    </div>
+  `).join('');
+}
+async function adminAddPkg() {
+  const coins = parseInt($('pkgCoins').value, 10);
+  const price = $('pkgPrice').value.trim();
+  const bonus = parseInt($('pkgBonus').value, 10) || 0;
+  const order = parseInt($('pkgOrder').value, 10) || 1;
+  if (!coins || !price) return toast('Coins နဲ့ Price ဖြည့်ပါ', 'warn');
+  await db.ref('app_config/coin_packages').push({ coins, price, bonus, order, ts: Date.now() });
+  toast('✅ Package Added', 'success');
+  $('pkgCoins').value = ''; $('pkgPrice').value = ''; $('pkgBonus').value = ''; $('pkgOrder').value = '';
+}
+async function adminDelPkg(id) {
+  if (!confirm('Delete package?')) return;
+  await db.ref('app_config/coin_packages/' + id).remove();
+  toast('Deleted', 'info');
+}
+
 function loadAdminVersion() {
   db.ref('app_config/version').once('value').then(snap => {
     const v = snap.val() || {};
-    $('admLatest') && ($('admLatest').value = v.latest || '');
-    $('admNotes') && ($('admNotes').value = v.releaseNotes || '');
-    $('admForce') && ($('admForce').checked = !!v.forceUpdate);
+    if($('admLatest')) $('admLatest').value = v.latest || '';
+    if($('admNotes')) $('admNotes').value = v.releaseNotes || '';
+    if($('admForce')) $('admForce').checked = !!v.forceUpdate;
   });
 }
 async function adminSaveVersion() {
@@ -1722,7 +1774,7 @@ async function adminSaveVersion() {
 }
 
 /* ============================================================
-   AUTO UPDATE
+   AUTO UPDATE (Bug Fix)
    ============================================================ */
 function checkUpdate() {
   if (!db) return;
@@ -1730,9 +1782,12 @@ function checkUpdate() {
     const v = snap.val();
     if (!v || !v.latest) return;
     const cmp = compareVersion(APP_VERSION, v.latest);
-    if (cmp >= 0) return;
+    if (cmp >= 0) return; // Latest ဖြစ်နေရင် ဘာမှမလုပ်
+    
+    // localStorage မှာ သိမ်းထားပြီးသားဆိုရင် ပြန်မပြ
     const dismissed = localStorage.getItem('wc_version_dismissed');
     if (dismissed === v.latest && !v.forceUpdate) return;
+    
     showUpdateModal(v);
   }).catch(err => console.warn('[Update]', err.message));
 }
@@ -1749,15 +1804,21 @@ function compareVersion(a, b) {
 }
 function showUpdateModal(v) {
   _updateVersion = v;
-  $('newVerLabel') && ($('newVerLabel').textContent = v.latest);
-  $('releaseNotes') && ($('releaseNotes').textContent = v.releaseNotes || 'Bug fixes and improvements');
+  if($('newVerLabel')) $('newVerLabel').textContent = v.latest;
+  if($('releaseNotes')) $('releaseNotes').textContent = v.releaseNotes || 'Bug fixes and improvements';
   $('updateModal').classList.add('show');
 }
 function applyUpdate() {
   if (!_updateVersion) return;
   localStorage.removeItem('wc_version_dismissed');
-  toast('🔄 Updating...', 'info');
-  setTimeout(() => location.reload(true), 500);
+  // Cache ရှင်းပြီး ပြန် Reload လုပ်မယ်
+  if ('caches' in window) {
+    caches.keys().then(names => {
+      for (let name of names) caches.delete(name);
+    });
+  }
+  toast('🔄 Updating App...', 'info');
+  setTimeout(() => location.reload(true), 800);
 }
 function checkUpdateManually() {
   toast('🔄 Checking...', 'info');
@@ -1765,7 +1826,7 @@ function checkUpdateManually() {
     const v = snap.val();
     if (!v || !v.latest) return toast('Version info မရှိပါ', 'warn');
     const cmp = compareVersion(APP_VERSION, v.latest);
-    if (cmp >= 0) return toast('✅ Latest', 'success');
+    if (cmp >= 0) return toast('✅ Latest Version ဖြစ်ပါတယ်', 'success');
     showUpdateModal(v);
   }).catch(err => toast('Failed: ' + err.message, 'error'));
 }
@@ -1777,13 +1838,16 @@ function init() {
   loadSettingsLocal();
   applyCoinIcons();
   generateReels();
-  renderPkgGrid();
+  
+  // Real-time Coin Packages
+  db.ref('app_config/coin_packages').on('value', snap => {
+    allCoinPackages = snap.val() || {};
+    renderPkgGrid();
+  });
 
-  // Auth tabs
   $('tabLogin') && ($('tabLogin').onclick = () => showAuthTab('login'));
   $('tabSignup') && ($('tabSignup').onclick = () => showAuthTab('signup'));
 
-  // Login form
   $('loginForm') && ($('loginForm').onsubmit = async e => {
     e.preventDefault();
     const phone = $('loginPhone').value.trim();
@@ -1802,7 +1866,6 @@ function init() {
     } finally { btn.disabled = false; btn.textContent = 'Login'; }
   });
 
-  // Signup form
   $('signupForm') && ($('signupForm').onsubmit = async e => {
     e.preventDefault();
     const name = $('suName').value.trim();
@@ -1823,12 +1886,10 @@ function init() {
     } finally { btn.disabled = false; btn.textContent = 'Sign Up'; }
   });
 
-  // Nav
   document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
     btn.onclick = () => gotoPage(btn.dataset.page);
   });
 
-  // Admin tabs
   document.querySelectorAll('.admin-tab').forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
@@ -1837,17 +1898,16 @@ function init() {
       const panel = $('admPanel-' + btn.dataset.tab);
       if (panel) panel.classList.add('active');
       if (btn.dataset.tab === 'buyreq') loadAdminBuyRequests();
+      if (btn.dataset.tab === 'packages') renderAdminPackages();
       if (btn.dataset.tab === 'version') loadAdminVersion();
     };
   });
 
-  // Modal overlay click
   document.querySelectorAll('.modal-overlay').forEach(ov => {
     ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('show'); });
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
 
-  // Auth state
   auth.onAuthStateChanged(async user => {
     if (user) {
       const snap = await db.ref('users/' + user.uid).once('value');
@@ -1860,8 +1920,10 @@ function init() {
       loadUserData();
       loadHistory();
       updateAllUI();
-      // Auto-detect admin
-      // Notification prompt
+      
+      // Coin Packages Listener
+      db.ref('app_config/coin_packages').on('value', snap => { allCoinPackages = snap.val() || {}; });
+
       if (!localStorage.getItem('wc_notif_prompted_v2') && Notification.permission !== 'granted') {
         setTimeout(() => { $('notificationPromptModal').classList.add('show'); localStorage.setItem('wc_notif_prompted_v2', '1'); }, 3000);
       }
@@ -1870,7 +1932,6 @@ function init() {
     }
   });
 
-  // Auto update check
   setTimeout(checkUpdate, 2000);
   if (updateCheckInterval) clearInterval(updateCheckInterval);
   updateCheckInterval = setInterval(checkUpdate, 10 * 60 * 1000);
@@ -1880,16 +1941,6 @@ function init() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
-
-/* ============================================================
-   DEBUG
-   ============================================================ */
-window.WCDebug = {
-  state: () => ({ uid: currentUser?.uid, balance: coinBalance, version: APP_VERSION, isAdmin }),
-  addCoins: (n) => currentUser && addCoins(n, 'admin_add', { desc: 'Debug' }),
-  setCoinIcon: (url) => { localStorage.setItem('wc_coin_icon', url || ''); setTimeout(() => location.reload(), 300); },
-  reset: () => { localStorage.clear(); location.reload(); }
-};
 </script>
 </body>
 </html>

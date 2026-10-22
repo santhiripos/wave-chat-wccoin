@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f172a">
+<title>WC Wallet Ultra</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Padauk:wght@400;700&family=Noto+Sans+Myanmar:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg-main:#070a13;--bg-card:rgba(30,41,59,0.7);--bg-card-hover:rgba(51,65,85,0.8);
+  --text-main:#f8fafc;--text-muted:#94a3b8;
+  --primary:#00f2fe;--primary-dark:#4facfe;
+  --accent:#fbbf24;--accent-dark:#d97706;
+  --success:#10b981;--danger:#ef4444;--border:rgba(255,255,255,0.08);
+  --grad-primary:linear-gradient(135deg,#4facfe,#00f2fe);
+  --grad-accent:linear-gradient(135deg,#fbbf24,#d97706);
+  --grad-success:linear-gradient(135deg,#10b981,#059669);
+  --grad-danger:linear-gradient(135deg,#ef4444,#dc2626);
+  --sh-sm:0 4px 6px -1px rgba(0,0,0,.5);--sh-md:0 10px 15px -3px rgba(0,0,0,.5);--sh-lg:0 20px 25px -5px rgba(0,0,0,.5);
+  --gold-coin: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%23FFD700"/><stop offset="0.5" stop-color="%23FFA500"/><stop offset="1" stop-color="%23FF8C00"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="url(%23g)" stroke="%23B8860B" stroke-width="4"/><circle cx="50" cy="50" r="35" fill="none" stroke="%23FFF8DC" stroke-width="2" opacity="0.6"/><text x="50" y="62" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="900" fill="%23B8860B">W</text></svg>');
+}
+body{font-family:'Inter','Padauk','Noto Sans Myanmar',sans-serif;background:var(--bg-main);color:var(--text-main);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6;background-image:radial-gradient(circle at 15% 50%, rgba(79, 172, 254, 0.15), transparent 25%), radial-gradient(circle at 85% 30%, rgba(251, 191, 36, 0.1), transparent 25%)}
+.hidden{display:none!important}
+
+/* ===== TOP NAVIGATION ===== */
+.top-navbar{position:fixed;top:0;left:0;right:0;background:rgba(15,23,42,0.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:9999;display:flex;flex-direction:column}
+.nav-top-row{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;color:#fff}
+.nav-logo-mark{background:var(--grad-primary);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#000}
+.nav-tools{display:flex;align-items:center;gap:10px}
+.lang-select{background:rgba(255,255,255,0.1);color:#fff;border:1px solid var(--border);padding:6px 10px;border-radius:6px;font-size:12px;font-weight:600;outline:none;cursor:pointer}
+.logout-btn{background:rgba(239,68,68,0.2);color:#ef4444;border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.logout-btn:hover{background:rgba(239,68,68,0.3)}
+
+/* Nav Menu Bar */
+.nav-menu-bar{display:flex;overflow-x:auto;padding:8px 20px;gap:8px;scrollbar-width:none}
+.nav-menu-bar::-webkit-scrollbar{display:none}
+.nav-btn{background:transparent;border:1px solid transparent;color:var(--text-muted);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:.3s;font-family:inherit}
+.nav-btn:hover{background:rgba(255,255,255,0.05);color:#fff}
+.nav-btn.active{background:rgba(79,172,254,0.15);color:var(--primary);border-color:rgba(79,172,254,0.3);box-shadow:0 0 10px rgba(0,242,254,0.1)}
+
+.app-shell{display:none;min-height:100vh;padding-top:100px;padding-bottom:40px;max-width:1200px;margin:0 auto;padding-left:15px;padding-right:15px}
+.app-shell.active{display:block}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding:0 10px}
+.topbar-left h2{font-size:24px;font-weight:900;letter-spacing:-.5px;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-left p{font-size:14px;color:var(--text-muted);margin-top:4px;font-weight:500}
+
+.page-view{display:none}
+.page-view.active{display:block;animation:fadeUp .4s cubic-bezier(0.16, 1, 0.3, 1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== BALANCE CARD ===== */
+.balance-card{background:linear-gradient(135deg,rgba(30,41,59,0.8) 0%,rgba(15,23,42,0.9) 100%);backdrop-filter:blur(20px);border-radius:24px;padding:30px;color:#fff;position:relative;overflow:hidden;margin-bottom:24px;box-shadow:0 15px 35px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1)}
+.balance-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(0,242,254,.2),transparent 70%);border-radius:50%;filter:blur(20px)}
+.balance-label{font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:10px;position:relative;z-index:2;text-shadow:0 0 10px rgba(0,242,254,0.5)}
+.balance-amount{font-size:48px;font-weight:900;letter-spacing:-1px;line-height:1.1;position:relative;z-index:2;display:flex;align-items:center;gap:12px;flex-wrap:wrap;text-shadow:0 4px 20px rgba(0,0,0,0.5)}
+.balance-amount .coin-icon{width:44px;height:44px;background-image:var(--gold-coin);background-size:contain;background-repeat:no-repeat;background-position:center;filter:drop-shadow(0 4px 10px rgba(251,191,36,0.4))}
+.balance-amount small{font-size:20px;font-weight:800;color:var(--text-muted)}
+.balance-actions{display:flex;gap:12px;margin-top:24px;position:relative;z-index:2}
+.balance-action{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:14px 12px;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.3s}
+.balance-action:hover{background:rgba(255,255,255,0.1);transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,0.2)}
+
+/* ===== STATS & ACTIONS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat-box{background:var(--bg-card);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:var(--sh-sm);transition:.3s}
+.stat-box:hover{transform:translateY(-5px);box-shadow:var(--sh-md);border-color:rgba(255,255,255,0.2)}
+.stat-box .sb-label{font-size:13px;color:var(--text-muted);font-weight:700;margin-bottom:8px}
+.stat-box .sb-value{font-size:26px;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px}
+.stat-box .sb-value .inline-coin{width:24px;height:24px;background-image:var(--gold-coin);background-size:contain;background-repeat:no-repeat;background-position:center}
+
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px}
+.action-tile{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:24px 14px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:.3s;box-shadow:var(--sh-sm);font-family:inherit}
+.action-tile:hover{transform:translateY(-5px);box-shadow:var(--sh-md);border-color:var(--primary);background:rgba(30,41,59,0.9)}
+.action-tile .at-icon{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;background:rgba(255,255,255,0.05);box-shadow:inset 0 0 20px rgba(255,255,255,0.05)}
+.action-tile h4{font-size:16px;font-weight:800;color:#fff}
+.action-tile p{font-size:12px;color:var(--text-muted);text-align:center}
+
+/* ===== SLOT 5x5 ===== */
+.slot-wrapper{background:linear-gradient(145deg,#0b0f19 0%,#1a0b2e 100%);border-radius:24px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 0 2px rgba(251,191,36,.2),inset 0 0 40px rgba(251,191,36,.05);max-width:980px;margin:0 auto;position:relative;overflow:hidden;border:1px solid rgba(251,191,36,.3)}
+.slot-top{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.4);border:1px solid rgba(251,191,36,.3);border-radius:14px;padding:12px 20px;margin-bottom:16px;position:relative;z-index:2;backdrop-filter:blur(10px)}
+.slot-credit{display:flex;align-items:center;gap:8px;color:var(--accent);font-weight:900;font-size:15px}
+.slot-credit .coin-icon{width:24px;height:24px;background-image:var(--gold-coin);background-size:contain;background-repeat:no-repeat;background-position:center}
+.slot-credit .val{color:#00f2fe;font-size:22px;text-shadow:0 0 15px rgba(0,242,254,.6)}
+.slot-btn-sm{background:var(--grad-accent);color:#000;border:none;border-radius:8px;width:36px;height:36px;cursor:pointer;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.slot-btn-sm:hover{transform:scale(1.1)}
+.slot-title{text-align:center;font-size:38px;font-weight:900;background:linear-gradient(180deg,#FFD700 0%,#FF8C00 50%,#FFD700 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:8px;margin:10px 0 4px;position:relative;z-index:2;filter:drop-shadow(0 0 20px rgba(251,191,36,.6))}
+.slot-subtitle{text-align:center;font-size:12px;color:#00f2fe;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;border:1px solid rgba(0,242,254,.3);border-radius:8px;padding:6px;background:rgba(0,242,254,.05);font-weight:800;position:relative;z-index:2}
+.slot-info-row{display:flex;justify-content:space-around;background:rgba(0,0,0,.6);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:10px 16px;margin-bottom:16px;position:relative;z-index:2}
+.slot-info-item{display:flex;flex-direction:column;align-items:center}
+.slot-info-item .lbl{font-size:10px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.slot-info-item .val{font-size:20px;color:#fff;font-weight:900;margin-top:2px;text-shadow:0 0 10px rgba(255,255,255,0.3)}
+.slot-main{display:flex;gap:12px;margin-bottom:16px;position:relative;z-index:2}
+.slot-reels{flex:1;background:linear-gradient(180deg,#05020a,#110522);border:3px solid var(--accent);border-radius:16px;padding:8px;position:relative;min-width:0;overflow:hidden;box-shadow:inset 0 0 50px rgba(251,191,36,.1)}
+.reels-container{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:4px;width:100%;height:100%}
+.reel-column{position:relative;overflow:hidden;border-radius:8px;background:#05020a;border:1px solid rgba(251,191,36,.2);height:100%;min-height:360px}
+.reel-strip{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;will-change:transform}
+.reel-cell{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#FFFDF8,#FFF5E0);border-radius:6px;border:1px solid rgba(251,191,36,.3);margin:1px 0;position:relative;overflow:hidden;flex-shrink:0;box-shadow:inset 0 0 10px rgba(0,0,0,0.1)}
+.reel-cell .sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:34px;color:#1E293B}
+.reel-cell .sym svg{width:100%;height:100%;max-width:52px;max-height:52px;display:block;margin:auto}
+.reel-cell .sym.win{background:linear-gradient(135deg,rgba(0,255,204,.95),rgba(255,204,0,.9));border-radius:6px;animation:wf .3s infinite alternate;box-shadow:0 0 25px #00ffcc;z-index:2}
+.reel-cell .sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.95),rgba(255,100,0,.9));border-radius:6px;animation:sf .3s infinite alternate;box-shadow:0 0 30px #ff00ff;z-index:2}
+@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.15)}}
+@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.2)}}
+
+/* Win Line Overlay */
+.win-lines-overlay{position:absolute;inset:0;pointer-events:none;z-index:10;display:none}
+.win-lines-overlay.show{display:block}
+.win-lines-overlay svg{width:100%;height:100%}
+
+.slot-btns{display:flex;flex-direction:column;gap:10px;width:110px;flex-shrink:0}
+.slot-btn{border-radius:12px;font-weight:900;cursor:pointer;text-transform:uppercase;border:none;transition:.2s;padding:0;color:#000;position:relative;overflow:hidden;box-shadow:0 6px 15px rgba(0,0,0,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;font-family:inherit}
+.slot-btn:active{transform:scale(.95)}
+.slot-spin{background:linear-gradient(180deg,#00f2fe,#4facfe);font-size:26px;padding:18px 0;flex:1}
+.slot-spin .btn-label{font-size:14px;letter-spacing:1px;margin-top:4px}
+.slot-spin:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(50%)}
+.slot-auto{background:linear-gradient(180deg,#ff00ff,#c400c4);color:#fff;font-size:20px;padding:14px 0}
+.slot-auto .btn-label{font-size:12px;margin-top:2px}
+.slot-turbo{background:linear-gradient(180deg,#fbbf24,#d97706);font-size:20px;padding:14px 0}
+.slot-turbo .btn-label{font-size:12px;margin-top:2px}
+
+.slot-bet-row{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.6);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:10px 16px;gap:10px;flex-wrap:wrap;position:relative;z-index:2}
+.bet-ctrl{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);padding:6px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);position:relative;}
+.bet-ctrl button{background:var(--grad-accent);border:none;width:34px;height:34px;border-radius:8px;font-weight:900;cursor:pointer;font-size:18px;color:#000;box-shadow:0 2px 5px rgba(0,0,0,.3)}
+.bet-ctrl .bv{color:#fff;font-weight:900;font-size:20px;min-width:60px;text-align:center}
+.bet-ctrl .bl{color:var(--accent);font-size:10px;font-weight:800;text-transform:uppercase;position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#0f172a;padding:0 4px}
+.quick-bets{display:flex;gap:8px}
+.quick-bets button{border:none;border-radius:8px;font-weight:900;cursor:pointer;color:#fff;font-size:14px;padding:10px 14px;font-family:inherit;transition:.2s}
+.q2x{background:linear-gradient(180deg,#4facfe,#00f2fe);color:#000}
+.q3x{background:linear-gradient(180deg,#ff6600,#cc4400)}
+.q5x{background:linear-gradient(180deg,#ef4444,#dc2626)}
+.daily-btn{background:linear-gradient(180deg,#10b981,#059669);color:#fff;padding:10px 16px;border:none;border-radius:8px;font-weight:900;cursor:pointer;font-size:20px}
+.slot-msg{background:rgba(0,0,0,.8);border:1px solid rgba(251,191,36,.3);border-radius:12px;padding:14px;color:#fbbf24;font-size:14px;font-weight:700;min-height:60px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.5;flex-wrap:wrap;gap:8px;margin-top:14px;position:relative;z-index:2}
+.slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:64px;font-weight:900;text-shadow:0 0 40px currentColor,0 0 80px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
+.slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .4s infinite alternate}
+@keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.2)}}
+.slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,255,.2),rgba(251,191,36,.2));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:12px}
+.slot-freespin.show{opacity:1}
+.slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:36px;font-weight:900;color:#ff00ff;text-shadow:0 0 30px #ff00ff,0 0 60px #ff00ff;animation:fsFlash .5s infinite alternate}
+@keyframes fsFlash{0%{opacity:.6}100%{opacity:1}}
+
+/* ===== GAME HUB & GIFTS ===== */
+.game-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:.3s;box-shadow:var(--sh-sm);display:flex;flex-direction:column}
+.game-card:hover{transform:translateY(-6px);box-shadow:0 15px 30px rgba(0,0,0,0.4);border-color:var(--primary)}
+.game-card .game-thumb{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,#1e293b,#0f172a);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden;position:relative}
+.game-card .game-thumb img{width:100%;height:100%;object-fit:cover}
+.game-card .game-body{padding:16px;display:flex;flex-direction:column;gap:8px}
+.game-card .game-body h4{font-size:18px;font-weight:900;color:#fff}
+.game-card .game-body p{font-size:13px;color:var(--text-muted);line-height:1.5;min-height:40px}
+.game-card .game-body .game-play{background:var(--grad-primary);color:#000;border:none;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;font-size:14px;margin-top:auto;transition:.2s;font-family:inherit}
+.game-card .game-body .game-play:hover{box-shadow:0 0 20px rgba(0,242,254,0.4)}
+
+.gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.gift-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:.3s;box-shadow:var(--sh-sm);display:flex;flex-direction:column}
+.gift-card:hover{transform:translateY(-5px);box-shadow:var(--sh-md);border-color:#FF6B9D}
+.gift-image{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#1e293b,#0f172a);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden}
+.gift-image img{width:100%;height:100%;object-fit:cover}
+.gift-body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.gift-body h4{font-size:16px;font-weight:900;color:#fff}
+.gift-body .gift-price{font-size:18px;font-weight:900;color:#FF6B9D;display:flex;align-items:center;gap:6px}
+.gift-body .gift-price .coin-icon{width:20px;height:20px;background-image:var(--gold-coin);background-size:contain;background-repeat:no-repeat;background-position:center}
+.gift-body .gift-btn{background:linear-gradient(135deg,#FF6B9D,#C44569);color:#fff;border:none;border-radius:10px;padding:12px;font-weight:800;cursor:pointer;font-size:14px;transition:.2s;margin-top:auto;font-family:inherit}
+.gift-body .gift-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(196,69,105,.4)}
+
+/* ===== FORMS & MODALS ===== */
+.info-row{margin-bottom:16px}
+.info-row label{display:block;font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.info-row input,.info-row select,.info-row textarea{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:12px;font-size:15px;background:rgba(0,0,0,0.2);outline:none;color:#fff;font-family:inherit;font-weight:500;transition:.2s}
+.info-row input:focus,.info-row select:focus,.info-row textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(0,242,254,.15)}
+.info-row textarea{resize:vertical;min-height:100px}
+.btn{padding:14px 24px;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--grad-primary);color:#000;box-shadow:0 4px 15px rgba(0,242,254,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,242,254,.4)}
+.btn-secondary{background:rgba(255,255,255,0.05);color:#fff;border:1px solid var(--border)}
+.btn-danger{background:var(--grad-danger);color:#fff}
+.btn-success{background:var(--grad-success);color:#fff}
+.btn-gold{background:var(--grad-accent);color:#000}
+.btn-block{width:100%}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:8px}
+
+.history-list{display:flex;flex-direction:column;gap:10px}
+.tx-row{background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh-sm);transition:.2s}
+.tx-row:hover{transform:translateX(4px);box-shadow:var(--sh-md)}
+
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.pkg-card{background:var(--bg-card);border:2px solid var(--border);border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;position:relative;transition:.2s}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.pkg-card.selected{border-color:var(--accent);background:rgba(251,191,36,.05);box-shadow:0 6px 20px rgba(251,191,36,.15)}
+.pkg-coins{font-size:24px;font-weight:900;color:var(--accent);line-height:1.1;margin-bottom:6px}
+.pkg-price{font-size:14px;color:var(--text-muted);font-weight:700}
+.pkg-bonus{position:absolute;top:-8px;right:10px;background:var(--danger);color:#fff;font-size:11px;font-weight:900;padding:3px 10px;border-radius:12px}
+.req-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.req-card .req-body{flex:1;min-width:0}
+.req-card .req-title{font-size:14px;font-weight:800;margin-bottom:2px}
+.req-card .req-sub{font-size:12px;color:var(--text-muted);font-weight:500}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(2,6,23,.8);display:none;align-items:center;justify-content:center;z-index:9000;padding:20px;backdrop-filter:blur(8px)}
+.modal-overlay.show{display:flex}
+.modal{background:var(--bg-card);border-radius:20px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg);animation:popIn .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;border:1px solid var(--border)}
+.modal.modal-lg{max-width:800px}
+@keyframes popIn{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-head h3{font-size:18px;font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;color:var(--primary)}
+.modal-close{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--text-muted);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:inherit}
+.modal-close:hover{background:var(--bg-main)}
+.modal-body{padding:24px;flex:1;overflow-y:auto}
+.modal-foot{padding:16px 24px 24px;display:flex;gap:10px;flex-shrink:0}
+
+/* ===== ADMIN PANEL ===== */
+#adminScreen{display:none;min-height:100vh;background:var(--bg-main);position:fixed;inset:0;z-index:1000;overflow-y:auto;padding-top:60px}
+#adminScreen.active{display:block}
+.admin-header{background:rgba(15,23,42,0.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.admin-header h2{font-size:22px;font-weight:900;background:var(--grad-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.admin-body{padding:24px;max-width:1200px;margin:0 auto}
+.admin-tabs{display:flex;gap:8px;background:rgba(0,0,0,0.3);border-radius:16px;padding:8px;margin-bottom:24px;overflow-x:auto;position:sticky;top:70px;z-index:9;border:1px solid var(--border);scrollbar-width:none}
+.admin-tabs::-webkit-scrollbar{display:none}
+.admin-tab{padding:10px 20px;border:none;background:transparent;font-weight:800;font-size:14px;cursor:pointer;border-radius:10px;color:var(--text-muted);white-space:nowrap;transition:.2s;font-family:inherit}
+.admin-tab.active{background:var(--grad-primary);color:#000;box-shadow:0 4px 15px rgba(0,242,254,.3)}
+.admin-panel{display:none}
+.admin-panel.active{display:block;animation:fadeUp .3s}
+.admin-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px;box-shadow:var(--sh-sm)}
+.admin-card-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.admin-grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.admin-grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+.admin-field{margin-bottom:16px}
+.admin-field label{display:block;font-size:12px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.admin-field input,.admin-field select,.admin-field textarea{width:100%;padding:14px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:rgba(0,0,0,0.3);outline:none;color:#fff;font-family:inherit}
+.admin-field textarea{resize:vertical;min-height:100px;font-family:monospace}
+
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
+.admin-stat{background:linear-gradient(145deg,rgba(30,41,59,0.8),rgba(15,23,42,0.9));border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;box-shadow:var(--sh-sm)}
+.admin-stat .as-icon{font-size:32px;margin-bottom:8px}
+.admin-stat .as-value{font-size:24px;font-weight:900;color:#fff}
+.admin-stat .as-label{font-size:12px;color:var(--text-muted);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+.user-row{display:flex;align-items:center;gap:16px;padding:16px;background:rgba(0,0,0,0.2);border-radius:16px;margin-bottom:12px;border:1px solid var(--border)}
+.user-row .ur-av{width:48px;height:48px;border-radius:50%;background:var(--grad-primary);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0}
+.user-row .ur-body{flex:1;min-width:0}
+.user-row .ur-name{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px}
+.user-row .ur-sub{font-size:13px;color:var(--text-muted)}
+.user-row .ur-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+@media(max-width:768px){
+  .app-shell{padding-top:120px;padding-left:10px;padding-right:10px}
+  .nav-menu-bar{padding:10px}
+  .slot-main{flex-direction:column}
+  .slot-btns{flex-direction:row;width:100%;margin-top:10px}
+  .slot-btn{flex:1}
+  .slot-reels{border-radius:12px}
+  .reel-column{min-height:240px}
+  .slot-title{font-size:28px;letter-spacing:4px}
+  .balance-amount{font-size:36px}
+  .action-grid{grid-template-columns:repeat(2,1fr)}
+  .user-row{flex-direction:column;align-items:flex-start}
+  .user-row .ur-actions{width:100%;justify-content:space-between}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAVIGATION -->
+<div class="top-navbar" id="mainNav">
+  <div class="nav-top-row">
+    <div class="nav-logo"><div class="nav-logo-mark">WC</div> Wallet</div>
+    <div class="nav-tools">
+      <select class="lang-select" id="globalLangSelect" onchange="changeLanguage(this.value)">
+        <option value="my">🇲🇲 Unicode</option>
+        <option value="zg">🇲🇲 Zawgyi</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+  <div class="nav-menu-bar" id="navMenuBar">
+    <button class="nav-btn active" data-page="dashboard"><span>🏠</span> Dashboard</button>
+    <button class="nav-btn" data-page="play"><span>🎰</span> Play Slot</button>
+    <button class="nav-btn" data-page="games"><span>🎮</span> Game Hub</button>
+    <button class="nav-btn" data-page="gift"><span>🎁</span> Gift Shop</button>
+    <button class="nav-btn" data-page="transfer"><span>💸</span> Transfer</button>
+    <button class="nav-btn" data-page="buy"><span>🛒</span> Buy</button>
+    <button class="nav-btn" data-page="history"><span>📜</span> History</button>
+    <button class="nav-btn" data-page="settings"><span>⚙️</span> Settings</button>
+  </div>
+</div>
+
+<div class="loading" id="loading"><div class="spinner"></div></div>
+<div class="toast-container" id="toastContainer"></div>
+<div class="coin-reward" id="coinReward"><div class="coin-icon"></div><span id="coinRewardText">+0 WCCoin</span></div>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen" style="position:fixed;inset:0;background:var(--bg-main);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div class="auth-box" style="background:var(--bg-card);padding:40px;border-radius:24px;width:400px;max-width:90%;border:1px solid var(--border);">
+    <h1 id="authTitle" style="text-align:center;color:var(--primary);margin-bottom:20px;">Login</h1>
+    <form class="auth-form" id="loginForm">
+      <div class="info-row"><input type="tel" id="loginPhone" placeholder="09xxxxxxxxx" required></div>
+      <div class="info-row"><input type="password" id="loginPass" placeholder="Password" required></div>
+      <p class="auth-err" id="loginErr" style="color:var(--danger);text-align:center;margin-bottom:10px;"></p>
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Login</button>
+    </form>
+    <form class="auth-form hidden" id="signupForm">
+      <div class="info-row"><input type="text" id="suName" placeholder="Full Name" required></div>
+      <div class="info-row"><input type="tel" id="suPhone" placeholder="09xxxxxxxxx" required></div>
+      <div class="info-row"><input type="password" id="suPass" placeholder="Password (6+ chars)" required></div>
+      <div class="info-row"><select id="suGender" required><option value="">- လိင် -</option><option value="male">👨 ကျား</option><option value="female">👩 မ</option></select></div>
+      <div class="info-row"><select id="suAge" required><option value="">- အသက် -</option><option value="18-24">18-24</option><option value="25-34">25-34</option><option value="45+">45+</option></select></div>
+      <p class="auth-err" id="signupErr" style="color:var(--danger);text-align:center;margin-bottom:10px;min-height:20px;"></p>
+      <button type="submit" class="btn btn-gold btn-block" id="signupBtn">Sign Up</button>
+    </form>
+    <div style="text-align:center;margin-top:20px;">
+      <a href="#" id="switchAuthBtn" style="color:var(--text-muted);font-size:14px;text-decoration:none;">Switch to Sign Up</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div class="app-shell" id="appShell">
+  <div class="topbar">
+    <div class="topbar-left"><h2 id="pageTitle">Dashboard</h2><p id="pageSubtitle">သင့်ရဲ့ WCCoin နဲ့ Slot ဂိမ်း</p></div>
+    <div class="topbar-right">
+      <button class="avatar-btn" onclick="gotoPage('settings')" style="width:44px;height:44px;border-radius:50%;background:var(--grad-primary);color:#000;font-weight:900;font-size:18px;border:none;cursor:pointer;"><span id="topAvatar">W</span></button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page-view active" id="page-dashboard">
+    <div class="balance-card">
+      <div class="balance-label">Total Balance</div>
+      <div class="balance-amount"><div class="coin-icon"></div><span id="mainBalance">0</span><small>WCCoin</small></div>
+      <div class="balance-actions">
+        <button class="balance-action" onclick="gotoPage('play')">🎰 Play Slot</button>
+        <button class="balance-action" onclick="gotoPage('gift')">🎁 Gift Shop</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="sb-label">Today's Earned</div><div class="sb-value"><div class="inline-coin"></div><span id="statToday">0</span></div></div>
+      <div class="stat-box"><div class="sb-label">Games Played</div><div class="sb-value"><span id="statGames">0</span></div></div>
+      <div class="stat-box"><div class="sb-label">Total Wins</div><div class="sb-value"><div class="inline-coin"></div><span id="statWins">0</span></div></div>
+    </div>
+    <div class="action-grid">
+      <button class="action-tile" onclick="gotoPage('games')"><div class="at-icon">🎮</div><h4>Game Hub</h4><p>ဂိမ်းများ</p></button>
+      <button class="action-tile" onclick="gotoPage('transfer')"><div class="at-icon">💸</div><h4>Transfer</h4><p>လွှဲပို့ရန်</p></button>
+      <button class="action-tile" onclick="gotoPage('buy')"><div class="at-icon">🛒</div><h4>Buy Coin</h4><p>ဝယ်ယူရန်</p></button>
+      <button class="action-tile" onclick="gotoPage('history')"><div class="at-icon">📜</div><h4>History</h4><p>မှတ်တမ်း</p></button>
+    </div>
+  </div>
+
+  <!-- PLAY SLOT -->
+  <div class="page-view" id="page-play">
+    <div class="slot-wrapper">
+      <div class="slot-top">
+        <div class="slot-credit"><div class="coin-icon"></div><span class="lbl">WCCoin</span><span class="val" id="slotCredit">0</span></div>
+        <div class="slot-top-right"><button class="slot-btn-sm" onclick="refreshSlot()">🔄</button></div>
+      </div>
+      <div class="slot-title">SLOT</div>
+      <div class="slot-subtitle">WCCoin · 5×5 · WIN <span id="slotWinRateLabel">40</span>%</div>
+      <div class="slot-info-row">
+        <div class="slot-info-item"><div class="lbl">BET</div><div class="val" id="slotBetDisplay">10</div></div>
+        <div class="slot-info-item"><div class="lbl">WIN</div><div class="val" id="slotWinDisplay">0</div></div>
+        <div class="slot-info-item vip"><div class="lbl">VIP</div><div class="val" id="slotVipDisplay">🥉</div></div>
+      </div>
+      <div class="slot-main">
+        <div class="slot-reels" id="slotReels">
+          <div class="reels-container" id="reelsContainer"></div>
+          <div class="win-lines-overlay" id="winLinesOverlay"><svg id="winLinesSvg"></svg></div>
+          <div class="slot-effect" id="slotEffect"></div>
+          <div class="slot-freespin" id="slotFreeSpin"></div>
+        </div>
+        <div class="slot-btns">
+          <button class="slot-btn slot-spin" id="slotSpinBtn" onclick="slotSpin()">🎰<br><span class="btn-label">SPIN</span></button>
+          <button class="slot-btn slot-auto" id="slotAutoBtn" onclick="slotToggleAuto()">🔄<br><span class="btn-label">AUTO</span></button>
+          <button class="slot-btn slot-turbo" id="slotTurboBtn" onclick="slotToggleTurbo()">⚡<br><span class="btn-label">TURBO</span></button>
+        </div>
+      </div>
+      <div class="slot-bet-row">
+        <div class="bet-ctrl" style="position:relative;">
+          <button onclick="slotChangeBet(-5)">−</button>
+          <div style="text-align:center"><div class="bl">BET</div><div class="bv" id="slotBetValue">10</div></div>
+          <button onclick="slotChangeBet(5)">+</button>
+        </div>
+        <div class="quick-bets"><button class="q2x" onclick="slotQuickBet(2)">2×</button><button class="q3x" onclick="slotQuickBet(3)">3×</button><button class="q5x" onclick="slotQuickBet(5)">5×</button></div>
+        <button class="daily-btn" onclick="slotDailyBonus()">🎁</button>
+      </div>
+      <div class="slot-msg" id="slotMessage">🎰 SPIN နှိပ်ပြီး ကစားပါ</div>
+    </div>
+  </div>
+
+  <!-- GAME HUB -->
+  <div class="page-view" id="page-games">
+    <div style="margin-bottom:20px;font-size:16px;color:var(--text-muted);font-weight:600;">Admin ထည့်ထားတဲ့ ဂိမ်းများ</div>
+    <div class="gift-grid" id="gameHubGrid"></div>
+  </div>
+
+  <!-- GIFT SHOP -->
+  <div class="page-view" id="page-gift">
+    <div class="balance-card" style="background:linear-gradient(135deg,#FF6B9D 0%,#C44569 100%);padding:20px;border-radius:20px;margin-bottom:20px;">
+      <h2 style="font-size:24px;font-weight:900;margin-bottom:6px;">🎁 Gift Shop</h2>
+      <p style="font-size:14px;margin-bottom:10px;opacity:.9;">WCCoin တွေနဲ့ လက်ဆောင်ပစ္စည်းတွေ လဲလှယ်ပါ</p>
+      <div style="font-size:28px;font-weight:900;display:flex;align-items:center;gap:8px;"><div class="coin-icon" style="width:24px;height:24px;"></div><span id="giftBalance">0</span> WCCoin</div>
+    </div>
+    <div class="gift-grid" id="giftGrid"></div>
+    <div class="section-header" style="margin-top:20px;margin-bottom:10px;"><h3>📦 ကျွန်ုပ်၏ Orders</h3></div>
+    <div id="myGiftOrders"></div>
+  </div>
+
+  <!-- TRANSFER -->
+  <div class="page-view" id="page-transfer">
+    <div class="admin-card">
+      <h3 style="margin-bottom:20px;color:var(--primary);">💸 WCCoin Transfer</h3>
+      <div class="info-row"><label>ဖုန်းနံပါတ်</label><input type="tel" id="trPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="info-row"><label>ပမာဏ</label><input type="number" id="trAmount" placeholder="0"></div>
+      <div class="info-row"><label>မှတ်ချက်</label><input type="text" id="trNote" placeholder="optional"></div>
+      <button class="btn btn-primary btn-block" id="doTransferBtn" onclick="doTransfer()">ငွေလွှဲမည်</button>
+    </div>
+  </div>
+
+  <!-- BUY -->
+  <div class="page-view" id="page-buy">
+    <div class="admin-card">
+      <h3 style="margin-bottom:20px;color:var(--primary);">🛒 Buy WCCoin</h3>
+      <div class="pkg-grid" id="pkgGrid"></div>
+      <div class="info-row" style="margin-top:20px;"><label>ငွေပေးချေမှု Note</label><textarea id="buyNote" placeholder="KBZ Pay ref..."></textarea></div>
+      <button class="btn btn-gold btn-block" id="reqBuyBtn" onclick="requestBuyCoins()">🛒 Request ပို့မည်</button>
+    </div>
+    <div class="section-header" style="margin-top:20px;margin-bottom:10px;"><h3>📋 ကျွန်ုပ်၏ Requests</h3></div>
+    <div id="myBuyRequests"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="page-view" id="page-history">
+    <div class="admin-card">
+      <h3 style="margin-bottom:20px;color:var(--primary);">📜 Transaction History</h3>
+      <div class="history-list" id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page-view" id="page-settings">
+    <div class="admin-card">
+      <h3 style="margin-bottom:20px;color:var(--primary);">⚙️ Settings</h3>
+      <div class="info-row"><label>Name</label><input type="text" id="setName"></div>
+      <div class="info-row"><label>Phone</label><input type="tel" id="setPhone" disabled></div>
+      <button class="btn btn-primary btn-block" onclick="saveSettings()">Save</button>
+    </div>
+    <div class="admin-card" style="margin-top:20px;">
+      <button class="btn btn-secondary btn-block" onclick="checkUpdateManually()">Check for Update</button>
+      <button class="btn btn-secondary btn-block" style="margin-top:10px;" onclick="openAdminLogin()">👑 Admin Panel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminScreen">
+  <div class="admin-header">
+    <h2>👑 Admin Panel</h2>
+    <button class="btn btn-sm btn-danger" onclick="closeAdmin()">✕ Close</button>
+  </div>
+  <div class="admin-body">
+    <div class="admin-stats">
+      <div class="admin-stat"><div class="as-icon">👥</div><div class="as-value" id="admStatUsers">0</div><div class="as-label">Users</div></div>
+      <div class="admin-stat"><div class="as-icon">💰</div><div class="as-value" id="admStatCoins">0</div><div class="as-label">Total Coins</div></div>
+      <div class="admin-stat"><div class="as-icon">🛒</div><div class="as-value" id="admStatBuyReq">0</div><div class="as-label">Buy Reqs</div></div>
+      <div class="admin-stat"><div class="as-icon">🎁</div><div class="as-value" id="admStatGiftOrders">0</div><div class="as-label">Gift Orders</div></div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="users">👥 Users</button>
+      <button class="admin-tab" data-tab="buyreq">🛒 Buy Reqs</button>
+      <button class="admin-tab" data-tab="gift">🎁 Gifts</button>
+      <button class="admin-tab" data-tab="giftorders">📦 Gift Orders</button>
+      <button class="admin-tab" data-tab="slot">🎰 Slot Control</button>
+      <button class="admin-tab" data-tab="games">🎮 Games</button>
+      <button class="admin-tab" data-tab="packages">📦 Packages</button>
+      <button class="admin-tab" data-tab="version">🚀 Version</button>
+    </div>
+
+    <div class="admin-panel active" id="admPanel-users">
+      <div class="admin-card">
+        <div class="admin-card-title">💰 User Coin Management</div>
+        <div class="admin-grid-2">
+          <div class="admin-field"><label>User ရွေးပါ</label><select id="admCoinUser"></select></div>
+          <div class="admin-field"><label>ပမာဏ (+ / −)</label><input type="number" id="admCoinAmt" placeholder="e.g. 100 or -50"></div>
+        </div>
+        <div class="admin-field"><label>အကြောင်းပြချက်</label><input type="text" id="admCoinReason" placeholder="Bonus / Gift / Correction"></div>
+        <button class="btn btn-primary btn-block" onclick="adminApplyCoins()">✅ အတည်ပြု</button>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">👥 Users List <span style="color:var(--primary);font-size:14px" id="admUserCount">0</span></div>
+        <div class="admin-field"><input type="text" id="admSearch" placeholder="🔍 Search users (name / phone)..." oninput="renderAdminUsers(this.value)"></div>
+        <div id="admUserList"></div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admPanel-buyreq"><div class="admin-card"><div class="admin-card-title">🛒 Buy Requests</div><div id="admBuyReqList"></div></div></div>
+
+    <div class="admin-panel" id="admPanel-gift">
+      <div class="admin-card">
+        <div class="admin-card-title">🎁 Gift Management</div>
+        <div style="background:var(--bg-main);border-radius:12px;padding:16px;margin-bottom:16px;border:1px dashed var(--border)">
+          <div class="admin-field"><label>လက်ဆောင် နာမည်</label><input type="text" id="giftName" placeholder="e.g. iPhone 15 Pro"></div>
+          <div class="admin-field"><label>ပုံ URL (Image)</label><input type="url" id="giftImage" placeholder="https://example.com/image.jpg"></div>
+          <div class="admin-field"><label>Emoji (ပုံမရှိရင်)</label><input type="text" id="giftEmoji" placeholder="🎁" maxlength="4" style="text-align:center;font-size:24px"></div>
+          <div class="admin-field"><label>ဖော်ပြချက်</label><textarea id="giftDesc" placeholder="အသေးစိတ် ဖော်ပြချက်..."></textarea></div>
+          <div class="admin-grid-3">
+            <div class="admin-field"><label>WCCoin ဈေးနှုန်း</label><input type="number" id="giftPrice" placeholder="e.g. 5000"></div>
+            <div class="admin-field"><label>Stock</label><input type="number" id="giftStock" placeholder="e.g. 10"></div>
+            <div class="admin-field"><label>Order</label><input type="number" id="giftOrder" placeholder="1"></div>
+          </div>
+          <button class="btn btn-success btn-block" onclick="adminAddGift()">➕ Gift ထည့်မည်</button>
+        </div>
+        <div class="admin-card-title">📋 လက်ရှိ လက်ဆောင်များ</div>
+        <div id="admGiftList"></div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admPanel-giftorders"><div class="admin-card"><div class="admin-card-title">📦 Gift Orders</div><div id="admGiftOrderList"></div></div></div>
+
+    <div class="admin-panel" id="admPanel-slot">
+      <div class="slot-control-banner">
+        <h3>🎰 Slot Control Panel</h3>
+        <p>Slot ဂိမ်းရဲ့ Win Rate, Bet Limits, နဲ့ အနိုင်အရှုံး ထိန်းချုပ်မှုများ</p>
+        <div class="slot-control-grid">
+          <div class="slot-control-item"><label>🎯 Win Rate (%)</label><input type="number" id="slotCfgWinRate" min="0" max="100" placeholder="40"></div>
+          <div class="slot-control-item"><label>📉 Min Bet</label><input type="number" id="slotCfgMinBet" min="1" placeholder="5"></div>
+          <div class="slot-control-item"><label>📈 Max Bet</label><input type="number" id="slotCfgMaxBet" min="1" placeholder="5000"></div>
+          <div class="slot-control-item"><label>💎 Max Win Multiplier</label><input type="number" id="slotCfgMaxWin" min="1" placeholder="500"></div>
+          <div class="slot-control-item"><label>🎁 Free Spin Rate (%)</label><input type="number" id="slotCfgFreeSpinRate" min="0" max="100" placeholder="5"></div>
+          <div class="slot-control-item"><label>🔒 Slot Status</label><select id="slotCfgStatus"><option value="active">✅ Active</option><option value="disabled">❌ Disabled</option></select></div>
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top:16px" onclick="adminSaveSlotConfig()">💾 Slot Config သိမ်းမည်</button>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">🎯 Force Win/Lose</div>
+        <div class="slot-force-btns">
+          <button class="win-btn" id="forceWinBtn" onclick="adminSetForce('win')">🎉 Force WIN</button>
+          <button class="lose-btn" id="forceLoseBtn" onclick="adminSetForce('lose')">😢 Force LOSE</button>
+          <button class="auto-btn active" id="forceAutoBtn" onclick="adminSetForce('auto')">🎲 Auto</button>
+        </div>
+        <div style="margin-top:12px;padding:10px;background:var(--bg-main);border-radius:8px;font-size:13px;font-weight:700;color:var(--text-muted)">လက်ရှိ mode: <span id="forceModeLabel" style="color:var(--primary);font-weight:900">🎲 Auto</span></div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admPanel-games">
+      <div class="admin-card">
+        <div class="admin-card-title">🎮 Dynamic Game Manager</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">
+          HTML + JS Code ရိုက်ထည့်ပြီး Save လုပ်ပါ။ Game Hub မှာ ချက်ချင်း ပေါ်လာမည်။<br>
+          <strong style="color:var(--primary)">Wallet API (iframe ထဲက သုံးနိုင်သည်):</strong><br>
+          • <code>WCWallet.betCoins(amount, {game:'MyGame'})</code><br>
+          • <code>WCWallet.winCoins(amount, {game:'MyGame'})</code><br>
+          • <code>WCWallet.getBalance()</code> · <code>WCWallet.toast('msg','success')</code>
+        </p>
+        <div class="admin-field"><label>Game Name</label><input type="text" id="gGameName" placeholder="e.g. Lucky Dice"></div>
+        <div class="admin-grid-3">
+          <div class="admin-field"><label>Emoji</label><input type="text" id="gGameEmoji" placeholder="🎲" maxlength="4" style="text-align:center;font-size:20px"></div>
+          <div class="admin-field"><label>Order</label><input type="number" id="gGameOrder" placeholder="1"></div>
+          <div class="admin-field"><label>Thumb URL</label><input type="url" id="gGameThumb" placeholder="https://..."></div>
+        </div>
+        <div class="admin-field"><label>Description</label><input type="text" id="gGameDesc" placeholder="ဂိမ်း အကြောင်း"></div>
+        <div class="admin-field"><label>HTML Code</label><textarea id="gGameHtml" placeholder="<div>Your game HTML</div>" style="min-height:120px;font-family:monospace;font-size:12px"></textarea></div>
+        <div class="admin-field"><label>JS Code (Optional)</label><textarea id="gGameJs" placeholder="// WCWallet API ကို သုံးပါ" style="min-height:100px;font-family:monospace;font-size:12px"></textarea></div>
+        <button class="btn btn-success btn-block" onclick="adminAddGame()">➕ Game ထည့်မည်</button>
+        <div class="admin-card-title" style="margin-top:20px">📋 Games List</div>
+        <div id="admGameList"></div>
+      </div>
+    </div>
+
+    <div class="admin-panel" id="admPanel-packages"><div class="admin-card" id="pkgEditor"></div></div>
+
+    <div class="admin-panel" id="admPanel-version">
+      <div class="admin-card">
+        <div class="admin-card-title">🚀 App Version</div>
+        <div class="admin-field"><label>Latest Version</label><input type="text" id="admLatest" placeholder="5.0.0"></div>
+        <div class="admin-field"><label>Release Notes</label><textarea id="admNotes" placeholder="Bug fixes..."></textarea></div>
+        <div class="admin-field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="admForce" style="width:20px;height:20px"><label style="margin:0;font-size:14px;text-transform:none;font-weight:700">Force Update</label></div>
+        <button class="btn btn-primary btn-block" onclick="adminSaveVersion()">🚀 Save Version</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="adminLoginModal">
+  <div class="modal">
+    <div class="modal-head"><h3>👑 Admin Login</h3><button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="info-row"><label>Admin Phone</label><input type="tel" id="admLoginPhone" placeholder="09xxxxxxxxx"></div>
+      <div class="info-row"><label>Password</label><input type="password" id="admLoginPass" placeholder="Admin password"></div>
+      <p class="auth-err" id="admLoginErr"></p>
+    </div>
+    <div class="modal-foot"><button class="btn btn-primary btn-block" onclick="doAdminLogin()">Login as Admin</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="updateModal">
+  <div class="modal">
+    <div class="modal-head"><h3>🚀 Update Available</h3><button class="modal-close" onclick="closeModal('updateModal')">✕</button></div>
+    <div class="modal-body" style="text-align:center">
+      <div style="width:80px;height:80px;border-radius:24px;background:var(--grad-primary);display:inline-flex;align-items:center;justify-content:center;font-size:40px;color:#fff;margin-bottom:16px">🚀</div>
+      <h2 style="font-size:22px;font-weight:900;margin-bottom:6px">ဗားရှင်းအသစ် ထွက်ပါပြီ</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Version <strong id="newVerLabel" style="color:var(--primary)">1.0.0</strong></p>
+      <div class="info-row" style="text-align:left"><label>Release Notes</label><div id="releaseNotes" style="font-size:14px;line-height:1.6;padding:14px;background:var(--bg-main);border-radius:10px;min-height:70px"></div></div>
+    </div>
+    <div class="modal-foot" style="flex-direction:column">
+      <button class="btn btn-primary btn-block" onclick="applyUpdate()">🔄 Update Now</button>
+      <button class="btn btn-secondary btn-block" onclick="closeModal('updateModal')">နောက်မှ</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="giftExchangeModal">
+  <div class="modal">
+    <div class="modal-head"><h3>🎁 လက်ဆောင် လဲလှယ်မည်</h3><button class="modal-close" onclick="closeModal('giftExchangeModal')">✕</button></div>
+    <div class="modal-body" id="giftExchangeBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('giftExchangeModal')">မလုပ်တော့</button>
+      <button class="btn btn-gold" style="flex:1" onclick="confirmGiftExchange()">✅ အတည်ပြု</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE & JAVASCRIPT -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+'use strict';
+const APP_VERSION = '6.0.0';
+const firebaseConfig = {
+  apiKey: "AIzaSyBQJ4zzAxZ_aSuGBxwegTw_dtfaW8oLJnU",
+  authDomain: "wavechat-21.firebaseapp.com",
+  databaseURL: "https://wavechat-21-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "wavechat-21",
+  storageBucket: "wavechat-21.firebasestorage.app",
+  messagingSenderId: "974140621548",
+  appId: "1:974140621548:web:16566800329e43d05c5bc9"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+let currentUser = null;
+let coinBalance = 0, todayEarned = 0, totalGamesPlayed = 0, totalWins = 0;
+let settings = { name: 'Player', notifications: 'on', lang: 'my' };
+let userDataRef = null, txRef = null;
+let isAdmin = false;
+let selectedPkgId = null, allCoinPackages = {}, allGifts = {}, selectedGiftId = null, allGiftOrders = {}, allGames = {};
+let slotConfig = { winRate: 40, minBet: 5, maxBet: 5000, maxWinMultiplier: 500, freeSpinRate: 5, status: 'active' };
+let slotForceMode = 'auto';
+let slotState = { credit: 0, bet: 10, baseBet: 10, spinning: false, auto: false, turbo: false, autoCount: 0, freeSpins: 0, isFreeSpin: false, totalSpins: 0, totalWins: 0, checkinState: { streak:0, lastCheckin:'', claimed:[] } };
+let _reelColumns = [], _reelStrips = [], _reelOffsets = [0,0,0,0,0];
+const REEL_VISIBLE = 5, REEL_BUFFER = 6;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Math.floor(Number(n) || 0).toLocaleString('en-US');
+function toEmail(phone) { const d = String(phone || '').replace(/\D/g, ''); return d + '@wcwallet.app'; }
+function cleanPhone(p) { let s = String(p || '').replace(/\D/g, ''); if (s.startsWith('0')) s = s.slice(1); return s; }
+function displayPhone(p) { const s = cleanPhone(p); return s ? '0' + s : ''; }
+
+/* Audio */
+let _audioCtx = null;
+function getAudioCtx() { if (!_audioCtx) { try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; } } if (_audioCtx.state === 'suspended') _audioCtx.resume().catch(()=>{}); return _audioCtx; }
+function playTone(freq, duration, type = 'sine', volume = 0.15, when = 0) { const ctx = getAudioCtx(); if (!ctx) return; const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime + when); gain.gain.setValueAtTime(volume, ctx.currentTime + when); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + when + duration); osc.connect(gain); gain.connect(ctx.destination); osc.start(ctx.currentTime + when); osc.stop(ctx.currentTime + when + duration); }
+function playSpinSound() { for (let i = 0; i < 8; i++) playTone(600 + (i % 3) * 100, 0.04, 'square', 0.06, i * 0.04); }
+function playReelStopSound(index) { playTone(300 + index * 60, 0.1, 'triangle', 0.15); playTone(150 + index * 30, 0.15, 'sine', 0.1, 0.02); }
+function playWinSound() { [523, 659, 784, 1047].forEach((n, i) => playTone(n, 0.2, 'sine', 0.18, i * 0.1)); }
+function playBigWinSound() { [523, 659, 784, 1047, 1319].forEach((n, i) => playTone(n, 0.25, 'sine', 0.22, i * 0.1)); setTimeout(() => { [1047, 1319, 1568, 2093].forEach((n, i) => playTone(n, 0.3, 'triangle', 0.2, i * 0.1)); }, 500); }
+function playLoseSound() { playTone(300, 0.15, 'sawtooth', 0.1, 0); playTone(200, 0.25, 'sawtooth', 0.1, 0.12); }
+function playFreeSpinSound() { [880, 1108, 1318, 1760, 2200].forEach((n, i) => playTone(n, 0.2, 'square', 0.15, i * 0.08)); }
+function playClickSound() { playTone(800, 0.04, 'square', 0.06); }
+
+function toast(msg, type = 'info') { const c = $('toastContainer'); if (!c) return; const el = document.createElement('div'); el.className = 'toast ' + (type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warn' ? 'warn' : ''); const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️'; el.innerHTML = '<span>' + icon + '</span><span>' + esc(msg) + '</span>'; c.appendChild(el); setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3500); }
+function showCoinReward(amount) { const el = $('coinReward'), txt = $('coinRewardText'); if (!el || !txt) return; txt.textContent = (amount >= 0 ? '+' : '') + fmt(amount) + ' WCCoin'; el.style.background = amount >= 0 ? 'var(--grad-accent)' : 'var(--grad-danger)'; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2800); }
+
+function loadSettingsLocal() { try { const s = localStorage.getItem('wc_settings_v5'); if (s) settings = Object.assign(settings, JSON.parse(s)); } catch(e){} }
+function saveSettingsLocal() { try { localStorage.setItem('wc_settings_v5', JSON.stringify(settings)); } catch(e){} }
+
+/* ============================================================
+   AUTH - ပြင်ဆင်ပြီး
+   ============================================================ */
+function showAuthTab(tab) {
+  const loginForm = $('loginForm'), signupForm = $('signupForm');
+  const authTitle = $('authTitle'), switchBtn = $('switchAuthBtn');
+  if (!loginForm || !signupForm) return;
+  
+  if (tab === 'login') {
+    loginForm.classList.remove('hidden');
+    signupForm.classList.add('hidden');
+    if (authTitle) authTitle.textContent = 'Login';
+    if (switchBtn) switchBtn.textContent = 'Switch to Sign Up';
+  } else {
+    signupForm.classList.remove('hidden');
+    loginForm.classList.add('hidden');
+    if (authTitle) authTitle.textContent = 'Sign Up';
+    if (switchBtn) switchBtn.textContent = 'Switch to Login';
+  }
+}
+
+async function signup(name, phone, password, gender, ageGroup) {
+  const cred = await auth.createUserWithEmailAndPassword(toEmail(phone), password);
+  const uid = cred.user.uid;
+  await db.ref('users/' + uid).set({
+    uid,
+    name,
+    phone: displayPhone(phone),
+    gender: gender || 'other',
+    age_group: ageGroup || '25-34',
+    coin_balance: 100,
+    today_earned: 0,
+    games_played: 0,
+    total_wins: 0,
+    createdAt: Date.now(),
+    isAdmin: false
+  });
+  await db.ref('coin_transactions/' + uid).push({
+    ts: Date.now(),
+    amount: 100,
+    reason: 'signup_bonus',
+    type: 'signup_bonus',
+    desc: '🎉 Welcome bonus'
+  });
+  return cred.user;
+}
+
+async function login(phone, password) {
+  return await auth.signInWithEmailAndPassword(toEmail(phone), password);
+}
+
+async function logout() {
+  if (userDataRef) { try { userDataRef.off(); } catch(e){} userDataRef = null; }
+  if (txRef) { try { txRef.off(); } catch(e){} txRef = null; }
+  await auth.signOut();
+  currentUser = null;
+  showScreen('auth');
+  toast('Logged out', 'info');
+}
+
+function showScreen(name) {
+  document.querySelectorAll('#authScreen, #appShell, #adminScreen').forEach(el => { if (el) el.classList.remove('active'); });
+  if (name === 'auth') {
+    $('authScreen').style.display = 'flex';
+  } else if (name === 'app') {
+    $('authScreen').style.display = 'none';
+    $('appShell').classList.add('active');
+  } else if (name === 'admin') {
+    $('authScreen').style.display = 'none';
+    $('adminScreen').classList.add('active');
+  }
+}
+
+function authErrMsg(err) {
+  const m = (err && err.message) || '';
+  if (m.includes('email-already-in-use')) return '⚠️ ဒီဖုန်းနံပါတ်နဲ့ အကောင့် ရှိပြီးသားပါ';
+  if (m.includes('weak-password')) return '⚠️ Password အားနည်းနေပါ (၆ လုံးအထက်)';
+  if (m.includes('invalid-email')) return '⚠️ ဖုန်းနံပါတ် မမှန်ကန်ပါ';
+  if (m.includes('network')) return '⚠️ အင်တာနက် ချိတ်ဆက်မှု ပြဿနာ';
+  if (m.includes('user-not-found')) return '⚠️ ဒီအကောင့် မရှိပါ';
+  if (m.includes('wrong-password') || m.includes('invalid-credential')) return '⚠️ Password မှားနေပါ';
+  if (m.includes('too-many-requests')) return '⚠️ ကြိုးစားမှု များလွန်းပါ၊ ခဏစောင့်ပါ';
+  return m || 'Error ဖြစ်ပွားပါသည်';
+}
+
+/* ============================================================
+   USER DATA
+   ============================================================ */
+function loadUserData() {
+  if (!currentUser) return;
+  if (userDataRef) { try { userDataRef.off(); } catch(e){} }
+  userDataRef = db.ref('users/' + currentUser.uid);
+  userDataRef.on('value', snap => {
+    const data = snap.val();
+    if (!data) return;
+    coinBalance = data.coin_balance || 0;
+    todayEarned = data.today_earned || 0;
+    totalGamesPlayed = data.games_played || 0;
+    totalWins = data.total_wins || 0;
+    currentUser = Object.assign(currentUser, data);
+    settings.name = data.name || settings.name;
+    isAdmin = data.isAdmin === true;
+    updateAllUI();
+  });
+}
+
+function loadHistory() {
+  if (!currentUser) return;
+  if (txRef) { try { txRef.off(); } catch(e){} }
+  txRef = db.ref('coin_transactions/' + currentUser.uid).limitToLast(50);
+  txRef.on('value', snap => {
+    const data = snap.val() || {};
+    const txHistory = Object.entries(data).map(([id, tx]) => Object.assign({ id }, tx)).sort((a,b) => (b.ts||0) - (a.ts||0));
+    renderHistoryList(txHistory);
+  });
+}
+
+async function addCoins(amount, reason, meta = {}) {
+  if (!currentUser || !amount) return false;
+  try {
+    const result = await db.ref('users/' + currentUser.uid + '/coin_balance').transaction(c => {
+      const n = (c || 0) + amount;
+      return n < 0 ? undefined : n;
+    });
+    if (!result.committed) return false;
+    await db.ref('coin_transactions/' + currentUser.uid).push({
+      ts: Date.now(), amount, reason, type: reason, desc: meta.desc || reason, ...meta
+    });
+    if (amount > 0) await db.ref('users/' + currentUser.uid + '/today_earned').transaction(c => (c || 0) + amount).catch(()=>{});
+    return true;
+  } catch(e) { console.error('addCoins error:', e); return false; }
+}
+
+async function addCoinsToUser(uid, amount, reason, meta = {}) {
+  try {
+    const result = await db.ref('users/' + uid + '/coin_balance').transaction(c => {
+      const n = (c || 0) + amount;
+      return n < 0 ? undefined : n;
+    });
+    if (!result.committed) return false;
+    await db.ref('coin_transactions/' + uid).push({ ts: Date.now(), amount, reason, type: reason, desc: meta.desc || reason, ...meta });
+    return true;
+  } catch(e) { console.error('addCoinsToUser error:', e); return false; }
+}
+
+/* ============================================================
+   UI
+   ============================================================ */
+function updateAllUI() {
+  const fmtCoins = fmt(coinBalance);
+  if($('mainBalance')) $('mainBalance').textContent = fmtCoins;
+  if($('slotCredit')) $('slotCredit').textContent = fmtCoins;
+  if($('statToday')) $('statToday').textContent = fmt(todayEarned);
+  if($('statGames')) $('statGames').textContent = fmt(totalGamesPlayed);
+  if($('statWins')) $('statWins').textContent = fmt(totalWins);
+  if($('giftBalance')) $('giftBalance').textContent = fmtCoins;
+  if($('setName')) $('setName').value = currentUser ? currentUser.name || '' : '';
+  if($('setPhone')) $('setPhone').value = currentUser ? currentUser.phone || '' : '';
+  const name = currentUser ? (currentUser.name || 'Player') : 'Player';
+  if($('topAvatar')) $('topAvatar').textContent = name.charAt(0).toUpperCase();
+  slotState.credit = coinBalance;
+  renderPkgGrid(); renderGiftGrid(); updateSlotVIP();
+}
+
+function renderHistoryList(txHistory) {
+  const wrap = $('historyList'); if (!wrap) return;
+  if (!txHistory || txHistory.length === 0) {
+    wrap.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted)">မှတ်တမ်း မရှိသေးပါ</div>';
+    return;
+  }
+  wrap.innerHTML = txHistory.map(tx => {
+    const amt = tx.amount || 0;
+    const sign = amt >= 0 ? '+' : '';
+    const desc = tx.game ? (tx.desc + ' · ' + tx.game) : (tx.desc || tx.reason || 'Transaction');
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;background:rgba(0,0,0,0.2);border-radius:12px;margin-bottom:10px;border:1px solid var(--border)">
+      <div><div style="font-weight:800;font-size:15px;color:#fff;">${esc(desc)}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${new Date(tx.ts || Date.now()).toLocaleString()}</div></div>
+      <div style="font-weight:900;font-size:16px;color:${amt>=0?'var(--success)':'var(--danger)'}">${sign}${fmt(amt)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderPkgGrid() {
+  const wrap = $('pkgGrid'); if (!wrap) return;
+  const items = Object.entries(allCoinPackages).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  if (items.length === 0) { wrap.innerHTML = '<p style="color:var(--text-muted);font-size:14px;padding:20px 0;grid-column:1/-1;text-align:center">Package မရှိသေးပါ။</p>'; return; }
+  wrap.innerHTML = items.map(([id, p]) => `<div class="pkg-card ${selectedPkgId === id ? 'selected' : ''}" data-pkg="${id}">${p.bonus ? `<span class="pkg-bonus">+${p.bonus}</span>` : ''}<div class="pkg-coins">${fmt(p.coins)}</div><div class="pkg-price">${esc(p.price)}</div></div>`).join('');
+  wrap.querySelectorAll('.pkg-card').forEach(card => {
+    card.onclick = () => { selectedPkgId = card.dataset.pkg; renderPkgGrid(); };
+  });
+}
+
+function renderGiftGrid() {
+  const wrap = $('giftGrid'); if (!wrap) return;
+  const items = Object.entries(allGifts).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  if (items.length === 0) { wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">လက်ဆောင် မရှိသေးပါ</div>'; return; }
+  wrap.innerHTML = items.map(([id, g]) => {
+    const stock = g.stock != null ? g.stock : -1;
+    const outOfStock = stock === 0;
+    const imgHtml = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.name)}" onerror="this.parentElement.innerHTML='<span style=&quot;font-size:56px;&quot;>${esc(g.emoji || '🎁')}</span>'">` : `<span style="font-size:56px;">${esc(g.emoji || '🎁')}</span>`;
+    return `<div class="gift-card"><div class="gift-image">${imgHtml}</div><div class="gift-body"><h4>${esc(g.name)}</h4><div class="gift-desc">${esc(g.desc || '')}</div><div class="gift-price"><div class="coin-icon"></div>${fmt(g.price || 0)}</div><div class="gift-stock">${stock < 0 ? '∞' : stock} ခု ကျန်သည်</div><button class="gift-btn ${outOfStock ? 'out' : ''}" ${outOfStock ? 'disabled' : ''} onclick="openGiftExchange('${id}')">${outOfStock ? 'ကုန်သွားပြီ' : '🎁 လဲလှယ်မည်'}</button></div></div>`;
+  }).join('');
+}
+
+function updateSlotVIP() {
+  const c = coinBalance || 0;
+  let icon = '🥉';
+  if (c >= 100000) icon = '💎';
+  else if (c >= 20000) icon = '👑';
+  else if (c >= 5000) icon = '🥇';
+  else if (c >= 1000) icon = '🥈';
+  if($('slotVipDisplay')) $('slotVipDisplay').textContent = icon;
+}
+
+/* ============================================================
+   PAGE NAV
+   ============================================================ */
+const PAGE_TITLES = {
+  dashboard: { title: 'Dashboard', sub: 'သင့်ရဲ့ WCCoin နဲ့ Slot ဂိမ်း' },
+  play: { title: 'Play Slot', sub: 'WCCoin နဲ့ ကစားပြီး ဆုရယူပါ' },
+  games: { title: '🎮 Game Hub', sub: 'Admin ထည့်ထားတဲ့ ဂိမ်းများ' },
+  gift: { title: 'Gift Shop', sub: 'WCCoin တွေနဲ့ လက်ဆောင်ပစ္စည်းတွေ လဲလှယ်ပါ' },
+  transfer: { title: 'Transfer', sub: 'WCCoin လွှဲပို့ရန်' },
+  buy: { title: 'Buy WCCoin', sub: 'ပိုက်ဆံနဲ့ WCCoin ဝယ်ယူပါ' },
+  history: { title: 'History', sub: 'WCCoin ရရှိမှု မှတ်တမ်း' },
+  settings: { title: 'Settings', sub: 'ပြင်ဆင်ရန်' }
+};
+
+function gotoPage(page) {
+  playClickSound();
+  document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
+  const view = $('page-' + page); if (view) view.classList.add('active');
+  const nav = document.querySelector(`.nav-btn[data-page="${page}"]`); if (nav) nav.classList.add('active');
+  const meta = PAGE_TITLES[page] || { title: 'WC Wallet', sub: '' };
+  if($('pageTitle')) $('pageTitle').textContent = meta.title;
+  if($('pageSubtitle')) $('pageSubtitle').textContent = meta.sub;
+  if (page === 'history') loadHistory();
+  if (page === 'play') { syncSlotCredit(); }
+  if (page === 'buy') { renderPkgGrid(); loadMyBuyRequests(); }
+  if (page === 'gift') { renderGiftGrid(); loadMyGiftOrders(); }
+  if (page === 'games') renderGameHub();
+}
+
+function closeModal(id) { const el = $(id); if (el) el.classList.remove('show'); }
+function closeAllModals() { document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show')); }
+
+/* ============================================================
+   Settings/Transfer/Buy
+   ============================================================ */
+async function saveSettings() {
+  const name = $('setName').value.trim() || 'Player';
+  if (currentUser) await db.ref('users/' + currentUser.uid).update({ name }).catch(()=>{});
+  updateAllUI();
+  toast('✅ Settings saved', 'success');
+}
+
+async function doTransfer() {
+  const phoneInput = $('trPhone').value.trim();
+  const amtInput = $('trAmount').value.trim();
+  const note = $('trNote').value.trim();
+  if (!phoneInput) return toast('ဖုန်းနံပါတ် ထည့်ပါ', 'warn');
+  if (!amtInput) return toast('ပမာဏ ထည့်ပါ', 'warn');
+  const amt = parseInt(amtInput, 10);
+  if (!amt || amt <= 0) return toast('ပမာဏ မှန်ကန်စွာ ထည့်ပါ', 'warn');
+  if (amt > coinBalance) return toast('WCCoin မလုံလောက်ပါ', 'warn');
+  if (cleanPhone(phoneInput) === cleanPhone(currentUser.phone)) return toast('ကိုယ့်ကိုယ် လွှဲလို့မရ', 'warn');
+  const btn = $('doTransferBtn'); btn.disabled = true;
+  try {
+    const usersSnap = await db.ref('users').orderByChild('phone').equalTo(displayPhone(phoneInput)).once('value');
+    let recipient = null;
+    usersSnap.forEach(child => { if (!recipient) recipient = Object.assign({ _key: child.key }, child.val()); });
+    if (!recipient) throw new Error('လက်ခံမည့်သူ မတွေ့ပါ');
+    if (recipient.uid === currentUser.uid) throw new Error('ကိုယ့်ကိုယ် လွှဲလို့မရ');
+    const ok = await addCoins(-amt, 'transfer_sent', { desc: '💸 Transfer to ' + recipient.name, to: recipient.uid, toName: recipient.name, note });
+    if (!ok) throw new Error('လွှဲမရပါ');
+    const ok2 = await addCoinsToUser(recipient.uid, amt, 'transfer_received', { desc: '💸 Transfer from ' + currentUser.name, from: currentUser.uid, fromName: currentUser.name, note });
+    if (!ok2) { await addCoins(amt, 'transfer_refund', { desc: 'Transfer failed - refund' }); throw new Error('လွှဲမရပါ (rollback)'); }
+    toast('✅ ' + fmt(amt) + ' WCCoin လွှဲပြီး', 'success');
+    showCoinReward(-amt);
+    $('trPhone').value = ''; $('trAmount').value = ''; $('trNote').value = '';
+  } catch(err) {
+    toast('❌ ' + err.message, 'error');
+  } finally { btn.disabled = false; }
+}
+
+async function requestBuyCoins() {
+  if (!selectedPkgId) return toast('Package ရွေးပါ', 'warn');
+  const pkg = allCoinPackages[selectedPkgId];
+  if (!pkg) return toast('Package မတွေ့', 'error');
+  const note = $('buyNote').value.trim();
+  const btn = $('reqBuyBtn'); btn.disabled = true;
+  try {
+    await db.ref('coin_buy_requests').push({
+      uid: currentUser.uid, userName: currentUser.name, phone: currentUser.phone,
+      coins: pkg.coins, bonus: pkg.bonus || 0, price: pkg.price, note,
+      status: 'pending', ts: Date.now()
+    });
+    toast('✅ Request sent!', 'success');
+    $('buyNote').value = '';
+    loadMyBuyRequests();
+  } catch(err) { toast('❌ ' + err.message, 'error'); }
+  finally { btn.disabled = false; }
+}
+
+function loadMyBuyRequests() {
+  if (!currentUser) return;
+  db.ref('coin_buy_requests').orderByChild('uid').equalTo(currentUser.uid).once('value').then(snap => {
+    const data = snap.val() || {};
+    const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0)).slice(0, 10);
+    const wrap = $('myBuyRequests'); if (!wrap) return;
+    if (list.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted)">Request မရှိသေးပါ</div>'; return; }
+    wrap.innerHTML = list.map(([id, r]) => {
+      const statusColor = r.status === 'approved' ? 'var(--success)' : r.status === 'rejected' ? 'var(--danger)' : 'var(--accent)';
+      const statusIcon = r.status === 'approved' ? '✅' : r.status === 'rejected' ? '❌' : '⏳';
+      return `<div class="req-card"><div style="font-size:24px">${statusIcon}</div><div class="req-body"><div class="req-title">${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ' bonus)' : ''} · ${esc(r.price || '')}</div><div class="req-sub">${new Date(r.ts || Date.now()).toLocaleString()} · <span style="color:${statusColor};font-weight:800">${esc(r.status || 'pending')}</span></div></div></div>`;
+    }).join('');
+  }).catch(() => {});
+}
+
+/* ============================================================
+   GIFT EXCHANGE
+   ============================================================ */
+function openGiftExchange(giftId) {
+  const g = allGifts[giftId]; if (!g) return;
+  if (coinBalance < (g.price || 0)) { toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn'); return; }
+  if (g.stock === 0) { toast('⚠️ ကုန်သွားပါပြီ', 'warn'); return; }
+  selectedGiftId = giftId;
+  const imgHtml = g.image ? `<img src="${esc(g.image)}" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:16px" onerror="this.style.display='none'">` : `<div style="font-size:100px;text-align:center;margin-bottom:16px">${esc(g.emoji || '🎁')}</div>`;
+  $('giftExchangeBody').innerHTML = `${imgHtml}<h3 style="font-size:18px;font-weight:900;margin-bottom:6px;text-align:center">${esc(g.name)}</h3><p style="font-size:13px;color:var(--text-muted);font-weight:500;text-align:center;margin-bottom:16px">${esc(g.desc || '')}</p><div style="background:var(--bg-main);border-radius:12px;padding:14px;margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:6px"><span>ဈေးနှုန်း:</span><span style="color:#C44569">${fmt(g.price)} WCCoin</span></div><div style="display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-bottom:6px"><span>သင့်လက်ကျန်:</span><span style="color:var(--primary)">${fmt(coinBalance)} WCCoin</span></div><div style="display:flex;justify-content:space-between;font-weight:700;font-size:14px;border-top:1px solid var(--border);padding-top:8px;margin-top:8px"><span>ကျန်မည်:</span><span style="color:var(--success)">${fmt(coinBalance - g.price)} WCCoin</span></div></div><p style="font-size:12px;color:var(--text-muted);font-weight:500;text-align:center">Admin approve လုပ်ပြီးမှ လက်ဆောင် ရရှိပါမည်</p>`;
+  $('giftExchangeModal').classList.add('show');
+}
+
+async function confirmGiftExchange() {
+  if (!selectedGiftId || !currentUser) return;
+  const g = allGifts[selectedGiftId]; if (!g) return;
+  if (coinBalance < g.price) { toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn'); return; }
+  if (g.stock === 0) { toast('⚠️ ကုန်သွားပါပြီ', 'warn'); return; }
+  try {
+    const ok = await addCoins(-g.price, 'gift_exchange', { desc: `🎁 Gift: ${g.name}`, giftId: selectedGiftId, giftName: g.name });
+    if (!ok) throw new Error('WCCoin နုတ်မရပါ');
+    if (g.stock > 0) await db.ref('gifts/' + selectedGiftId + '/stock').transaction(c => Math.max(0, (c || 0) - 1)).catch(()=>{});
+    await db.ref('gift_orders').push({
+      uid: currentUser.uid, userName: currentUser.name, phone: currentUser.phone,
+      giftId: selectedGiftId, giftName: g.name, giftImage: g.image || '', giftEmoji: g.emoji || '🎁',
+      price: g.price, status: 'pending', ts: Date.now()
+    });
+    toast('✅ လဲလှယ်ပြီး!', 'success');
+    showCoinReward(-g.price);
+    closeModal('giftExchangeModal');
+    selectedGiftId = null;
+    loadMyGiftOrders();
+  } catch(e) { toast('❌ ' + e.message, 'error'); }
+}
+
+function loadMyGiftOrders() {
+  if (!currentUser) return;
+  db.ref('gift_orders').orderByChild('uid').equalTo(currentUser.uid).once('value').then(snap => {
+    const data = snap.val() || {};
+    const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0)).slice(0, 15);
+    const wrap = $('myGiftOrders'); if (!wrap) return;
+    if (list.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted)">Order မရှိသေးပါ</div>'; return; }
+    wrap.innerHTML = list.map(([id, o]) => {
+      const statusColor = o.status === 'approved' ? 'var(--success)' : o.status === 'rejected' ? 'var(--danger)' : 'var(--accent)';
+      const statusIcon = o.status === 'approved' ? '✅' : o.status === 'rejected' ? '❌' : '⏳';
+      const imgHtml = o.giftImage ? `<img src="${esc(o.giftImage)}" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.parentElement.innerHTML='${esc(o.giftEmoji || '🎁')}'">` : `${esc(o.giftEmoji || '🎁')}`;
+      return `<div class="req-card"><div style="width:50px;height:50px;border-radius:10px;background:#FFF;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:24px">${imgHtml}</div><div class="req-body"><div class="req-title">${esc(o.giftName)}</div><div class="req-sub">${fmt(o.price)} WCCoin · ${new Date(o.ts || Date.now()).toLocaleString()} · <span style="color:${statusColor};font-weight:800">${statusIcon} ${esc(o.status || 'pending')}</span></div></div></div>`;
+    }).join('');
+  }).catch(() => {});
+}
+
+/* ============================================================
+   SLOT 5x5
+   ============================================================ */
+const SYMBOLS = ['cherry','lemon','orange','plum','watermelon','bell','seven','diamond','BAR','star','grapes','coin','crown','horseshoe','clover'];
+const SCATTER_SYMBOL = 'bomb';
+const PAYOUTS = { 'cherry':{3:2,4:5,5:10},'lemon':{3:2,4:8,5:15},'orange':{3:2,4:10,5:20},'plum':{3:2,4:12,5:25},'watermelon':{3:2,4:15,5:30},'bell':{3:2,4:20,5:40},'seven':{3:2,4:30,5:60},'diamond':{3:2,4:40,5:80},'BAR':{3:2,4:50,5:100},'star':{3:2,4:60,5:120},'grapes':{3:2,4:70,5:140},'coin':{3:2,4:80,5:160},'crown':{3:2,4:100,5:200},'horseshoe':{3:2,4:120,5:250},'clover':{3:2,4:160,5:300} };
+const SVG_ICONS = { 'cherry':'<svg viewBox="0 0 24 24"><circle cx="8" cy="16" r="4" fill="#FF0000"/><circle cx="16" cy="16" r="4" fill="#FF0000"/><path d="M12 12V4" stroke="#00AA00" stroke-width="2"/></svg>','lemon':'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7" fill="#FFEB3B" stroke="#F9A825" stroke-width="1"/></svg>','orange':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#FFA500"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>','plum':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#8A2BE2"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>','watermelon':'<svg viewBox="0 0 24 24"><path d="M2 12A10 10 0 0 1 22 12z" fill="#FF4444"/><path d="M6 12h12" stroke="#00AA00" stroke-width="1"/></svg>','bell':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>','seven':'<svg viewBox="0 0 24 24"><text x="12" y="18" font-size="18" text-anchor="middle" fill="#FF0000" font-weight="bold">7</text></svg>','diamond':'<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#00BFFF" stroke="#0066AA" stroke-width="1"/></svg>','BAR':'<svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="2" fill="#FFD700"/><text x="12" y="15" font-size="8" text-anchor="middle" fill="#8B4513" font-weight="bold">BAR</text></svg>','star':'<svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>','grapes':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#8A2BE2"/><circle cx="16" cy="8" r="3" fill="#8A2BE2"/><circle cx="12" cy="12" r="3" fill="#8A2BE2"/><circle cx="8" cy="16" r="3" fill="#8A2BE2"/><circle cx="16" cy="16" r="3" fill="#8A2BE2"/></svg>','coin':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD700" stroke="#8B4513" stroke-width="1"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="#8B4513" font-weight="bold">W</text></svg>','crown':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>','horseshoe':'<svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 3 2 5 5 6-3 1-5 3-5 6 0 4 3 7 7 7s7-3 7-7c0-3-2-5-5-6 3-1 5-3 5-6 0-4-3-7-7-7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>','clover':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#00FF00"/><circle cx="16" cy="8" r="3" fill="#00FF00"/><circle cx="8" cy="16" r="3" fill="#00FF00"/><circle cx="16" cy="16" r="3" fill="#00FF00"/></svg>','bomb':'💣' };
+
+function syncSlotCredit() {
+  slotState.credit = coinBalance;
+  if($('slotCredit')) $('slotCredit').textContent = fmt(coinBalance);
+  if($('slotBetValue')) $('slotBetValue').textContent = fmt(slotState.bet);
+  if($('slotBetDisplay')) $('slotBetDisplay').textContent = fmt(slotState.bet);
+  updateSlotVIP();
+}
+
+function randomSymbol() {
+  const rand = Math.random();
+  if (rand < 0.04) return SCATTER_SYMBOL;
+  if (rand < 0.6) return SYMBOLS[Math.floor(Math.random() * 5)];
+  if (rand < 0.9) return SYMBOLS[Math.floor(Math.random() * 10)];
+  return SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+}
+
+function buildCell(symKey) {
+  const cell = document.createElement('div');
+  cell.className = 'reel-cell';
+  const s = document.createElement('div');
+  s.className = 'sym' + (symKey === SCATTER_SYMBOL ? ' bomb' : '');
+  s.innerHTML = SVG_ICONS[symKey] || SVG_ICONS['cherry'];
+  s.dataset.sym = symKey;
+  cell.appendChild(s);
+  return cell;
+}
+
+function generateReels() {
+  const container = $('reelsContainer'); if (!container) return;
+  container.innerHTML = '';
+  _reelColumns = []; _reelStrips = []; _reelOffsets = [0,0,0,0,0];
+  for (let c = 0; c < 5; c++) {
+    const col = document.createElement('div');
+    col.className = 'reel-column'; col.dataset.col = c;
+    const strip = document.createElement('div');
+    strip.className = 'reel-strip'; strip.dataset.col = c;
+    for (let i = 0; i < REEL_VISIBLE + REEL_BUFFER * 2; i++) strip.appendChild(buildCell(randomSymbol()));
+    col.appendChild(strip);
+    container.appendChild(col);
+    _reelColumns.push(col); _reelStrips.push(strip);
+  }
+  resetReelPositions();
+}
+
+function resetReelPositions() {
+  const cellH = getCellHeight(); if (!cellH) return;
+  _reelOffsets = [0,0,0,0,0];
+  for (let c = 0; c < 5; c++) {
+    const strip = _reelStrips[c]; if (!strip) continue;
+    strip.style.transition = 'none';
+    strip.style.transform = `translateY(${-cellH * REEL_BUFFER}px)`;
+    _reelOffsets[c] = -cellH * REEL_BUFFER;
+  }
+}
+
+function getCellHeight() {
+  if (!_reelStrips[0]) return 0;
+  const firstCell = _reelStrips[0].querySelector('.reel-cell'); if (!firstCell) return 0;
+  const rect = firstCell.getBoundingClientRect();
+  const style = window.getComputedStyle(firstCell);
+  const margin = (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
+  return rect.height + margin;
+}
+
+function spinColumn(colIndex, targetSymbols, duration, onDone) {
+  const strip = _reelStrips[colIndex];
+  const colEl = _reelColumns[colIndex];
+  if (!strip || !colEl) { if (onDone) onDone(); return; }
+  const cellH = getCellHeight();
+  if (!cellH) { if (onDone) onDone(); return; }
+  const totalScrollCells = 30 + colIndex * 5;
+  const requiredCells = totalScrollCells + REEL_VISIBLE + REEL_BUFFER;
+  while (strip.children.length < requiredCells + REEL_BUFFER * 2) strip.appendChild(buildCell(randomSymbol()));
+  const finalCells = targetSymbols.slice(0, REEL_VISIBLE).map(buildCell);
+  const totalNeeded = totalScrollCells + REEL_VISIBLE + REEL_BUFFER;
+  while (strip.children.length < totalNeeded) strip.appendChild(buildCell(randomSymbol()));
+  for (let i = 0; i < finalCells.length; i++) {
+    const idx = totalScrollCells + i;
+    if (strip.children[idx]) strip.replaceChild(finalCells[i], strip.children[idx]);
+  }
+  const endOffset = -cellH * totalScrollCells;
+  const durationMs = Math.max(duration, 200);
+  strip.style.transition = `transform ${durationMs}ms cubic-bezier(0.2, 0.9, 0.3, 1)`;
+  void strip.offsetHeight;
+  strip.style.transform = `translateY(${endOffset}px)`;
+  _reelOffsets[colIndex] = endOffset;
+  setTimeout(() => {
+    cleanupColumn(colIndex, totalScrollCells, cellH);
+    playReelStopSound(colIndex);
+    if (onDone) onDone();
+  }, durationMs + 20);
+}
+
+function cleanupColumn(colIndex, targetStartIndex, cellH) {
+  const strip = _reelStrips[colIndex]; if (!strip) return;
+  const keepAbove = REEL_BUFFER;
+  const removeCount = Math.max(0, targetStartIndex - keepAbove);
+  for (let i = 0; i < removeCount; i++) { if (strip.firstChild) strip.removeChild(strip.firstChild); }
+  const newOffset = _reelOffsets[colIndex] + cellH * removeCount;
+  strip.style.transition = 'none';
+  strip.style.transform = `translateY(${newOffset}px)`;
+  _reelOffsets[colIndex] = newOffset;
+  void strip.offsetHeight;
+}
+
+function slotSpin() {
+  if (slotState.spinning) return;
+  if (!currentUser) return toast('Login လုပ်ပါ', 'warn');
+  if (slotConfig.status === 'disabled') { toast('⚠️ Slot ပိတ်ထားပါသည်', 'warn'); return; }
+  if (!slotState.isFreeSpin && slotState.bet > slotState.credit) { toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn'); slotStopAuto(); return; }
+  getAudioCtx(); playSpinSound();
+  if (!slotState.isFreeSpin) {
+    slotState.credit -= slotState.bet;
+    if($('slotCredit')) $('slotCredit').textContent = fmt(slotState.credit);
+    addCoins(-slotState.bet, 'bet', { desc: '🎰 Slot Bet', game: 'Slot' });
+  }
+  if($('slotWinDisplay')) $('slotWinDisplay').textContent = '0';
+  slotState.spinning = true;
+  if($('slotSpinBtn')) $('slotSpinBtn').disabled = true;
+  if($('slotAutoBtn')) $('slotAutoBtn').disabled = true;
+  if($('slotMessage')) $('slotMessage').textContent = slotState.isFreeSpin ? `🎁 Free Spin! (${slotState.freeSpins})` : '🎰 လှည့်နေသည်...';
+  slotState.totalSpins++; totalGamesPlayed++;
+  db.ref('users/' + currentUser.uid + '/games_played').set(totalGamesPlayed).catch(()=>{});
+  if($('slotEffect')) $('slotEffect').classList.remove('show');
+  if($('slotFreeSpin')) $('slotFreeSpin').classList.remove('show');
+  document.querySelectorAll('.reel-cell .sym').forEach(el => el.classList.remove('win', 'scatter'));
+  
+  let winChance = false;
+  if (slotForceMode === 'win') winChance = true;
+  else if (slotForceMode === 'lose') winChance = false;
+  else winChance = Math.random() * 100 < slotConfig.winRate;
+  
+  const results = []; let bombCount = 0;
+  for (let c = 0; c < 5; c++) {
+    const colRes = [];
+    for (let r = 0; r < REEL_VISIBLE; r++) {
+      let sym; const rand = Math.random();
+      if (rand < 0.03 && bombCount < 2) { sym = SCATTER_SYMBOL; bombCount++; }
+      else {
+        if (rand < 0.6) sym = SYMBOLS[Math.floor(Math.random() * 5)];
+        else if (rand < 0.9) sym = SYMBOLS[Math.floor(Math.random() * 10)];
+        else sym = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+      }
+      colRes.push(sym);
+    }
+    results.push(colRes);
+  }
+  if (winChance && !slotState.isFreeSpin) {
+    const low = ['cherry','lemon','orange','plum','watermelon'];
+    const rs = low[Math.floor(Math.random() * low.length)];
+    results[0][1] = rs; results[1][1] = rs; results[2][1] = rs;
+  }
+  
+  const baseDur = slotState.turbo ? 300 : 700;
+  const staggerDur = slotState.turbo ? 60 : 150;
+  let finishedCount = 0;
+  for (let c = 0; c < 5; c++) {
+    const colDur = baseDur + c * staggerDur;
+    spinColumn(c, results[c], colDur, () => {
+      finishedCount++;
+      if (finishedCount === 5) {
+        setTimeout(() => {
+          slotCheckWin(results);
+          slotState.spinning = false;
+          if($('slotSpinBtn')) $('slotSpinBtn').disabled = false;
+          if($('slotAutoBtn')) $('slotAutoBtn').disabled = false;
+          if (slotState.isFreeSpin) {
+            slotState.freeSpins--;
+            if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 300 : 800);
+            else { slotState.isFreeSpin = false; if($('slotFreeSpin')) $('slotFreeSpin').classList.remove('show'); }
+          }
+          if (slotState.auto && slotState.autoCount > 0) {
+            slotState.autoCount--;
+            if($('slotAutoBtn')) $('slotAutoBtn').innerHTML = `🔄<br><span class="btn-label">(${slotState.autoCount})</span>`;
+            if (slotState.autoCount > 0) setTimeout(() => slotSpin(), slotState.turbo ? 300 : 800);
+            else slotStopAuto();
+          }
+        }, 80);
+      }
+    });
+  }
+}
+
+function slotStopAuto() {
+  slotState.auto = false; slotState.autoCount = 0;
+  if($('slotAutoBtn')) {
+    $('slotAutoBtn').innerHTML = '🔄<br><span class="btn-label">AUTO</span>';
+    $('slotAutoBtn').style.background = 'var(--grad-accent)';
+  }
+}
+
+function slotToggleAuto() {
+  if (slotState.spinning) return;
+  playClickSound();
+  slotState.auto = !slotState.auto;
+  if (slotState.auto) {
+    slotState.autoCount = 10;
+    if($('slotAutoBtn')) {
+      $('slotAutoBtn').innerHTML = `🔄<br><span class="btn-label">(${slotState.autoCount})</span>`;
+      $('slotAutoBtn').style.background = 'var(--danger)';
+    }
+    if($('slotMessage')) $('slotMessage').textContent = '🔄 Auto Spin!';
+    setTimeout(() => { if (!slotState.spinning && slotState.auto) slotSpin(); }, 250);
+  } else {
+    slotStopAuto();
+    if($('slotMessage')) $('slotMessage').textContent = 'Auto ရပ်';
+  }
+}
+
+function slotToggleTurbo() {
+  playClickSound();
+  slotState.turbo = !slotState.turbo;
+  if($('slotTurboBtn')) $('slotTurboBtn').style.background = slotState.turbo ? 'var(--danger)' : 'var(--grad-accent)';
+  if($('slotMessage')) $('slotMessage').textContent = slotState.turbo ? '⚡ Turbo ON!' : 'Turbo OFF';
+}
+
+function slotChangeBet(delta) {
+  if (slotState.spinning) return;
+  playClickSound();
+  let nb = slotState.bet + delta;
+  if (nb < slotConfig.minBet) nb = slotConfig.minBet;
+  if (nb > slotConfig.maxBet) nb = slotConfig.maxBet;
+  if (nb > coinBalance) { if($('slotMessage')) $('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
+  slotState.bet = nb; slotState.baseBet = nb; syncSlotCredit();
+}
+
+function slotQuickBet(mult) {
+  if (slotState.spinning) return;
+  playClickSound();
+  const nb = slotState.baseBet * mult;
+  if (nb > slotConfig.maxBet) return;
+  if (nb > coinBalance) { if($('slotMessage')) $('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
+  slotState.bet = nb; syncSlotCredit();
+}
+
+function slotCheckWin(results) {
+  let totalWin = 0; const winPositions = []; const winLines = []; let hasJackpot = false;
+  const scatterPos = [];
+  for (let c = 0; c < 5; c++) for (let r = 0; r < REEL_VISIBLE; r++) {
+    if (results[c][r] === SCATTER_SYMBOL) scatterPos.push({ col: c, row: r });
+  }
+  let bombFreeSpins = 0;
+  const freeSpinChance = Math.random() * 100 < slotConfig.freeSpinRate;
+  if (scatterPos.length >= 3 || freeSpinChance) {
+    if (scatterPos.length === 3) bombFreeSpins = 5;
+    else if (scatterPos.length === 4) bombFreeSpins = 7;
+    else if (scatterPos.length >= 5) bombFreeSpins = 10;
+    else bombFreeSpins = 3;
+    slotState.freeSpins += bombFreeSpins;
+    slotState.isFreeSpin = true;
+    if($('slotFreeSpin')) $('slotFreeSpin').classList.add('show');
+    scatterPos.forEach(p => {
+      winPositions.push(p);
+      const strip = _reelStrips[p.col]; if (!strip) return;
+      const cell = strip.children[REEL_BUFFER + p.row];
+      if (cell) { const s = cell.querySelector('.sym'); if (s) s.classList.add('scatter'); }
+    });
+  }
+  
+  const lines = [
+    { positions: [{c:0,r:0},{c:1,r:0},{c:2,r:0},{c:3,r:0},{c:4,r:0}], dir:'➡️' },
+    { positions: [{c:0,r:1},{c:1,r:1},{c:2,r:1},{c:3,r:1},{c:4,r:1}], dir:'➡️' },
+    { positions: [{c:0,r:2},{c:1,r:2},{c:2,r:2},{c:3,r:2},{c:4,r:2}], dir:'➡️' },
+    { positions: [{c:0,r:3},{c:1,r:3},{c:2,r:3},{c:3,r:3},{c:4,r:3}], dir:'➡️' },
+    { positions: [{c:0,r:4},{c:1,r:4},{c:2,r:4},{c:3,r:4},{c:4,r:4}], dir:'➡️' },
+    { positions: [{c:0,r:0},{c:1,r:1},{c:2,r:2},{c:3,r:3},{c:4,r:4}], dir:'↘️' },
+    { positions: [{c:0,r:4},{c:1,r:3},{c:2,r:2},{c:3,r:1},{c:4,r:0}], dir:'↗️' },
+    { positions: [{c:0,r:0},{c:1,r:1},{c:2,r:2},{c:3,r:1},{c:4,r:0}], dir:'V' },
+    { positions: [{c:0,r:4},{c:1,r:3},{c:2,r:2},{c:3,r:3},{c:4,r:4}], dir:'^' }
+  ];
+  
+  lines.forEach(line => {
+    const syms = line.positions.map(p => results[p.c][p.r]);
+    const firstSym = syms[0];
+    if (!firstSym || firstSym === SCATTER_SYMBOL) return;
+    let count = 1; const matchedPositions = [0];
+    for (let i = 1; i < syms.length; i++) {
+      if (syms[i] === firstSym) { count++; matchedPositions.push(i); } else break;
+    }
+    if (PAYOUTS[firstSym] && count >= 3) {
+      const mult = PAYOUTS[firstSym][count];
+      if (mult) {
+        const amount = slotState.bet * mult;
+        totalWin += amount;
+        if (count >= 5) hasJackpot = true;
+        const mp = matchedPositions.map(i => line.positions[i]);
+        winLines.push({ positions: mp, symbol: firstSym, matchCount: count, winAmount: amount, dir: line.dir });
+        mp.forEach(p => winPositions.push(p));
+      }
+    }
+  });
+  
+  const maxWin = slotState.bet * slotConfig.maxWinMultiplier;
+  if (totalWin > maxWin) totalWin = maxWin;
+  
+  if (totalWin > 0) {
+    slotState.credit += totalWin;
+    if($('slotWinDisplay')) $('slotWinDisplay').textContent = fmt(totalWin);
+    if($('slotCredit')) $('slotCredit').textContent = fmt(slotState.credit);
+    addCoins(totalWin, 'game_reward', { desc: '🎰 Slot Win', game: 'Slot' }).then(ok => {
+      if (ok) { showCoinReward(totalWin); coinBalance = slotState.credit; updateAllUI(); }
+    });
+    db.ref('users/' + currentUser.uid + '/total_wins').set(totalWins + totalWin).catch(()=>{});
+    
+    let winText = '🎉 WIN!', color = '#00ffcc', sound;
+    if (hasJackpot || totalWin >= slotState.bet * 500) { winText = '🏆 JACKPOT!'; color = '#ff00ff'; sound = playBigWinSound; }
+    else if (totalWin >= slotState.bet * 100) { winText = '💎 MEGA WIN!'; color = '#ff00ff'; sound = playBigWinSound; }
+    else if (totalWin >= slotState.bet * 50) { winText = '🌟 SUPER WIN!'; color = '#ffcc00'; sound = playBigWinSound; }
+    else { sound = playWinSound; }
+    if (sound) sound();
+    const eff = $('slotEffect');
+    if (eff) { eff.textContent = winText; eff.style.color = color; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2800); }
+    
+    const linesHtml = winLines.map(l => `<span style="display:inline-block;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.5);border-radius:6px;padding:3px 8px;margin:2px;font-size:11px;">${l.dir} ${l.matchCount}×${fmt(l.winAmount)}</span>`).join('');
+    if($('slotMessage')) $('slotMessage').innerHTML = `<div style="width:100%;text-align:center;margin-bottom:6px;font-size:16px;">${winText} = <span style="color:#ffcc00">${fmt(totalWin)} WCCoin</span></div><div style="width:100%;text-align:center">${linesHtml}</div>`;
+    
+    winPositions.forEach(p => {
+      const strip = _reelStrips[p.col]; if (!strip) return;
+      const cell = strip.children[REEL_BUFFER + p.r];
+      if (cell) { const s = cell.querySelector('.sym'); if (s && !s.classList.contains('scatter')) s.classList.add('win'); }
+    });
+    
+    const overlay = $('winLinesOverlay');
+    const svg = $('winLinesSvg');
+    if (overlay && svg && winLines.length > 0) {
+      overlay.classList.add('show');
+      const slotReelsRect = $('slotReels').getBoundingClientRect();
+      let svgContent = '';
+      winLines.forEach(line => {
+        const points = line.positions.map(p => {
+          const strip = _reelStrips[p.c]; if (!strip) return null;
+          const cell = strip.children[REEL_BUFFER + p.r]; if (!cell) return null;
+          const rect = cell.getBoundingClientRect();
+          return { x: rect.left + rect.width / 2 - slotReelsRect.left, y: rect.top + rect.height / 2 - slotReelsRect.top };
+        }).filter(Boolean);
+        if (points.length >= 2) {
+          const path = points.map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x} ${pt.y}`).join(' ');
+          svgContent += `<path d="${path}" stroke="#ff00ff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 8px #ff00ff)" style="animation:pulse 0.5s infinite alternate"/>`;
+        }
+      });
+      svg.innerHTML = svgContent;
+      setTimeout(() => { overlay.classList.remove('show'); svg.innerHTML = ''; }, 3000);
+    }
+  }
+  
+  if (bombFreeSpins > 0) {
+    playFreeSpinSound();
+    const eff = $('slotEffect');
+    if (eff) { eff.textContent = '💣 FREE SPIN!'; eff.style.color = '#ff00ff'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
+    const bombMsg = `💣 <span style="color:#ff00ff">BOMB ${scatterPos.length}!</span> Free Spin ${bombFreeSpins} ခါ!`;
+    if ($('slotMessage')) {
+      if (totalWin > 0) $('slotMessage').innerHTML += `<div style="width:100%;text-align:center;margin-top:4px;font-size:14px;">${bombMsg}</div>`;
+      else $('slotMessage').innerHTML = bombMsg;
+    }
+  } else if (totalWin === 0) {
+    playLoseSound();
+    const eff = $('slotEffect');
+    if (eff) { eff.textContent = 'LOSE'; eff.style.color = '#ff4444'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 1500); }
+    if($('slotMessage')) $('slotMessage').innerHTML = '😢 <span style="color:#ff4444">LOSE!</span> ထပ်ကြိုးစားပါ';
+  }
+}
+
+function slotDailyBonus() {
+  const today = new Date().toDateString();
+  const st = slotState.checkinState;
+  if (st && st.lastCheckin === today) { toast('ဒီနေ့ ယူပြီးပါပြီ', 'warn'); return; }
+  const reward = 50;
+  addCoins(reward, 'daily_bonus', { desc: '🎁 Daily Bonus' }).then(ok => {
+    if (ok) { showCoinReward(reward); toast('+' + fmt(reward) + ' WCCoin', 'success'); }
+  });
+}
+
+function refreshSlot() { syncSlotCredit(); resetReelPositions(); toast('Refreshed', 'success'); }
+
+/* ============================================================
+   DYNAMIC GAME MANAGER (iframe sandbox)
+   ============================================================ */
+function renderGameHub() {
+  const wrap = $('gameHubGrid'); if (!wrap) return;
+  const items = Object.entries(allGames).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  if (items.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);grid-column:1/-1;">ဂိမ်း မရှိသေးပါ</div>'; return; }
+  wrap.innerHTML = items.map(([id, g]) => {
+    const thumb = g.thumb ? `<img src="${esc(g.thumb)}" alt="${esc(g.name)}" onerror="this.parentElement.innerHTML='${esc(g.emoji || '🎮')}'">` : esc(g.emoji || '🎮');
+    return `<div class="game-card"><div class="game-thumb">${thumb}</div><div class="game-body"><h4>${esc(g.name)}</h4><p>${esc(g.desc || '')}</p><button class="game-play" onclick="event.stopPropagation();playDynamicGame('${id}')">▶ Play</button></div></div>`;
+  }).join('');
+}
+
+function buildSandboxHtml(game) {
+  const bridgeScript = `
+    <script>
+      window.WCWallet = {
+        betCoins: function(amount, meta) {
+          return new Promise(function(resolve) {
+            var id = 'bet_' + Date.now() + '_' + Math.random();
+            var handler = function(e) {
+              if (e.data && e.data.type === 'WCWalletResponse' && e.data.id === id) {
+                window.removeEventListener('message', handler);
+                resolve(e.data.result);
+              }
+            };
+            window.addEventListener('message', handler);
+            window.parent.postMessage({ type: 'WCWalletBet', id: id, amount: amount, meta: meta || {} }, '*');
+          });
+        },
+        winCoins: function(amount, meta) {
+          return new Promise(function(resolve) {
+            var id = 'win_' + Date.now() + '_' + Math.random();
+            var handler = function(e) {
+              if (e.data && e.data.type === 'WCWalletResponse' && e.data.id === id) {
+                window.removeEventListener('message', handler);
+                resolve(e.data.result);
+              }
+            };
+            window.addEventListener('message', handler);
+            window.parent.postMessage({ type: 'WCWalletWin', id: id, amount: amount, meta: meta || {} }, '*');
+          });
+        },
+        getBalance: function() {
+          return new Promise(function(resolve) {
+            var id = 'bal_' + Date.now() + '_' + Math.random();
+            var handler = function(e) {
+              if (e.data && e.data.type === 'WCWalletResponse' && e.data.id === id) {
+                window.removeEventListener('message', handler);
+                resolve(e.data.result);
+              }
+            };
+            window.addEventListener('message', handler);
+            window.parent.postMessage({ type: 'WCWalletGetBalance', id: id }, '*');
+          });
+        },
+        getUser: function() {
+          return new Promise(function(resolve) {
+            var id = 'user_' + Date.now() + '_' + Math.random();
+            var handler = function(e) {
+              if (e.data && e.data.type === 'WCWalletResponse' && e.data.id === id) {
+                window.removeEventListener('message', handler);
+                resolve(e.data.result);
+              }
+            };
+            window.addEventListener('message', handler);
+            window.parent.postMessage({ type: 'WCWalletGetUser', id: id }, '*');
+          });
+        },
+        toast: function(msg, type) {
+          window.parent.postMessage({ type: 'WCWalletToast', msg: msg, toastType: type || 'info' }, '*');
+        },
+        fmt: function(n) { return Math.floor(Number(n) || 0).toLocaleString('en-US'); }
+      };
+    <\/script>
+  `;
+  const gameJs = game.js ? `<script>${game.js}<\/script>` : '';
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',-apple-system,sans-serif;background:#0f172a;color:#f8fafc;padding:12px;font-size:14px;line-height:1.6}
+  button{font-family:inherit;cursor:pointer}
+  input{font-family:inherit}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px;margin-bottom:12px}
+  h1,h2,h3{color:#00b4d8}
+  .btn{padding:10px 20px;background:linear-gradient(135deg,#00b4d8,#0077b6);color:#fff;border:none;border-radius:8px;font-weight:800;font-size:14px}
+</style>
+</head>
+<body>
+${game.html || '<p>No game content</p>'}
+${bridgeScript}
+${gameJs}
+</body>
+</html>`;
+}
+
+function playDynamicGame(id) {
+  const g = allGames[id];
+  if (!g) return toast('Game မတွေ့ပါ', 'error');
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay show';
+  overlay.style.zIndex = 99999;
+  overlay.innerHTML = `
+    <div class="modal modal-lg" style="max-width:800px">
+      <div class="modal-head">
+        <h3>🎮 ${esc(g.name)}</h3>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button>
+      </div>
+      <div class="modal-body" style="padding:12px">
+        <div style="background:#020617;padding:10px 14px;border-radius:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid #334155">
+          <span style="font-size:12px;color:#94a3b8;font-weight:700">🪙 WCCoin Balance</span>
+          <span style="font-size:20px;font-weight:900;color:#00ffcc" id="dynGameBalance">${fmt(coinBalance)}</span>
+        </div>
+        <iframe id="dynGameFrame" sandbox="allow-scripts allow-forms allow-modals" style="width:100%;height:500px;border:none;border-radius:8px;background:#0f172a"></iframe>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  
+  const iframe = overlay.querySelector('#dynGameFrame');
+  const balanceEl = overlay.querySelector('#dynGameBalance');
+  iframe.srcdoc = buildSandboxHtml(g);
+  
+  function handleMessage(e) {
+    if (!e.data || !e.data.type) return;
+    const t = e.data.type;
+    if (t === 'WCWalletBet') {
+      (async () => {
+        if (!currentUser) { e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: false }, '*'); return; }
+        if (e.data.amount > coinBalance) {
+          toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn');
+          e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: false }, '*');
+          return;
+        }
+        const ok = await addCoins(-e.data.amount, 'game_bet', Object.assign({ desc: '🎮 Game Bet', game: g.name }, e.data.meta || {}));
+        if (ok) { coinBalance -= e.data.amount; if (balanceEl) balanceEl.textContent = fmt(coinBalance); }
+        e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: ok }, '*');
+      })();
+    } else if (t === 'WCWalletWin') {
+      (async () => {
+        if (!currentUser) { e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: false }, '*'); return; }
+        const ok = await addCoins(e.data.amount, 'game_reward', Object.assign({ desc: '🎮 Game Win', game: g.name }, e.data.meta || {}));
+        if (ok) { coinBalance += e.data.amount; if (balanceEl) balanceEl.textContent = fmt(coinBalance); showCoinReward(e.data.amount); }
+        e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: ok }, '*');
+      })();
+    } else if (t === 'WCWalletGetBalance') {
+      e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: coinBalance }, '*');
+    } else if (t === 'WCWalletGetUser') {
+      e.source.postMessage({ type: 'WCWalletResponse', id: e.data.id, result: currentUser ? { name: currentUser.name, phone: currentUser.phone } : null }, '*');
+    } else if (t === 'WCWalletToast') {
+      toast(e.data.msg, e.data.toastType);
+    }
+  }
+  window.addEventListener('message', handleMessage);
+  const cleanup = () => window.removeEventListener('message', handleMessage);
+  overlay.addEventListener('remove', cleanup);
+  const origRemove = overlay.remove.bind(overlay);
+  overlay.remove = function() { cleanup(); origRemove(); };
+}
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+function openAdminLogin() {
+  if (isAdmin) { showScreen('admin'); loadAdminData(); return; }
+  $('adminLoginModal').classList.add('show');
+}
+
+async function doAdminLogin() {
+  const phone = $('admLoginPhone').value.trim();
+  const pass = $('admLoginPass').value;
+  $('admLoginErr').textContent = '';
+  if (!phone || !pass) { $('admLoginErr').textContent = '⚠️ ဖုန်းနဲ့ password ထည့်ပါ'; return; }
+  try {
+    if (currentUser && displayPhone(currentUser.phone) === displayPhone(phone)) {
+      const snap = await db.ref('users/' + currentUser.uid + '/isAdmin').once('value');
+      if (snap.val() === true) {
+        isAdmin = true;
+        closeModal('adminLoginModal');
+        showScreen('admin');
+        loadAdminData();
+        toast('✅ Admin ဝင်ရောက်ပြီး', 'success');
+        return;
+      }
+    }
+    const usersSnap = await db.ref('users').orderByChild('phone').equalTo(displayPhone(phone)).once('value');
+    let adminUser = null;
+    usersSnap.forEach(child => { if (!adminUser) adminUser = Object.assign({ _key: child.key }, child.val()); });
+    if (!adminUser || adminUser.isAdmin !== true) {
+      $('admLoginErr').textContent = '⚠️ ဒီအကောင့်က Admin မဟုတ်ပါ';
+      return;
+    }
+    $('admLoginErr').textContent = '⚠️ ဒီဖုန်းနဲ့ login လုပ်ပြီးမှ Admin ဝင်နိုင်ပါမည်';
+  } catch (e) {
+    $('admLoginErr').textContent = '⚠️ ' + (e.message || 'Error');
+  }
+}
+
+function closeAdmin() { isAdmin = false; if (currentUser) showScreen('app'); else showScreen('auth'); }
+
+function loadAdminData() {
+  loadAdminUsers(); loadAdminBuyRequests(); loadAdminGifts(); loadAdminGiftOrders();
+  loadAdminSlotConfig(); loadAdminPackages(); loadAdminVersion(); loadAdminStats(); loadAdminGames();
+}
+
+function loadAdminStats() {
+  db.ref('users').on('value', snap => {
+    const data = snap.val() || {};
+    let totalCoins = 0;
+    Object.values(data).forEach(u => { totalCoins += (u.coin_balance || 0); });
+    if($('admStatUsers')) $('admStatUsers').textContent = Object.keys(data).length;
+    if($('admStatCoins')) $('admStatCoins').textContent = fmt(totalCoins);
+  });
+  db.ref('coin_buy_requests').on('value', snap => {
+    const data = snap.val() || {};
+    const pending = Object.values(data).filter(r => r.status === 'pending').length;
+    if($('admStatBuyReq')) $('admStatBuyReq').textContent = pending;
+  });
+  db.ref('gift_orders').on('value', snap => {
+    const data = snap.val() || {};
+    const pending = Object.values(data).filter(o => o.status === 'pending').length;
+    if($('admStatGiftOrders')) $('admStatGiftOrders').textContent = pending;
+  });
+}
+
+function loadAdminUsers() {
+  db.ref('users').on('value', snap => {
+    const data = snap.val() || {};
+    window._adminUsers = data;
+    renderAdminUsers($('admSearch') ? $('admSearch').value : '');
+    if($('admUserCount')) $('admUserCount').textContent = Object.keys(data).length;
+    const sel = $('admCoinUser');
+    if (sel) sel.innerHTML = '<option value="">— Select —</option>' + Object.entries(data).map(([uid, u]) => `<option value="${uid}">${esc(u.name || 'User')} (${esc(u.phone || '')}) — ${fmt(u.coin_balance || 0)} WCCoin</option>`).join('');
+  });
+}
+
+function renderAdminUsers(filter) {
+  const list = $('admUserList'); const data = window._adminUsers || {}; if (!list) return;
+  const f = (filter || '').toLowerCase().trim();
+  const entries = Object.entries(data).filter(([,u]) => !f || (u.name || '').toLowerCase().includes(f) || (u.phone || '').includes(f));
+  if (entries.length === 0) { list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No users found</div>'; return; }
+  const genderIcon = g => g === 'male' ? '👨' : g === 'female' ? '👩' : '🧑';
+  list.innerHTML = entries.map(([uid, u]) => `<div class="user-row"><div class="ur-av">${esc((u.name || '?').charAt(0).toUpperCase())}</div><div class="ur-body"><div class="ur-name">${esc(u.name || 'User')} ${genderIcon(u.gender)} ${u.isAdmin ? '👑' : ''}</div><div class="ur-sub">${esc(u.phone || '')} · ${esc(u.age_group || '-')} · 🪙 ${fmt(u.coin_balance || 0)} WCCoin</div></div><div class="ur-actions"><button class="btn btn-success btn-sm" onclick="quickAddCoin('${uid}', 100)">+100</button><button class="btn btn-success btn-sm" onclick="quickAddCoin('${uid}', 500)">+500</button><button class="btn btn-danger btn-sm" onclick="quickAddCoin('${uid}', -100)">−100</button><button class="btn btn-secondary btn-sm" onclick="toggleAdmin('${uid}')">👑</button></div></div>`).join('');
+}
+
+async function quickAddCoin(uid, amount) {
+  const ok = await addCoinsToUser(uid, amount, amount > 0 ? 'admin_add' : 'admin_deduct', { desc: `👑 Admin ${amount > 0 ? '+' : ''}${amount} WCCoin` });
+  if (ok) toast(`✅ ${amount > 0 ? '+' : ''}${fmt(amount)} WCCoin`, 'success');
+  else toast('❌ Failed (check Firebase Rules)', 'error');
+}
+
+async function adminApplyCoins() {
+  const uid = $('admCoinUser').value;
+  const amt = parseInt($('admCoinAmt').value, 10);
+  const reason = $('admCoinReason').value.trim() || 'Admin adjustment';
+  if (!uid) return toast('User ရွေးပါ', 'warn');
+  if (!amt || isNaN(amt)) return toast('ပမာဏ ထည့်ပါ', 'warn');
+  const ok = await addCoinsToUser(uid, amt, amt > 0 ? 'admin_add' : 'admin_deduct', { desc: '👑 ' + reason });
+  if (ok) { toast('✅ Done', 'success'); $('admCoinAmt').value = ''; $('admCoinReason').value = ''; }
+  else toast('❌ Failed', 'error');
+}
+
+async function toggleAdmin(uid) {
+  const snap = await db.ref('users/' + uid + '/isAdmin').once('value');
+  const cur = snap.val() === true;
+  if (!confirm(cur ? 'Admin ဖြုတ်မလား?' : 'Admin ပေးမလား?')) return;
+  await db.ref('users/' + uid + '/isAdmin').set(!cur);
+  toast('✅ Updated', 'success');
+}
+
+function loadAdminBuyRequests() {
+  db.ref('coin_buy_requests').on('value', snap => {
+    const data = snap.val() || {};
+    const wrap = $('admBuyReqList'); if (!wrap) return;
+    const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0));
+    if (list.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No requests</div>'; return; }
+    wrap.innerHTML = list.map(([id, r]) => {
+      const status = r.status || 'pending';
+      const color = status === 'approved' ? 'var(--success)' : status === 'rejected' ? 'var(--danger)' : 'var(--accent)';
+      const showBtns = status === 'pending';
+      return `<div class="admin-card" style="background:var(--bg-main)"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><div><strong>${esc(r.userName || 'User')}</strong> · ${esc(r.phone || '')}</div><div style="color:${color};font-weight:800">${esc(status)}</div></div><div style="font-size:14px;color:var(--text-muted);margin-bottom:10px">${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ')' : ''} · ${esc(r.price || '')}</div>${r.note ? `<div style="font-size:13px;padding:8px;background:var(--bg-card);border-radius:6px;margin-bottom:10px">${esc(r.note)}</div>` : ''}${showBtns ? `<div style="display:flex;gap:10px"><button class="btn btn-success" style="flex:1;padding:10px" onclick="approveBuyReq('${id}','${r.uid}',${(r.coins||0)+(r.bonus||0)})">✅ Approve</button><button class="btn btn-danger" style="flex:1;padding:10px" onclick="rejectBuyReq('${id}')">❌ Reject</button></div>` : ''}</div>`;
+    }).join('');
+  });
+}
+
+async function approveBuyReq(reqId, uid, totalCoins) {
+  if (!confirm('Approve + add ' + totalCoins + ' WCCoin?')) return;
+  try {
+    const ok = await addCoinsToUser(uid, totalCoins, 'buy', { desc: '🛒 WCCoin Purchase approved', requestId: reqId });
+    if (!ok) throw new Error('Add failed');
+    await db.ref('coin_buy_requests/' + reqId).update({ status: 'approved', approvedAt: Date.now() });
+    toast('✅ Approved', 'success');
+  } catch(e) { toast('❌ ' + e.message, 'error'); }
+}
+
+async function rejectBuyReq(reqId) {
+  if (!confirm('Reject?')) return;
+  await db.ref('coin_buy_requests/' + reqId).update({ status: 'rejected', rejectedAt: Date.now() });
+  toast('Rejected', 'info');
+}
+
+function loadAdminGifts() {
+  db.ref('gifts').on('value', snap => {
+    allGifts = snap.val() || {};
+    renderGiftGrid();
+    renderAdminGifts();
+  });
+}
+
+function renderAdminGifts() {
+  const wrap = $('admGiftList'); if (!wrap) return;
+  const items = Object.entries(allGifts).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  if (items.length === 0) { wrap.innerHTML = '<p style="color:var(--text-muted);padding:14px">Gift မရှိသေးပါ</p>'; return; }
+  wrap.innerHTML = items.map(([id, g]) => {
+    const imgHtml = g.image ? `<img src="${esc(g.image)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${esc(g.emoji || '🎁')}'">` : `${esc(g.emoji || '🎁')}`;
+    return `<div class="order-row"><div class="order-img">${imgHtml}</div><div class="order-body"><div class="order-title">${esc(g.name)}</div><div class="order-meta">${fmt(g.price)} WCCoin · Stock: ${g.stock != null ? g.stock : '∞'} · Order: ${g.order || 0}</div></div><div class="order-actions"><button class="btn btn-danger btn-sm" onclick="adminDelGift('${id}')">🗑</button></div></div>`;
+  }).join('');
+}
+
+async function adminAddGift() {
+  const name = $('giftName').value.trim();
+  const image = $('giftImage').value.trim();
+  const emoji = $('giftEmoji').value.trim() || '🎁';
+  const desc = $('giftDesc').value.trim();
+  const price = parseInt($('giftPrice').value, 10);
+  const stock = parseInt($('giftStock').value, 10);
+  const order = parseInt($('giftOrder').value, 10) || 1;
+  if (!name) return toast('နာမည် ထည့်ပါ', 'warn');
+  if (!price || price <= 0) return toast('ဈေးနှုန်း ထည့်ပါ', 'warn');
+  await db.ref('gifts').push({ name, image, emoji, desc, price, stock: isNaN(stock) ? 10 : stock, order, ts: Date.now() });
+  toast('✅ Gift ထည့်ပြီး', 'success');
+  ['giftName','giftImage','giftEmoji','giftDesc','giftPrice','giftStock','giftOrder'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+}
+
+async function adminDelGift(id) {
+  if (!confirm('ဖျက်မလား?')) return;
+  await db.ref('gifts/' + id).remove();
+  toast('🗑', 'info');
+}
+
+function loadAdminGiftOrders() {
+  db.ref('gift_orders').on('value', snap => {
+    const data = snap.val() || {};
+    allGiftOrders = data;
+    const wrap = $('admGiftOrderList'); if (!wrap) return;
+    const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0));
+    if (list.length === 0) { wrap.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">Order မရှိသေးပါ</div>'; return; }
+    wrap.innerHTML = list.map(([id, o]) => {
+      const status = o.status || 'pending';
+      const color = status === 'approved' ? 'var(--success)' : status === 'rejected' ? 'var(--danger)' : 'var(--accent)';
+      const imgHtml = o.giftImage ? `<img src="${esc(o.giftImage)}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${esc(o.giftEmoji || '🎁')}'">` : `${esc(o.giftEmoji || '🎁')}`;
+      const showBtns = status === 'pending';
+      return `<div class="admin-card" style="background:var(--bg-main)"><div class="order-row" style="background:transparent;border:none;padding:0;margin-bottom:10px"><div class="order-img">${imgHtml}</div><div class="order-body"><div class="order-title">${esc(o.giftName)}</div><div class="order-meta">${esc(o.userName)} · ${esc(o.phone)}</div><div class="order-meta">${fmt(o.price)} WCCoin · ${new Date(o.ts || Date.now()).toLocaleString()}</div></div><div style="color:${color};font-weight:900;font-size:13px;text-transform:uppercase">${esc(status)}</div></div>${showBtns ? `<div style="display:flex;gap:8px"><button class="btn btn-success" style="flex:1;padding:10px" onclick="approveGiftOrder('${id}')">✅ Approve</button><button class="btn btn-danger" style="flex:1;padding:10px" onclick="rejectGiftOrder('${id}','${o.uid}',${o.price})">❌ Reject</button></div>` : ''}</div>`;
+    }).join('');
+  });
+}
+
+async function approveGiftOrder(orderId) {
+  if (!confirm('Approve?')) return;
+  await db.ref('gift_orders/' + orderId).update({ status: 'approved', approvedAt: Date.now() });
+  toast('✅', 'success');
+}
+
+async function rejectGiftOrder(orderId, uid, price) {
+  if (!confirm('Reject + refund ' + price + ' WCCoin?')) return;
+  try {
+    await addCoinsToUser(uid, price, 'gift_refund', { desc: '🎁 Refund', orderId });
+    await db.ref('gift_orders/' + orderId).update({ status: 'rejected', rejectedAt: Date.now() });
+    toast('✅ Rejected', 'success');
+  } catch(e) { toast('❌ ' + e.message, 'error'); }
+}
+
+function loadAdminSlotConfig() {
+  db.ref('app_config/slot_config').on('value', snap => {
+    const cfg = snap.val();
+    if (cfg) slotConfig = Object.assign(slotConfig, cfg);
+    else db.ref('app_config/slot_config').set(slotConfig).catch(()=>{});
+    if($('slotCfgWinRate')) $('slotCfgWinRate').value = slotConfig.winRate;
+    if($('slotCfgMinBet')) $('slotCfgMinBet').value = slotConfig.minBet;
+    if($('slotCfgMaxBet')) $('slotCfgMaxBet').value = slotConfig.maxBet;
+    if($('slotCfgMaxWin')) $('slotCfgMaxWin').value = slotConfig.maxWinMultiplier;
+    if($('slotCfgFreeSpinRate')) $('slotCfgFreeSpinRate').value = slotConfig.freeSpinRate;
+    if($('slotCfgStatus')) $('slotCfgStatus').value = slotConfig.status;
+    if($('slotWinRateLabel')) $('slotWinRateLabel').textContent = slotConfig.winRate;
+  });
+  db.ref('app_config/slot_force_mode').on('value', snap => {
+    slotForceMode = snap.val() || 'auto';
+    updateForceModeUI();
+  });
+}
+
+async function adminSaveSlotConfig() {
+  const winRate = parseInt($('slotCfgWinRate').value, 10);
+  const minBet = parseInt($('slotCfgMinBet').value, 10);
+  const maxBet = parseInt($('slotCfgMaxBet').value, 10);
+  const maxWin = parseInt($('slotCfgMaxWin').value, 10);
+  const freeSpinRate = parseInt($('slotCfgFreeSpinRate').value, 10);
+  const status = $('slotCfgStatus').value;
+  if (winRate < 0 || winRate > 100) return toast('Win Rate 0-100', 'warn');
+  if (minBet < 1 || maxBet < minBet) return toast('Bet range မှား', 'warn');
+  await db.ref('app_config/slot_config').set({ winRate, minBet, maxBet, maxWinMultiplier: maxWin || 500, freeSpinRate: freeSpinRate || 5, status });
+  toast('✅ Saved', 'success');
+}
+
+async function adminSetForce(mode) {
+  slotForceMode = mode;
+  await db.ref('app_config/slot_force_mode').set(mode);
+  updateForceModeUI();
+  const labels = { win: '🎉 WIN', lose: '😢 LOSE', auto: '🎲 Auto' };
+  toast('✅ ' + labels[mode], 'success');
+}
+
+function updateForceModeUI() {
+  document.querySelectorAll('.slot-force-btns button').forEach(b => b.classList.remove('active'));
+  if (slotForceMode === 'win' && $('forceWinBtn')) $('forceWinBtn').classList.add('active');
+  else if (slotForceMode === 'lose' && $('forceLoseBtn')) $('forceLoseBtn').classList.add('active');
+  else if ($('forceAutoBtn')) $('forceAutoBtn').classList.add('active');
+  const labels = { win: '🎉 Force WIN', lose: '😢 Force LOSE', auto: '🎲 Auto' };
+  if($('forceModeLabel')) $('forceModeLabel').textContent = labels[slotForceMode] || '🎲 Auto';
+}
+
+function loadAdminPackages() {
+  db.ref('app_config/coin_packages').on('value', snap => {
+    allCoinPackages = snap.val() || {};
+    renderPkgGrid();
+    renderAdminPackages();
+  });
+}
+
+function renderAdminPackages() {
+  const wrap = $('pkgEditor'); if (!wrap) return;
+  const items = Object.entries(allCoinPackages).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  wrap.innerHTML = `<div class="admin-card-title">📦 Coin Packages</div><div class="admin-grid-2"><div class="admin-field"><label>Coins</label><input type="number" id="pkgCoins" placeholder="100"></div><div class="admin-field"><label>Price</label><input type="text" id="pkgPrice" placeholder="1,000 Ks"></div><div class="admin-field"><label>Bonus</label><input type="number" id="pkgBonus" placeholder="0"></div><div class="admin-field"><label>Order</label><input type="number" id="pkgOrder" placeholder="1"></div></div><button class="btn btn-primary btn-block" style="margin-bottom:20px" onclick="adminAddPkg()">➕ Add Package</button><div id="pkgList"></div>`;
+  const list = $('pkgList');
+  if (items.length === 0) { list.innerHTML = '<p style="color:var(--text-muted)">No packages</p>'; return; }
+  list.innerHTML = items.map(([id, p]) => `<div style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-main);border-radius:10px;margin-bottom:8px"><div style="flex:1"><div style="font-weight:800;font-size:14px">${fmt(p.coins)} WCCoin ${p.bonus ? `(+${p.bonus})` : ''}</div><div style="font-size:13px;color:var(--text-muted)">Price: ${esc(p.price)}</div></div><button class="btn btn-danger btn-sm" onclick="adminDelPkg('${id}')">🗑</button></div>`).join('');
+}
+
+async function adminAddPkg() {
+  const coins = parseInt($('pkgCoins').value, 10);
+  const price = $('pkgPrice').value.trim();
+  const bonus = parseInt($('pkgBonus').value, 10) || 0;
+  const order = parseInt($('pkgOrder').value, 10) || 1;
+  if (!coins || !price) return toast('Coins + Price ဖြည့်ပါ', 'warn');
+  await db.ref('app_config/coin_packages').push({ coins, price, bonus, order, ts: Date.now() });
+  toast('✅ Added', 'success');
+  ['pkgCoins','pkgPrice','pkgBonus','pkgOrder'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+}
+
+async function adminDelPkg(id) {
+  if (!confirm('Delete?')) return;
+  await db.ref('app_config/coin_packages/' + id).remove();
+}
+
+function loadAdminVersion() {
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val() || {};
+    if($('admLatest')) $('admLatest').value = v.latest || '';
+    if($('admNotes')) $('admNotes').value = v.releaseNotes || '';
+    if($('admForce')) $('admForce').checked = !!v.forceUpdate;
+  });
+}
+
+async function adminSaveVersion() {
+  const latest = $('admLatest').value.trim();
+  if (!latest) return toast('Version ထည့်ပါ', 'warn');
+  await db.ref('app_config/version').set({ latest, releaseNotes: $('admNotes').value.trim(), forceUpdate: $('admForce').checked, releaseDate: Date.now() });
+  toast('✅ Saved', 'success');
+}
+
+function loadAdminGames() {
+  db.ref('games').on('value', snap => {
+    allGames = snap.val() || {};
+    renderGameHub();
+    renderAdminGames();
+  });
+}
+
+function renderAdminGames() {
+  const wrap = $('admGameList'); if (!wrap) return;
+  const items = Object.entries(allGames).sort((a,b) => (a[1].order||0) - (b[1].order||0));
+  if (items.length === 0) { wrap.innerHTML = '<p style="color:var(--text-muted);padding:14px">Game မရှိသေးပါ</p>'; return; }
+  wrap.innerHTML = items.map(([id, g]) => `<div class="order-row"><div class="order-img">${esc(g.emoji || '🎮')}</div><div class="order-body"><div class="order-title">${esc(g.name)}</div><div class="order-meta">${esc(g.desc || '').substring(0, 50)}</div></div><div class="order-actions"><button class="btn btn-danger btn-sm" onclick="adminDelGame('${id}')">🗑</button></div></div>`).join('');
+}
+
+async function adminAddGame() {
+  const name = $('gGameName').value.trim();
+  const html = $('gGameHtml').value.trim();
+  const js = $('gGameJs').value.trim();
+  if (!name) return toast('Game Name ထည့်ပါ', 'warn');
+  if (!html && !js) return toast('HTML သို့မဟုတ် JS Code ထည့်ပါ', 'warn');
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'သိမ်းနေသည်...';
+  try {
+    await db.ref('games').push({
+      name: name,
+      emoji: $('gGameEmoji').value || '🎮',
+      order: parseInt($('gGameOrder').value) || 1,
+      thumb: $('gGameThumb').value,
+      desc: $('gGameDesc').value,
+      html: html,
+      js: js,
+      ts: Date.now()
+    });
+    toast('✅ Game ထည့်သွင်းပြီးပါပြီ', 'success');
+    $('gGameName').value = '';
+    $('gGameHtml').value = '';
+    $('gGameJs').value = '';
+    $('gGameDesc').value = '';
+    $('gGameThumb').value = '';
+  } catch(e) { toast('❌ ' + e.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = '➕ Game ထည့်မည်'; }
+}
+
+async function adminDelGame(id) {
+  if (!confirm('Delete?')) return;
+  await db.ref('games/' + id).remove();
+}
+
+/* ============================================================
+   AUTO UPDATE
+   ============================================================ */
+let _updateVersion = null;
+function checkUpdate() {
+  if (!db) return;
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val();
+    if (!v || !v.latest) return;
+    const cmp = compareVersion(APP_VERSION, v.latest);
+    if (cmp >= 0) return;
+    const dismissed = localStorage.getItem('wc_version_dismissed');
+    if (dismissed === v.latest) return;
+    if (_updateVersion && _updateVersion.latest === v.latest) return;
+    showUpdateModal(v);
+  }).catch(() => {});
+}
+function compareVersion(a, b) {
+  const pa = String(a || '0').split('.').map(n => parseInt(n, 10) || 0);
+  const pb = String(b || '0').split('.').map(n => parseInt(n, 10) || 0);
+  const len = Math.max(pa.length, pb.length);
+  for (let i = 0; i < len; i++) { const x = pa[i] || 0, y = pb[i] || 0; if (x > y) return 1; if (x < y) return -1; }
+  return 0;
+}
+function showUpdateModal(v) {
+  _updateVersion = v;
+  if($('newVerLabel')) $('newVerLabel').textContent = v.latest;
+  if($('releaseNotes')) $('releaseNotes').textContent = v.releaseNotes || 'Bug fixes';
+  $('updateModal').classList.add('show');
+}
+function applyUpdate() {
+  if (!_updateVersion) { closeModal('updateModal'); return; }
+  localStorage.setItem('wc_version_dismissed', _updateVersion.latest);
+  _updateVersion = null;
+  closeModal('updateModal');
+  if ('caches' in window) { caches.keys().then(names => { for (let name of names) caches.delete(name); }).catch(()=>{}); }
+  toast('🔄 Updating...', 'info');
+  setTimeout(() => { window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now(); }, 600);
+}
+function checkUpdateManually() {
+  toast('🔄 Checking...', 'info');
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val();
+    if (!v || !v.latest) return toast('Version info မရှိပါ', 'warn');
+    const cmp = compareVersion(APP_VERSION, v.latest);
+    if (cmp >= 0) return toast('✅ Latest', 'success');
+    showUpdateModal(v);
+  }).catch(err => toast('Failed: ' + err.message, 'error'));
+}
+
+/* ============================================================
+   INIT - ပြင်ဆင်ပြီး
+   ============================================================ */
+function init() {
+  loadSettingsLocal();
+  generateReels();
+  window.addEventListener('resize', () => { setTimeout(() => { resetReelPositions(); }, 100); });
+  
+  db.ref('app_config/coin_packages').on('value', snap => { allCoinPackages = snap.val() || {}; renderPkgGrid(); });
+  db.ref('gifts').on('value', snap => { allGifts = snap.val() || {}; renderGiftGrid(); });
+  db.ref('games').on('value', snap => { allGames = snap.val() || {}; renderGameHub(); });
+  db.ref('app_config/slot_config').on('value', snap => {
+    if (snap.val()) { slotConfig = Object.assign(slotConfig, snap.val()); if($('slotWinRateLabel')) $('slotWinRateLabel').textContent = slotConfig.winRate; }
+  });
+  db.ref('app_config/slot_force_mode').on('value', snap => { slotForceMode = snap.val() || 'auto'; });
+  
+  // ✅ Switch button - JS ပဲ assign လုပ်သည် (HTML inline onclick ဖျက်ထားပြီး)
+  const switchBtn = $('switchAuthBtn');
+  if (switchBtn) {
+    switchBtn.onclick = (e) => {
+      e.preventDefault();
+      const isLogin = !$('loginForm').classList.contains('hidden');
+      showAuthTab(isLogin ? 'signup' : 'login');
+    };
+  }
+  
+  // ✅ Login form
+  $('loginForm').onsubmit = async e => {
+    e.preventDefault();
+    const b = $('loginBtn');
+    const errEl = $('loginErr');
+    errEl.textContent = '';
+    b.disabled = true; b.textContent = '...';
+    try {
+      const phone = $('loginPhone').value.trim();
+      const pass = $('loginPass').value;
+      if (!phone) throw new Error('ဖုန်းနံပါတ် ထည့်ပါ');
+      if (!pass) throw new Error('Password ထည့်ပါ');
+      await login(phone, pass);
+      toast('Welcome', 'success');
+    } catch(err) {
+      errEl.textContent = authErrMsg(err);
+    } finally {
+      b.disabled = false; b.textContent = 'Login';
+    }
+  };
+  
+  // ✅ Signup form - validation နဲ့ မြန်မာ error ထည့်ပြီး
+  $('signupForm').onsubmit = async e => {
+    e.preventDefault();
+    const b = $('signupBtn');
+    const errEl = $('signupErr');
+    errEl.textContent = '';
+    b.disabled = true; b.textContent = '...';
+    try {
+      const name = $('suName').value.trim();
+      const phone = $('suPhone').value.trim();
+      const pass = $('suPass').value;
+      const gender = $('suGender').value;
+      const age = $('suAge').value;
+      
+      if (!name || name.length < 2) throw new Error('နာမည် အနည်းဆုံး ၂ လုံး ထည့်ပါ');
+      if (!/^09\d{7,9}$/.test(phone.replace(/\s/g,''))) throw new Error('ဖုန်းနံပါတ် မှန်ကန်စွာ ထည့်ပါ (09xxxxxxxxx)');
+      if (!pass || pass.length < 6) throw new Error('Password အနည်းဆုံး ၆ လုံး ထည့်ပါ');
+      if (!gender) throw new Error('လိင် ရွေးပါ');
+      if (!age) throw new Error('အသက် ရွေးပါ');
+      
+      await signup(name, phone, pass, gender, age);
+      toast('✅ Account ဖွင့်ပြီးပါပြီ!', 'success');
+    } catch(err) {
+      errEl.textContent = authErrMsg(err);
+    } finally {
+      b.disabled = false; b.textContent = 'Sign Up';
+    }
+  };
+  
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn => btn.onclick = () => gotoPage(btn.dataset.page));
+  document.querySelectorAll('.admin-tab').forEach(btn => btn.onclick = () => {
+    document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    $('admPanel-' + btn.dataset.tab).classList.add('active');
+  });
+  document.querySelectorAll('.modal-overlay').forEach(ov => ov.addEventListener('click', e => { if(e.target === ov) ov.classList.remove('show'); }));
+  
+  auth.onAuthStateChanged(async u => {
+    if(u) {
+      const s = await db.ref('users/'+u.uid).once('value');
+      const d = s.val();
+      if(!d) { auth.signOut(); return; }
+      currentUser = { uid: u.uid, ...d };
+      isAdmin = d.isAdmin === true;
+      showScreen('app');
+      loadUserData();
+      updateAllUI();
+    } else {
+      showScreen('auth');
+    }
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+</script>
+</body>
+</html>

@@ -3,379 +3,370 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#4F46E5">
+<meta name="theme-color" content="#00B4D8">
 <title>WC Wallet + Slot</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --primary:#4F46E5;--primary-dark:#4338CA;--primary-light:#818CF8;
-  --emerald:#059669;--emerald-dark:#047857;
-  --amber:#F59E0B;--amber-dark:#D97706;
-  --coral:#FB7185;--coral-dark:#F43F5E;
-  --bg:#F8FAFC;--surface:#FFF;--surface-2:#F1F5F9;
-  --text:#0F172A;--text-2:#64748B;--text-3:#94A3B8;
-  --border:#E2E8F0;--border-dark:#CBD5E1;
-  --green:#10B981;--red:#EF4444;--warn:#F59E0B;
-  --grad-primary:linear-gradient(135deg,#4F46E5,#7C3AED);
-  --grad-emerald:linear-gradient(135deg,#059669,#10B981);
-  --grad-amber:linear-gradient(135deg,#F59E0B,#FB923C);
-  --grad-coral:linear-gradient(135deg,#FB7185,#F43F5E);
-  --grad-sidebar:linear-gradient(180deg,#0F172A,#1E1B4B);
-  --grad-slot:linear-gradient(145deg,#1E1B4B,#0F0A2E);
+  --wc-blue:#00B4D8;--wc-blue-dark:#0077B6;--wc-blue-light:#90E0EF;
+  --wc-gold:#FFB800;--wc-gold-dark:#FF8C00;
+  --bg:#EEF4F9;--surface:#FFF;--surface-2:#F5F9FC;--text:#0F172A;--text-2:#5B6B82;
+  --border:#DCE6F0;--green:#00D9A3;--red:#FF4757;--warn:#FFB800;
+  --grad:linear-gradient(135deg,#00B4D8,#0077B6);
+  --grad-gold:linear-gradient(135deg,#FFB800,#FF8C00);
+  --grad-dark:linear-gradient(135deg,#0F172A,#1E293B);
   --r:18px;--r-pill:999px;
-  --sh-sm:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
-  --sh-md:0 4px 12px rgba(15,23,42,.08),0 2px 4px rgba(15,23,42,.04);
-  --sh-lg:0 12px 32px rgba(15,23,42,.12),0 4px 8px rgba(15,23,42,.06);
-  --sh-glow:0 8px 24px rgba(79,70,229,.25);
-  /* slot colors */
-  --slot-bg:#0F0A2E;--slot-panel:#1E1B4B;--slot-header:#312E81;
-  --slot-gold:#FBBF24;--slot-cyan:#22D3EE;--slot-pink:#F472B6;--slot-purple:#A78BFA;
-  --reel:#1E1B4B;--reel-text:#F1F5F9;
+  --sh-sm:0 2px 8px rgba(15,23,42,.05);--sh-md:0 8px 24px rgba(15,23,42,.08);
+  --sh-lg:0 16px 40px rgba(15,23,42,.12);
+  --sh-glow:0 8px 24px rgba(0,180,216,.35);
+  --slot-bg:#0a0118;--panel:#160829;--header:#2a0845;
+  --gold:#ffcc00;--cyan:#00ffcc;--pink:#ff00ff;
+  --reel:#FFFBF0;--reel-text:#1E293B;
 }
-body{font-family:'Plus Jakarta Sans','Padauk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.5}
+body{font-family:'Inter','Padauk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:15px}
 .hidden{display:none!important}
-button{font-family:inherit}
 
 /* ===== LOADING ===== */
-.loading{position:fixed;inset:0;background:rgba(248,250,252,.9);display:none;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(8px)}
+.loading{position:fixed;inset:0;background:rgba(255,255,255,.9);display:none;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(6px)}
 .loading.show{display:flex}
-.spinner{width:48px;height:48px;border:4px solid rgba(79,70,229,.15);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+.spinner{width:50px;height:50px;border:5px solid rgba(0,180,216,.15);border-top-color:var(--wc-blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ===== AUTH SCREEN ===== */
-#authScreen{display:none;min-height:100vh;background:linear-gradient(135deg,#4F46E5 0%,#7C3AED 40%,#0F172A 100%);align-items:center;justify-content:center;padding:20px;position:fixed;inset:0;z-index:1000;overflow-y:auto}
+#authScreen{display:none;min-height:100vh;background:linear-gradient(135deg,#00B4D8 0%,#0077B6 50%,#03045E 100%);align-items:center;justify-content:center;padding:20px;position:fixed;inset:0;z-index:1000;overflow-y:auto}
 #authScreen.active{display:flex}
-#authScreen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(129,140,248,.3) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(244,114,182,.2) 0%,transparent 50%);pointer-events:none}
 .auth-logo{position:absolute;top:30px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;z-index:10}
-.auth-logo-mark{width:58px;height:58px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--primary);box-shadow:0 12px 32px rgba(0,0,0,.25);letter-spacing:-1px}
-.auth-logo-text{font-size:30px;font-weight:800;color:#fff;letter-spacing:-1px}
-.auth-logo-text span{color:#A5B4FC}
-.auth-box{background:rgba(255,255,255,.98);padding:42px 32px 34px;border-radius:28px;box-shadow:0 32px 80px rgba(0,0,0,.35);width:420px;max-width:100%;position:relative;z-index:5;margin:80px 0 20px;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.5)}
-.auth-box h1{font-size:30px;font-weight:800;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:6px;letter-spacing:-.5px}
-.auth-box .subtitle{text-align:center;color:var(--text-2);font-size:15px;margin-bottom:24px;font-weight:500}
-.auth-tabs{display:flex;background:var(--surface-2);border-radius:var(--r-pill);padding:5px;margin-bottom:22px}
-.auth-tab{flex:1;padding:13px;border:none;background:transparent;cursor:pointer;font-weight:700;font-size:15px;color:var(--text-2);border-radius:var(--r-pill);transition:.2s}
-.auth-tab.active{background:var(--grad-primary);color:#fff;box-shadow:var(--sh-glow)}
-.auth-form{display:flex;flex-direction:column;gap:14px}
+.auth-logo-mark{width:60px;height:60px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#0077B6;box-shadow:0 10px 32px rgba(0,0,0,.2);letter-spacing:-1px}
+.auth-logo-text{font-size:32px;font-weight:900;color:#fff;letter-spacing:-1px}
+.auth-logo-text span{color:#90E0EF}
+.auth-box{background:#FFF;padding:44px 32px 36px;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.3);width:420px;max-width:100%;position:relative;z-index:5;margin:80px 0 20px}
+.auth-box h1{font-size:32px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:8px}
+.auth-box .subtitle{text-align:center;color:var(--text-2);font-size:16px;margin-bottom:26px;font-weight:600}
+.auth-tabs{display:flex;background:var(--surface-2);border-radius:var(--r-pill);padding:6px;margin-bottom:24px}
+.auth-tab{flex:1;padding:14px;border:none;background:transparent;cursor:pointer;font-weight:800;font-size:16px;color:var(--text-2);border-radius:var(--r-pill);font-family:inherit;transition:.2s}
+.auth-tab.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
+.auth-form{display:flex;flex-direction:column;gap:16px}
 .auth-input-group{position:relative;display:flex;align-items:center}
-.auth-input-group .ico{position:absolute;left:16px;font-size:18px;pointer-events:none;z-index:1;opacity:.7}
-.auth-form input{width:100%;padding:15px 16px 15px 48px;border:2px solid var(--border);border-radius:14px;font-size:15px;background:var(--surface-2);transition:.2s;outline:none;color:var(--text);font-weight:600}
-.auth-form input:focus{border-color:var(--primary);background:#FFF;box-shadow:0 0 0 4px rgba(79,70,229,.1)}
-.auth-btn{background:var(--grad-primary);color:#fff;padding:15px;border:none;border-radius:14px;font-weight:800;cursor:pointer;font-size:16px;transition:.2s;box-shadow:var(--sh-glow);margin-top:6px}
-.auth-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(79,70,229,.35)}
+.auth-input-group .ico{position:absolute;left:18px;font-size:20px;pointer-events:none;z-index:1}
+.auth-form input{width:100%;padding:16px 18px 16px 52px;border:2px solid var(--border);border-radius:14px;font-size:16px;background:var(--surface-2);transition:.2s;outline:none;color:var(--text);font-family:inherit;font-weight:600}
+.auth-form input:focus{border-color:var(--wc-blue);background:#FFF;box-shadow:0 0 0 4px rgba(0,180,216,.1)}
+.auth-btn{background:var(--grad);color:#fff;padding:16px;border:none;border-radius:14px;font-weight:900;cursor:pointer;font-size:18px;font-family:inherit;transition:.2s;box-shadow:0 6px 20px rgba(0,180,216,.3);margin-top:8px}
+.auth-btn:hover{transform:translateY(-2px)}
 .auth-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.auth-err{color:var(--red);font-size:14px;text-align:center;min-height:20px;font-weight:600}
-.auth-footer{margin-top:22px;text-align:center;font-size:13px;color:var(--text-3);font-weight:600}
+.auth-err{color:var(--red);font-size:15px;text-align:center;min-height:22px;font-weight:700}
+.auth-footer{margin-top:24px;text-align:center;font-size:14px;color:var(--text-2);font-weight:600}
 
 /* ===== TOASTS ===== */
 .toast-container{position:fixed;top:20px;right:20px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:calc(100vw - 40px)}
-.toast{background:#FFF;padding:14px 20px;border-radius:14px;box-shadow:var(--sh-lg);border-left:4px solid var(--primary);font-size:15px;font-weight:600;color:var(--text);min-width:240px;max-width:360px;pointer-events:auto;display:flex;align-items:center;gap:10px;animation:slideRight .3s ease-out}
+.toast{background:#FFF;padding:16px 22px;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.15);border-left:6px solid var(--wc-blue);font-size:16px;font-weight:700;color:var(--text);min-width:260px;max-width:380px;pointer-events:auto;display:flex;align-items:center;gap:12px;animation:slideRight .3s ease-out}
 .toast.success{border-left-color:var(--green)}
 .toast.error{border-left-color:var(--red)}
 .toast.warn{border-left-color:var(--warn)}
 @keyframes slideRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-.coin-reward{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-200px);background:var(--grad-amber);color:#fff;padding:14px 26px;border-radius:36px;font-weight:800;font-size:18px;box-shadow:0 12px 32px rgba(245,158,11,.4);z-index:99998;transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;display:flex;align-items:center;gap:10px}
+.coin-reward{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-200px);background:var(--grad-gold);color:#fff;padding:16px 28px;border-radius:36px;font-weight:900;font-size:20px;box-shadow:0 12px 32px rgba(255,184,0,.4);z-index:99998;transition:transform .4s cubic-bezier(.4,0,.2,1);pointer-events:none;display:flex;align-items:center;gap:10px}
 .coin-reward.show{transform:translateX(-50%) translateY(0)}
-.coin-reward .coin-icon{width:28px;height:28px}
+.coin-reward .coin-icon{width:30px;height:30px}
 .coin-reward .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
 
 /* ===== APP SHELL ===== */
 .app-shell{display:none;min-height:100vh}
 .app-shell.active{display:flex}
-.sidebar{width:250px;background:var(--grad-sidebar);padding:24px 14px;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20;overflow-y:auto;border-right:1px solid rgba(255,255,255,.06)}
-.sidebar::-webkit-scrollbar{width:4px}
-.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
-.sidebar-logo{display:flex;align-items:center;gap:12px;padding:0 8px;margin-bottom:28px}
-.logo-mark{width:44px;height:44px;border-radius:14px;background:var(--grad-primary);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.4);letter-spacing:-1px}
-.sidebar-logo h1{font-size:18px;font-weight:800;letter-spacing:-.5px;color:#fff}
-.sidebar-logo p{font-size:10px;color:#94A3B8;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;margin-top:2px}
-.nav-section{font-size:11px;color:#64748B;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:0 12px;margin:20px 0 8px}
-.nav-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;cursor:pointer;transition:.2s;color:#94A3B8;font-size:14px;font-weight:600;margin-bottom:3px;border:none;background:transparent;width:100%;text-align:left}
-.nav-item .ni-icon{font-size:18px;width:22px;text-align:center}
-.nav-item:hover{background:rgba(255,255,255,.06);color:#E2E8F0}
-.nav-item.active{background:linear-gradient(90deg,rgba(79,70,229,.4),rgba(124,58,237,.15));color:#FFF;border-left:3px solid var(--primary-light);padding-left:11px}
-.nav-wallet{margin-top:6px}
-.wallet-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;cursor:pointer;transition:.2s;margin-bottom:4px;color:#E2E8F0}
-.wallet-row:hover{background:rgba(255,255,255,.06)}
-.wallet-row .wr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sidebar{width:250px;background:#FFF;border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20;overflow-y:auto}
+.sidebar-logo{display:flex;align-items:center;gap:12px;padding:0 8px;margin-bottom:30px}
+.logo-mark{width:48px;height:48px;border-radius:16px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.35);letter-spacing:-1px}
+.sidebar-logo h1{font-size:20px;font-weight:900;letter-spacing:-0.5px}
+.sidebar-logo p{font-size:11px;color:var(--text-2);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-top:2px}
+.nav-section{font-size:12px;color:var(--text-2);font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:0 12px;margin:20px 0 10px}
+.nav-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;cursor:pointer;transition:.2s;color:var(--text-2);font-size:15px;font-weight:700;margin-bottom:4px;border:none;background:transparent;width:100%;text-align:left;font-family:inherit}
+.nav-item .ni-icon{font-size:20px;width:24px;text-align:center}
+.nav-item:hover{background:var(--surface-2);color:var(--text)}
+.nav-item.active{background:linear-gradient(90deg,rgba(0,180,216,.15),rgba(0,180,216,.03));color:var(--wc-blue-dark);border-left:4px solid var(--wc-blue)}
+.nav-wallet{margin-top:8px}
+.wallet-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;cursor:pointer;transition:.2s;margin-bottom:6px}
+.wallet-row:hover{background:var(--surface-2)}
+.wallet-row .wr-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
 .wallet-row .wr-meta{flex:1;min-width:0}
-.wallet-row .wr-meta h5{font-size:13px;font-weight:700;margin-bottom:2px;color:#fff}
-.wallet-row .wr-meta p{font-size:11px;color:#94A3B8;font-weight:600}
-.sb-user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:.2s}
-.sb-user:hover{background:rgba(255,255,255,.1)}
-.sb-avatar{width:40px;height:40px;border-radius:50%;background:var(--grad-primary);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
-.sb-user h5{font-size:14px;font-weight:700;color:#fff}
-.sb-user p{font-size:11px;color:#94A3B8;font-weight:600}
+.wallet-row .wr-meta h5{font-size:15px;font-weight:800;margin-bottom:2px}
+.wallet-row .wr-meta p{font-size:12px;color:var(--text-2);font-weight:600}
+.sb-user{margin-top:auto;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:var(--surface-2);border:1px solid var(--border);cursor:pointer;transition:.2s}
+.sb-user:hover{background:#FFF}
+.sb-avatar{width:44px;height:44px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;flex-shrink:0}
+.sb-user h5{font-size:15px;font-weight:800}
+.sb-user p{font-size:12px;color:var(--text-2);font-weight:600}
 
-.main-content{flex:1;margin-left:250px;padding:28px 32px 48px;position:relative;z-index:2;min-height:100vh;background:linear-gradient(180deg,#F8FAFC 0%,#F1F5F9 100%)}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;gap:16px;flex-wrap:wrap}
-.topbar-left h2{font-size:26px;font-weight:800;letter-spacing:-.8px;color:var(--text)}
-.topbar-left p{font-size:14px;color:var(--text-2);margin-top:4px;font-weight:500}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.avatar-btn{width:44px;height:44px;border-radius:50%;background:var(--grad-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:var(--sh-sm);position:relative;border:none}
-.avatar-btn .status-dot{position:absolute;bottom:1px;right:1px;width:12px;height:12px;background:var(--green);border:2.5px solid #FFF;border-radius:50%}
-.logout-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 16px;font-size:14px;font-weight:700;cursor:pointer;color:var(--red);transition:.2s}
-.logout-btn:hover{background:#FEF2F2;border-color:#FECACA}
+.main-content{flex:1;margin-left:250px;padding:30px 36px 50px;position:relative;z-index:2}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:16px;flex-wrap:wrap}
+.topbar-left h2{font-size:28px;font-weight:900;letter-spacing:-1px}
+.topbar-left p{font-size:15px;color:var(--text-2);margin-top:4px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.avatar-btn{width:48px;height:48px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;cursor:pointer;box-shadow:var(--sh-sm);position:relative;border:none;font-family:inherit}
+.avatar-btn .status-dot{position:absolute;bottom:2px;right:2px;width:14px;height:14px;background:var(--green);border:3px solid #FFF;border-radius:50%}
+.logout-btn{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:12px 18px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;color:var(--red);transition:.2s}
+.logout-btn:hover{background:#FFF0F1;border-color:var(--red)}
 
 /* ===== PAGE VIEWS ===== */
 .page-view{display:none}
-.page-view.active{display:block;animation:fadeUp .35s ease-out}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-view.active{display:block;animation:fadeUp .3s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== BALANCE ===== */
-.balance-card{background:linear-gradient(135deg,#4F46E5 0%,#7C3AED 60%,#EC4899 100%);border-radius:26px;padding:30px 28px;color:#fff;position:relative;overflow:hidden;margin-bottom:24px;box-shadow:var(--sh-glow)}
-.balance-card::before{content:'';position:absolute;top:-60%;right:-20%;width:340px;height:340px;background:radial-gradient(circle,rgba(255,255,255,.2),transparent 70%);border-radius:50%}
-.balance-card::after{content:'';position:absolute;bottom:-70%;left:-15%;width:280px;height:280px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 70%);border-radius:50%}
-.balance-label{font-size:12px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;opacity:.85;margin-bottom:10px;position:relative;z-index:2}
-.balance-amount{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;position:relative;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.balance-amount .coin-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center}
-.balance-amount .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))}
-.balance-amount small{font-size:18px;font-weight:700;opacity:.9}
-.balance-sub{font-size:14px;margin-top:10px;font-weight:500;opacity:.9;position:relative;z-index:2;display:flex;align-items:center;gap:6px}
-.balance-actions{display:flex;gap:12px;margin-top:22px;position:relative;z-index:2}
-.balance-action{flex:1;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:14px 12px;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.2s;backdrop-filter:blur(12px)}
-.balance-action:hover{background:rgba(255,255,255,.28);transform:translateY(-2px)}
+/* ===== BALANCE / STATS / ACTIONS ===== */
+.balance-card{background:linear-gradient(135deg,#00B4D8 0%,#0077B6 100%);border-radius:28px;padding:32px 30px;color:#fff;position:relative;overflow:hidden;margin-bottom:28px;box-shadow:0 12px 32px rgba(0,180,216,.28)}
+.balance-card::before{content:'';position:absolute;top:-50%;right:-30%;width:320px;height:320px;background:rgba(255,255,255,.08);border-radius:50%}
+.balance-card::after{content:'';position:absolute;bottom:-60%;left:-20%;width:260px;height:260px;background:rgba(255,255,255,.05);border-radius:50%}
+.balance-label{font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.85;margin-bottom:12px;position:relative;z-index:2}
+.balance-amount{font-size:48px;font-weight:900;letter-spacing:-2px;line-height:1.1;position:relative;z-index:2;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.balance-amount .coin-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.balance-amount .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.balance-amount small{font-size:20px;font-weight:800;opacity:.9}
+.balance-sub{font-size:15px;margin-top:12px;font-weight:600;opacity:.85;position:relative;z-index:2;display:flex;align-items:center;gap:8px}
+.balance-actions{display:flex;gap:14px;margin-top:24px;position:relative;z-index:2}
+.balance-action{flex:1;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.35);color:#fff;padding:16px 12px;border-radius:16px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;backdrop-filter:blur(10px)}
+.balance-action:hover{background:rgba(255,255,255,.3);transform:translateY(-2px)}
 
-/* ===== STATS ===== */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.stat-box{background:#FFF;border:1px solid var(--border);border-radius:20px;padding:20px 22px;box-shadow:var(--sh-sm);transition:.25s}
-.stat-box:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--border-dark)}
-.stat-box .sb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.stat-box .sb-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.sb-wave .sb-icon{background:linear-gradient(135deg,#FEF3C7,#FDE68A)}
-.sb-kpay .sb-icon{background:linear-gradient(135deg,#DBEAFE,#BFDBFE)}
-.sb-wc .sb-icon{background:linear-gradient(135deg,#D1FAE5,#A7F3D0)}
-.sb-total .sb-icon{background:linear-gradient(135deg,#EDE9FE,#DDD6FE)}
-.stat-box .sb-label{font-size:13px;color:var(--text-2);font-weight:600;margin-bottom:6px}
-.stat-box .sb-value{font-size:24px;font-weight:800;letter-spacing:-.8px;line-height:1.2;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.stat-box .sb-value small{font-size:13px;font-weight:700;color:var(--text-3)}
-.stat-box .sb-value .inline-coin{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:30px}
+.stat-box{background:#FFF;border:1px solid var(--border);border-radius:22px;padding:22px 24px;box-shadow:var(--sh-sm);transition:.25s}
+.stat-box:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.stat-box .sb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.stat-box .sb-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.sb-wave .sb-icon{background:linear-gradient(135deg,#FFF3D0,#FFE29A)}
+.sb-kpay .sb-icon{background:linear-gradient(135deg,#DDEEFF,#B8DCFF)}
+.sb-wc .sb-icon{background:linear-gradient(135deg,#D0F9E8,#A8EFD3)}
+.sb-total .sb-icon{background:linear-gradient(135deg,#E0F2FE,#BAE6FD)}
+.stat-box .sb-label{font-size:14px;color:var(--text-2);font-weight:700;margin-bottom:8px}
+.stat-box .sb-value{font-size:28px;font-weight:900;letter-spacing:-1px;line-height:1.15;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stat-box .sb-value small{font-size:15px;font-weight:800;color:var(--text-2)}
+.stat-box .sb-value .inline-coin{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .stat-box .sb-value .inline-coin img{width:100%;height:100%;object-fit:contain}
-.stat-box .sb-foot{font-size:12px;color:var(--text-3);margin-top:8px;font-weight:500}
+.stat-box .sb-foot{font-size:13px;color:var(--text-2);margin-top:10px;font-weight:600}
 
-/* ===== ACTIONS ===== */
-.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}
-.action-tile{background:#FFF;border:1px solid var(--border);border-radius:20px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm)}
-.action-tile:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--primary-light)}
-.action-tile .at-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.at-play .at-icon{background:linear-gradient(135deg,#FED7AA,#FDBA74)}
-.at-receive .at-icon{background:linear-gradient(135deg,#BBF7D0,#86EFAC)}
-.at-history .at-icon{background:linear-gradient(135deg,#BFDBFE,#93C5FD)}
-.at-buy .at-icon{background:linear-gradient(135deg,#DDD6FE,#C4B5FD)}
-.action-tile h4{font-size:15px;font-weight:700;color:var(--text);text-align:center;line-height:1.2}
-.action-tile p{font-size:12px;color:var(--text-2);font-weight:500;text-align:center}
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:30px}
+.action-tile{background:#FFF;border:1px solid var(--border);border-radius:22px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm);font-family:inherit;border:none}
+.action-tile:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:rgba(0,180,216,.3)}
+.action-tile .at-icon{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.at-play .at-icon{background:linear-gradient(135deg,#FFE4B8,#FFC97A)}
+.at-receive .at-icon{background:linear-gradient(135deg,#D0F9E8,#A8EFD3)}
+.at-history .at-icon{background:linear-gradient(135deg,#DDEEFF,#B8DCFF)}
+.at-buy .at-icon{background:linear-gradient(135deg,#F3E4FF,#E0C8FF)}
+.action-tile h4{font-size:16px;font-weight:800;color:var(--text);text-align:center;line-height:1.2}
+.action-tile p{font-size:13px;color:var(--text-2);font-weight:600;text-align:center}
 
 /* ===== WALLET CARDS ===== */
-.wallets-section{margin-bottom:24px}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.section-header h3{font-size:20px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
-.section-header a{font-size:13px;color:var(--primary);font-weight:700;cursor:pointer;text-decoration:none}
-.wallet-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.wallet-card{background:#FFF;border:1px solid var(--border);border-radius:22px;padding:22px;position:relative;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm)}
-.wallet-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--primary-light)}
-.wallet-card::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;opacity:.1;filter:blur(24px);background:var(--primary)}
-.wallet-card-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:2}
-.wallet-logo{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;background:var(--grad-primary);letter-spacing:-1px}
+.wallets-section{margin-bottom:28px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.section-header h3{font-size:22px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:10px}
+.section-header a{font-size:14px;color:var(--wc-blue-dark);font-weight:800;cursor:pointer;text-decoration:none}
+.wallet-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.wallet-card{background:#FFF;border:1px solid var(--border);border-radius:24px;padding:24px;position:relative;overflow:hidden;cursor:pointer;transition:.25s;box-shadow:var(--sh-sm)}
+.wallet-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.wallet-card::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;border-radius:50%;opacity:.12;filter:blur(20px);background:#00B4D8}
+.wallet-card-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;position:relative;z-index:2}
+.wallet-logo{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;flex-shrink:0;background:var(--grad);letter-spacing:-1px}
 .wallet-card-head .wc-name{flex:1;min-width:0}
-.wallet-card-head .wc-name h4{font-size:16px;font-weight:800;margin-bottom:3px}
-.wallet-card-head .wc-name p{font-size:12px;color:var(--text-2);font-weight:500}
-.wallet-balance{font-size:30px;font-weight:800;letter-spacing:-1.2px;position:relative;z-index:2;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.wallet-balance small{font-size:14px;font-weight:700;color:var(--text-3)}
-.wallet-balance .inline-coin{width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.wallet-card-head .wc-name h4{font-size:18px;font-weight:900;margin-bottom:4px}
+.wallet-card-head .wc-name p{font-size:13px;color:var(--text-2);font-weight:600}
+.wallet-balance{font-size:34px;font-weight:900;letter-spacing:-1.5px;position:relative;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wallet-balance small{font-size:16px;font-weight:800;color:var(--text-2)}
+.wallet-balance .inline-coin{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .wallet-balance .inline-coin img{width:100%;height:100%;object-fit:contain}
-.wallet-meta{font-size:12px;color:var(--text-3);margin-top:8px;font-weight:500;position:relative;z-index:2}
+.wallet-meta{font-size:13px;color:var(--text-2);margin-top:10px;font-weight:600;position:relative;z-index:2}
 
 /* ===== SLOT GAME ===== */
-.slot-wrapper{background:var(--grad-slot);border-radius:26px;padding:20px;box-shadow:0 20px 60px rgba(15,10,46,.5);border:1px solid rgba(167,139,250,.3);max-width:850px;margin:0 auto;position:relative;overflow:hidden}
-.slot-wrapper::before{content:'';position:absolute;top:-50%;left:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(167,139,250,.15),transparent 70%);pointer-events:none}
-.slot-wrapper::after{content:'';position:absolute;bottom:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(34,211,238,.1),transparent 70%);pointer-events:none}
-.slot-top{display:flex;justify-content:space-between;align-items:center;background:var(--slot-panel);border:1px solid rgba(251,191,36,.3);border-radius:14px;padding:12px 16px;margin-bottom:14px;position:relative;z-index:2}
-.slot-credit{display:flex;align-items:center;gap:10px;color:var(--slot-gold);font-weight:800;font-size:16px}
-.slot-credit .coin-icon{width:26px;height:26px}
-.slot-credit .coin-icon img{width:100%;height:100%;object-fit:contain}
-.slot-credit .lbl{font-size:12px;opacity:.7;margin-right:2px;letter-spacing:.5px}
-.slot-credit .val{color:var(--slot-cyan);font-size:22px;text-shadow:0 0 12px rgba(34,211,238,.6)}
-.slot-top-right{display:flex;gap:8px}
-.slot-btn-sm{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);border-radius:10px;width:40px;height:40px;cursor:pointer;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s;color:var(--slot-gold)}
-.slot-btn-sm:active{transform:scale(.92)}
-.slot-btn-sm:hover{background:rgba(251,191,36,.25)}
-.slot-title{text-align:center;font-size:42px;font-weight:800;background:linear-gradient(135deg,#FBBF24,#F472B6,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:10px;margin:8px 0 4px;position:relative;z-index:2;filter:drop-shadow(0 0 20px rgba(251,191,36,.4))}
-.slot-subtitle{text-align:center;font-size:12px;color:var(--slot-cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;border:1px solid rgba(34,211,238,.3);border-radius:8px;padding:6px;background:rgba(34,211,238,.08);font-weight:700;position:relative;z-index:2}
-.slot-info-row{display:flex;justify-content:space-between;background:var(--slot-header);border:1px solid rgba(251,191,36,.25);border-radius:12px;padding:10px 16px;margin-bottom:14px;position:relative;z-index:2}
-.slot-info-item{display:flex;flex-direction:column;align-items:center;min-width:70px}
-.slot-info-item .lbl{font-size:10px;color:var(--slot-gold);font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.slot-info-item .val{font-size:20px;color:#fff;font-weight:800;margin-top:2px}
-.slot-info-item.vip .val{color:#FBBF24;font-size:24px}
-.slot-main{display:flex;gap:12px;margin-bottom:14px;position:relative;z-index:2}
-.slot-ways{display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(244,114,182,.15);border:1px solid rgba(244,114,182,.4);border-radius:10px;padding:8px 4px;width:42px;flex-shrink:0}
-.slot-ways span{writing-mode:vertical-rl;color:var(--slot-pink);font-weight:800;font-size:11px;letter-spacing:1.5px}
-.slot-reels{flex:1;background:var(--reel);border:1px solid rgba(251,191,36,.3);border-radius:12px;padding:8px;position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;box-shadow:inset 0 0 40px rgba(0,0,0,.3)}
-.reels-table{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}
-.reels-table td{background:rgba(255,255,255,.05);border-radius:8px;border:1px solid rgba(167,139,250,.2);text-align:center;vertical-align:middle;width:20%;height:20%;padding:0;position:relative;overflow:hidden;aspect-ratio:1}
-.sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:32px;color:var(--reel-text);transition:transform .1s}
-.sym svg{width:100%;height:100%;max-width:42px;max-height:42px;display:block;margin:auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
-.sym.bomb{font-size:30px}
-.reels-table.spinning .sym{animation:spinSym .07s linear infinite}
+.slot-wrapper{background:linear-gradient(145deg,#1a0a2e 0%,#0a0118 50%,#12031f 100%);border-radius:32px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 3px rgba(255,204,0,.3),inset 0 0 60px rgba(255,204,0,.05);max-width:880px;margin:0 auto;position:relative;overflow:hidden}
+.slot-wrapper::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,0,255,.08) 0%,transparent 60%);animation:glowRotate 8s linear infinite;pointer-events:none}
+@keyframes glowRotate{to{transform:rotate(360deg)}}
+.slot-top{display:flex;justify-content:space-between;align-items:center;background:rgba(22,8,41,.9);border:2px solid rgba(255,204,0,.5);border-radius:14px;padding:14px 20px;margin-bottom:16px;position:relative;z-index:2;backdrop-filter:blur(10px)}
+.slot-credit{display:flex;align-items:center;gap:12px;color:var(--gold);font-weight:900;font-size:18px}
+.slot-credit .coin-icon{width:30px;height:30px}
+.slot-credit .coin-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,204,0,.5))}
+.slot-credit .lbl{font-size:14px;opacity:.75;margin-right:4px}
+.slot-credit .val{color:var(--cyan);font-size:26px;text-shadow:0 0 12px rgba(0,255,204,.7)}
+.slot-top-right{display:flex;gap:10px}
+.slot-btn-sm{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a0b2e;border:none;border-radius:10px;width:44px;height:44px;cursor:pointer;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 3px 8px rgba(255,204,0,.3)}
+.slot-btn-sm:active{transform:scale(.9)}
+.slot-title{text-align:center;font-size:48px;font-weight:900;background:linear-gradient(180deg,#FFD700 0%,#FF8C00 50%,#FFD700 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:10px;margin:12px 0 4px;position:relative;z-index:2;filter:drop-shadow(0 0 20px rgba(255,204,0,.6));animation:titlePulse 2s ease-in-out infinite}
+@keyframes titlePulse{0%,100%{filter:drop-shadow(0 0 20px rgba(255,204,0,.6))}50%{filter:drop-shadow(0 0 35px rgba(255,0,255,.8))}}
+.slot-subtitle{text-align:center;font-size:13px;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;border:1.5px solid rgba(0,255,204,.6);border-radius:8px;padding:7px;background:rgba(0,255,204,.08);font-weight:800;position:relative;z-index:2;backdrop-filter:blur(10px)}
+.slot-info-row{display:flex;justify-content:space-between;background:rgba(42,8,69,.8);border:2px solid rgba(255,204,0,.4);border-radius:12px;padding:12px 20px;margin-bottom:16px;position:relative;z-index:2;backdrop-filter:blur(10px)}
+.slot-info-item{display:flex;flex-direction:column;align-items:center;min-width:80px}
+.slot-info-item .lbl{font-size:11px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
+.slot-info-item .val{font-size:22px;color:#fff;font-weight:900;margin-top:4px}
+.slot-info-item.vip .val{color:#ffaa00;font-size:26px}
+.slot-main{display:flex;gap:14px;margin-bottom:16px;position:relative;z-index:2}
+.slot-ways{display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(180deg,#4a0000,#2a0000);border:2px solid rgba(255,204,0,.5);border-radius:12px;padding:10px 8px;width:50px;flex-shrink:0}
+.slot-ways span{writing-mode:vertical-rl;color:var(--gold);font-weight:900;font-size:13px;letter-spacing:3px;text-shadow:0 0 10px rgba(255,204,0,.5)}
+.slot-reels{flex:1;background:linear-gradient(180deg,#FFFBF0,#FFF5E0);border:3px solid var(--gold);border-radius:14px;padding:10px;position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;box-shadow:inset 0 0 30px rgba(255,204,0,.15)}
+.reels-table{width:100%;border-collapse:separate;border-spacing:5px;table-layout:fixed}
+.reels-table td{background:linear-gradient(180deg,#FFFDF8,#FFF8E7);border-radius:8px;border:2px solid rgba(255,204,0,.6);text-align:center;vertical-align:middle;width:20%;height:20%;padding:0;position:relative;overflow:hidden;aspect-ratio:1;box-shadow:inset 0 2px 4px rgba(0,0,0,.05)}
+.sym{display:flex;justify-content:center;align-items:center;width:100%;height:100%;font-weight:bold;font-size:36px;color:var(--reel-text);transition:transform .1s}
+.sym svg{width:100%;height:100%;max-width:46px;max-height:46px;display:block;margin:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.15))}
+.sym.bomb{font-size:34px}
+/* ပိုမြန်သော လည်ပတ်မှု Animation */
+.reels-table.spinning .sym{animation:spinSym .08s linear infinite}
 @keyframes spinSym{0%{transform:translateY(-120%)}100%{transform:translateY(120%)}}
-.sym.win{background:linear-gradient(135deg,rgba(34,211,238,.9),rgba(251,191,36,.85));border-radius:8px;animation:wf .3s infinite alternate;box-shadow:0 0 20px #22D3EE,0 0 40px #FBBF24;z-index:2}
-.sym.scatter{background:linear-gradient(135deg,rgba(244,114,182,.9),rgba(251,146,60,.85));border-radius:8px;animation:sf .3s infinite alternate;box-shadow:0 0 25px #F472B6,0 0 50px #FB923C;z-index:2}
-@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.08)}}
-@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.12)}}
-.slot-btns{display:flex;flex-direction:column;gap:8px;width:105px;flex-shrink:0}
-.slot-btn{border-radius:12px;font-weight:800;cursor:pointer;text-transform:uppercase;border:1px solid rgba(255,255,255,.2);transition:.15s;padding:0;color:#0F0A2E;position:relative;overflow:hidden;letter-spacing:.5px}
+
+.sym.win{background:linear-gradient(135deg,rgba(0,255,204,.95),rgba(255,204,0,.85));border-radius:8px;animation:wf .25s infinite alternate;box-shadow:0 0 20px #00ffcc,0 0 40px #ffcc00;z-index:2}
+.sym.scatter{background:linear-gradient(135deg,rgba(255,0,255,.95),rgba(255,100,0,.85));border-radius:8px;animation:sf .25s infinite alternate;box-shadow:0 0 25px #ff00ff,0 0 50px #ff6600;z-index:2}
+@keyframes wf{0%{transform:scale(1)}100%{transform:scale(1.12)}}
+@keyframes sf{0%{transform:scale(1)}100%{transform:scale(1.18)}}
+.slot-btns{display:flex;flex-direction:column;gap:12px;width:115px;flex-shrink:0}
+.slot-btn{border-radius:14px;font-weight:900;cursor:pointer;text-transform:uppercase;border:2px solid rgba(255,255,255,.25);transition:.15s;font-family:inherit;padding:0;color:#1a0b2e;position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 .slot-btn:active{transform:scale(.95)}
-.slot-btn::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:.5s}
+.slot-btn::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transition:.5s}
 .slot-btn:hover::after{left:150%}
-.slot-spin{background:var(--grad-emerald);font-size:18px;padding:22px 0;box-shadow:0 0 24px rgba(16,185,129,.5);line-height:1.2;color:#fff}
+.slot-spin{background:linear-gradient(180deg,#00ffcc,#00b894);font-size:22px;padding:26px 0;box-shadow:0 0 25px rgba(0,255,204,.5),0 4px 12px rgba(0,0,0,.3);line-height:1.2}
 .slot-spin:disabled{opacity:.5;box-shadow:none;cursor:not-allowed}
-.slot-auto{background:var(--grad-coral);color:#fff;font-size:14px;padding:14px 0;line-height:1.2}
-.slot-turbo{background:var(--grad-amber);font-size:14px;padding:14px 0;line-height:1.2;color:#0F0A2E}
-.slot-bet-row{display:flex;justify-content:space-between;align-items:center;background:var(--slot-panel);border:1px solid rgba(251,191,36,.25);border-radius:12px;padding:10px 14px;gap:10px;flex-wrap:wrap;position:relative;z-index:2}
-.bet-ctrl{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);padding:5px 8px;border-radius:10px;border:1px solid rgba(251,191,36,.3)}
-.bet-ctrl button{background:var(--grad-amber);border:none;width:34px;height:34px;border-radius:8px;font-weight:800;cursor:pointer;font-size:18px;color:#0F0A2E;transition:.15s}
+.slot-auto{background:linear-gradient(180deg,#ff00ff,#c400c4);color:#fff;font-size:16px;padding:18px 0;line-height:1.2;box-shadow:0 0 18px rgba(255,0,255,.4)}
+.slot-turbo{background:linear-gradient(180deg,#ffaa00,#cc8800);font-size:16px;padding:18px 0;line-height:1.2;box-shadow:0 0 18px rgba(255,170,0,.4)}
+.slot-bet-row{display:flex;justify-content:space-between;align-items:center;background:rgba(22,8,41,.9);border:2px solid rgba(255,204,0,.4);border-radius:12px;padding:12px 16px;gap:12px;flex-wrap:wrap;position:relative;z-index:2;backdrop-filter:blur(10px)}
+.bet-ctrl{display:flex;align-items:center;gap:10px;background:rgba(74,0,0,.8);padding:8px 12px;border-radius:10px;border:2px solid rgba(255,204,0,.5)}
+.bet-ctrl button{background:linear-gradient(180deg,#FFD700,#FFA500);border:none;width:40px;height:40px;border-radius:8px;font-weight:900;cursor:pointer;font-size:22px;color:#1a0b2e;transition:.15s;box-shadow:0 2px 6px rgba(0,0,0,.2)}
 .bet-ctrl button:active{transform:scale(.9)}
-.bet-ctrl .bv{color:#fff;font-weight:800;font-size:20px;min-width:56px;text-align:center}
-.bet-ctrl .bl{color:var(--slot-gold);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.quick-bets{display:flex;gap:6px}
-.quick-bets button{border:none;border-radius:8px;font-weight:800;cursor:pointer;color:#fff;font-size:14px;padding:10px 14px;min-width:48px;transition:.15s}
-.quick-bets button:active{transform:scale(.93)}
-.q2x{background:var(--grad-amber);color:#0F0A2E}
-.q3x{background:var(--grad-coral)}
-.q5x{background:linear-gradient(180deg,#EC4899,#BE185D)}
-.daily-btn{background:var(--grad-emerald);color:#fff;padding:10px 16px;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:18px;transition:.15s}
-.daily-btn:active{transform:scale(.93)}
-.slot-msg{background:rgba(0,0,0,.4);border:1px solid rgba(251,191,36,.3);border-radius:12px;padding:12px;color:var(--slot-gold);font-size:14px;font-weight:700;min-height:56px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.5;flex-wrap:wrap;gap:6px;margin-top:14px;overflow:hidden;position:relative;z-index:2}
-.slot-msg .win-line{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.5);border-radius:8px;padding:4px 10px;margin:3px;display:inline-block;font-size:12px;animation:popIn .3s ease-out}
+.bet-ctrl .bv{color:#fff;font-weight:900;font-size:24px;min-width:65px;text-align:center}
+.bet-ctrl .bl{color:var(--gold);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.quick-bets{display:flex;gap:8px}
+.quick-bets button{border:none;border-radius:10px;font-weight:900;cursor:pointer;color:#fff;font-size:16px;padding:14px 18px;min-width:58px;font-family:inherit;transition:.15s;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.quick-bets button:active{transform:scale(.95)}
+.q2x{background:linear-gradient(180deg,#ffaa00,#cc8800)}
+.q3x{background:linear-gradient(180deg,#ff6600,#cc4400)}
+.q5x{background:linear-gradient(180deg,#ff0066,#cc0044)}
+.daily-btn{background:linear-gradient(180deg,#00ff66,#00cc44);color:#1a0b2e;padding:14px 20px;border:none;border-radius:10px;font-weight:900;cursor:pointer;font-size:22px;font-family:inherit;transition:.15s;box-shadow:0 3px 8px rgba(0,255,102,.3)}
+.daily-btn:active{transform:scale(.95)}
+.slot-msg{background:linear-gradient(180deg,#000,#0a0015);border:2px solid rgba(255,204,0,.5);border-radius:12px;padding:16px;color:#ffcc00;font-size:16px;font-weight:800;min-height:65px;display:flex;justify-content:center;align-items:center;text-align:center;line-height:1.5;flex-wrap:wrap;gap:8px;margin-top:16px;overflow:hidden;position:relative;z-index:2;box-shadow:inset 0 0 20px rgba(255,204,0,.1)}
+.slot-msg .win-line{background:rgba(255,204,0,.15);border:2px solid rgba(255,204,0,.6);border-radius:8px;padding:5px 12px;margin:4px;display:inline-block;font-size:13px;animation:popIn .3s ease-out}
 @keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
-.slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:60px;font-weight:800;text-shadow:0 0 40px currentColor,0 0 80px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
-.slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .4s infinite alternate}
-@keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.12)}}
-.slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(244,114,182,.15),rgba(251,191,36,.15));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:12px}
+
+.slot-effect{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:68px;font-weight:900;text-shadow:0 0 40px currentColor,0 0 80px currentColor;z-index:50;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;text-align:center}
+.slot-effect.show{opacity:1;transform:translate(-50%,-50%) scale(1);animation:winPulse .35s infinite alternate}
+@keyframes winPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.15)}}
+.slot-freespin{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,0,255,.15),rgba(255,204,0,.15));z-index:40;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:10px}
 .slot-freespin.show{opacity:1}
-.slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:34px;font-weight:800;color:#F472B6;text-shadow:0 0 25px #F472B6,0 0 50px #F472B6;animation:fsFlash .5s infinite alternate}
+.slot-freespin::before{content:'🎁 FREE SPIN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:38px;font-weight:900;color:#ff00ff;text-shadow:0 0 25px #ff00ff,0 0 50px #ff00ff;animation:fsFlash .4s infinite alternate}
 @keyframes fsFlash{0%{opacity:.5}100%{opacity:1}}
 
-/* ===== FORMS / BUTTONS ===== */
-.tab-bar{display:flex;gap:8px;background:var(--surface-2);border-radius:var(--r-pill);padding:5px;margin-bottom:20px;overflow-x:auto}
-.tab-bar button{padding:11px 18px;border:none;background:transparent;font-weight:700;font-size:14px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);white-space:nowrap;transition:.2s}
-.tab-bar button.active{background:var(--grad-primary);color:#fff;box-shadow:var(--sh-glow)}
-.info-row{margin-bottom:18px}
-.info-row label{display:block;font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.info-row input,.info-row select,.info-row textarea{width:100%;padding:15px 18px;border:1.5px solid var(--border);border-radius:14px;font-size:15px;background:var(--surface-2);outline:none;color:var(--text);font-weight:600;transition:.15s}
-.info-row input:focus,.info-row select:focus,.info-row textarea:focus{border-color:var(--primary);background:#FFF;box-shadow:0 0 0 4px rgba(79,70,229,.1)}
-.info-row textarea{resize:vertical;min-height:90px}
-.btn{padding:15px 22px;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+/* ===== TRANSFER / BUY / HISTORY LIST ===== */
+.tab-bar{display:flex;gap:10px;background:var(--surface-2);border-radius:var(--r-pill);padding:6px;margin-bottom:22px;overflow-x:auto}
+.tab-bar button{padding:12px 20px;border:none;background:transparent;font-weight:800;font-size:15px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
+.tab-bar button.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
+
+.info-row{margin-bottom:20px}
+.info-row label{display:block;font-size:14px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.info-row input,.info-row select,.info-row textarea{width:100%;padding:16px 20px;border:2px solid var(--border);border-radius:14px;font-size:16px;background:var(--surface-2);outline:none;color:var(--text);font-family:inherit;font-weight:600;transition:.15s}
+.info-row input:focus,.info-row select:focus,.info-row textarea:focus{border-color:var(--wc-blue);background:#FFF;box-shadow:0 0 0 4px rgba(0,180,216,.1)}
+.info-row textarea{resize:vertical;min-height:100px}
+
+.btn{padding:16px 24px;border-radius:14px;font-weight:800;font-size:16px;cursor:pointer;font-family:inherit;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .btn:active{transform:scale(.97)}
-.btn-primary{background:var(--grad-primary);color:#fff;box-shadow:var(--sh-glow)}
-.btn-primary:hover{transform:translateY(-1px)}
-.btn-secondary{background:var(--surface-2);color:var(--text);border:1.5px solid var(--border)}
-.btn-danger{background:var(--grad-coral);color:#fff}
-.btn-gold{background:var(--grad-amber);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,.3)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(0,180,216,.3)}
+.btn-secondary{background:var(--surface-2);color:var(--text);border:2px solid var(--border)}
+.btn-danger{background:linear-gradient(135deg,#FF4757,#FF6B7A);color:#fff}
+.btn-gold{background:var(--grad-gold);color:#fff;box-shadow:0 4px 14px rgba(255,184,0,.3)}
 .btn-block{width:100%}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-/* ===== HISTORY ===== */
-.history-list{display:flex;flex-direction:column;gap:10px}
-.tx-row{background:#FFF;border:1px solid var(--border);border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh-sm);transition:.2s}
-.tx-row:hover{transform:translateX(4px);box-shadow:var(--sh-md);border-color:var(--border-dark)}
-.tx-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--surface-2)}
-.tx-icon.plus{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);color:#059669}
-.tx-icon.minus{background:linear-gradient(135deg,#FEE2E2,#FECACA);color:#DC2626}
+.history-list{display:flex;flex-direction:column;gap:12px}
+.tx-row{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:18px 20px;display:flex;align-items:center;gap:18px;box-shadow:var(--sh-sm);transition:.2s}
+.tx-row:hover{transform:translateX(4px);box-shadow:var(--sh-md)}
+.tx-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:var(--surface-2)}
+.tx-icon.plus{background:linear-gradient(135deg,#D0F9E8,#A8EFD3);color:#00A378}
+.tx-icon.minus{background:linear-gradient(135deg,#FFE4E4,#FFC8C8);color:#E63946}
 .tx-body{flex:1;min-width:0}
-.tx-body .tx-title{font-size:15px;font-weight:700;margin-bottom:3px}
-.tx-body .tx-desc{font-size:12px;color:var(--text-3);font-weight:500}
-.tx-amount{font-size:18px;font-weight:800;flex-shrink:0;display:flex;align-items:center;gap:5px}
-.tx-amount.plus{color:#059669}
-.tx-amount.minus{color:#DC2626}
-.tx-amount .coin-icon{width:22px;height:22px}
+.tx-body .tx-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.tx-body .tx-desc{font-size:13px;color:var(--text-2);font-weight:600}
+.tx-amount{font-size:20px;font-weight:900;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.tx-amount.plus{color:#00A378}
+.tx-amount.minus{color:#E63946}
+.tx-amount .coin-icon{width:24px;height:24px}
 .tx-amount .coin-icon img{width:100%;height:100%;object-fit:contain}
-.empty-state{text-align:center;padding:50px 20px;color:var(--text-2)}
-.empty-state .em{font-size:64px;display:block;margin-bottom:16px;opacity:.4}
-.empty-state h3{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px}
-.empty-state p{font-size:14px;font-weight:500}
 
-/* ===== PACKAGES ===== */
-.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:22px}
-.pkg-card{background:#FFF;border:2px solid var(--border);border-radius:18px;padding:20px 14px;text-align:center;cursor:pointer;position:relative;transition:.2s}
-.pkg-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--primary-light)}
-.pkg-card.selected{border-color:var(--primary);background:rgba(79,70,229,.04);box-shadow:0 8px 24px rgba(79,70,229,.15)}
-.pkg-coins{font-size:24px;font-weight:800;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:6px}
-.pkg-price{font-size:14px;color:var(--text-2);font-weight:700}
-.pkg-bonus{position:absolute;top:-10px;right:10px;background:var(--grad-coral);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;box-shadow:0 2px 8px rgba(244,63,94,.3)}
-.req-card{background:#FFF;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-2)}
+.empty-state .em{font-size:72px;display:block;margin-bottom:20px;opacity:.5}
+.empty-state h3{font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px}
+.empty-state p{font-size:15px;font-weight:600}
+
+/* ===== PACKAGE / REQUEST CARDS ===== */
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.pkg-card{background:#FFF;border:3px solid var(--border);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;position:relative;transition:.2s}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md)}
+.pkg-card.selected{border-color:var(--wc-gold);background:rgba(255,184,0,.06);box-shadow:0 8px 24px rgba(255,184,0,.2)}
+.pkg-coins{font-size:28px;font-weight:900;color:#FF8C00;line-height:1.1;margin-bottom:8px}
+.pkg-price{font-size:16px;color:var(--text-2);font-weight:800}
+.pkg-bonus{position:absolute;top:-10px;right:12px;background:var(--red);color:#fff;font-size:12px;font-weight:900;padding:4px 12px;border-radius:14px}
+.req-card{background:#FFF;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px}
 .req-card .req-body{flex:1;min-width:0}
-.req-card .req-title{font-size:15px;font-weight:700;margin-bottom:3px}
-.req-card .req-sub{font-size:12px;color:var(--text-2);font-weight:500}
+.req-card .req-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.req-card .req-sub{font-size:13px;color:var(--text-2);font-weight:600}
 
 /* ===== MODALS ===== */
-.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.75);display:none;align-items:center;justify-content:center;z-index:9000;padding:20px;backdrop-filter:blur(8px)}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,14,39,.7);display:none;align-items:center;justify-content:center;z-index:9000;padding:20px;backdrop-filter:blur(6px)}
 .modal-overlay.show{display:flex}
-.modal{background:#FFF;border-radius:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.35);animation:modalIn .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+.modal{background:#FFF;border-radius:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:popIn .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
 .modal.modal-lg{max-width:600px}
-@keyframes modalIn{0%{transform:scale(.94);opacity:0}100%{transform:scale(1);opacity:1}}
-.modal-head{padding:22px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.modal-head h3{font-size:20px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
-.modal-close{background:transparent;border:none;font-size:22px;cursor:pointer;color:var(--text-2);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+@keyframes popIn{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+.modal-head{padding:24px 26px;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.modal-head h3{font-size:22px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:10px}
+.modal-close{background:transparent;border:none;font-size:24px;cursor:pointer;color:var(--text-2);width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-family:inherit}
 .modal-close:hover{background:var(--surface-2)}
-.modal-body{padding:24px;flex:1;overflow-y:auto}
-.modal-foot{padding:18px 24px 24px;display:flex;gap:10px;flex-shrink:0}
+.modal-body{padding:26px;flex:1;overflow-y:auto}
+.modal-foot{padding:20px 26px 26px;display:flex;gap:12px;flex-shrink:0}
 
 /* ===== ADMIN ===== */
 #adminScreen{display:none;min-height:100vh;background:var(--bg);position:fixed;inset:0;z-index:1000;overflow-y:auto}
 #adminScreen.active{display:block}
-.admin-header{background:var(--grad-primary);color:#fff;padding:18px 26px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--sh-md)}
-.admin-header h2{font-size:22px;font-weight:800}
-.admin-body{padding:28px;max-width:1200px;margin:0 auto}
-.admin-tabs{display:flex;gap:8px;background:#FFF;border-radius:var(--r-pill);padding:6px;margin-bottom:22px;overflow-x:auto;box-shadow:var(--sh-sm)}
-.admin-tab{padding:12px 20px;border:none;background:transparent;font-weight:700;font-size:14px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);white-space:nowrap;transition:.2s}
-.admin-tab.active{background:var(--grad-primary);color:#fff;box-shadow:var(--sh-glow)}
+.admin-header{background:var(--grad);color:#fff;padding:20px 28px;display:flex;justify-content:space-between;align-items:center}
+.admin-header h2{font-size:24px;font-weight:900}
+.admin-body{padding:30px;max-width:1200px;margin:0 auto}
+.admin-tabs{display:flex;gap:10px;background:#FFF;border-radius:var(--r-pill);padding:8px;margin-bottom:24px;overflow-x:auto;box-shadow:var(--sh-sm)}
+.admin-tab{padding:14px 22px;border:none;background:transparent;font-weight:800;font-size:15px;cursor:pointer;border-radius:var(--r-pill);color:var(--text-2);font-family:inherit;white-space:nowrap;transition:.2s}
+.admin-tab.active{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(0,180,216,.3)}
 .admin-panel{display:none}
 .admin-panel.active{display:block}
-.admin-card{background:#FFF;border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:16px;box-shadow:var(--sh-sm)}
-.user-row{display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface-2);border-radius:14px;margin-bottom:8px}
-.user-row .ur-av{width:46px;height:46px;border-radius:50%;background:var(--grad-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0}
+.admin-card{background:#FFF;border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:18px;box-shadow:var(--sh-sm)}
+.user-row{display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface-2);border-radius:16px;margin-bottom:10px}
+.user-row .ur-av{width:52px;height:52px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;flex-shrink:0}
 .user-row .ur-body{flex:1;min-width:0}
-.user-row .ur-name{font-size:15px;font-weight:700;margin-bottom:3px}
-.user-row .ur-sub{font-size:12px;color:var(--text-2);font-weight:500}
+.user-row .ur-name{font-size:16px;font-weight:800;margin-bottom:4px}
+.user-row .ur-sub{font-size:13px;color:var(--text-2);font-weight:600}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
-  .sidebar{width:74px;padding:18px 8px}
+  .sidebar{width:80px;padding:20px 10px}
   .sidebar-logo h1,.sidebar-logo p,.nav-section,.nav-item span:not(.ni-icon),.wallet-row .wr-meta,.sb-user h5,.sb-user p{display:none}
   .sidebar-logo{justify-content:center;padding:0}
-  .nav-item,.wallet-row{justify-content:center;padding:12px 8px}
-  .main-content{margin-left:74px;padding:20px 16px 40px}
+  .nav-item,.wallet-row{justify-content:center;padding:14px 10px}
+  .main-content{margin-left:80px;padding:20px 18px 40px}
 }
 @media(max-width:600px){
-  .slot-wrapper{padding:14px;border-radius:20px}
-  .slot-title{font-size:30px;letter-spacing:6px}
-  .sym{font-size:24px}.sym svg{max-width:30px;max-height:30px}
-  .slot-btns{width:82px}
-  .slot-spin{font-size:15px;padding:18px 0}
-  .slot-auto,.slot-turbo{font-size:12px;padding:11px 0}
-  .balance-amount{font-size:36px}
-  .balance-amount .coin-icon{width:32px;height:32px}
-  .balance-action{padding:11px 8px;font-size:13px}
-  .auth-box{padding:30px 22px 26px}
+  .slot-wrapper{padding:16px;border-radius:24px}
+  .slot-title{font-size:34px;letter-spacing:6px}
+  .sym{font-size:26px}.sym svg{max-width:32px;max-height:32px}
+  .slot-btns{width:88px}
+  .slot-spin{font-size:16px;padding:22px 0}
+  .slot-auto,.slot-turbo{font-size:13px;padding:14px 0}
+  .balance-amount{font-size:38px}
+  .balance-amount .coin-icon{width:34px;height:34px}
+  .balance-action{padding:12px 10px;font-size:14px}
+  .auth-box{padding:32px 24px 28px}
   .auth-box h1{font-size:26px}
+  .reels-table td{border-width:1px}
+  .reels-table{border-spacing:3px}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
+<!-- ===== LOADING ===== -->
 <div class="loading" id="loading"><div class="spinner"></div></div>
 
-<!-- TOASTS -->
+<!-- ===== TOASTS ===== -->
 <div class="toast-container" id="toastContainer"></div>
 <div class="coin-reward" id="coinReward">
   <div class="coin-icon"><img id="coinRewardIcon" src="" alt="WCCoin"></div>
   <span id="coinRewardText">+0 WCCoin</span>
 </div>
 
-<!-- AUTH SCREEN -->
+<!-- ===== AUTH SCREEN ===== -->
 <div id="authScreen" class="active">
   <div class="auth-logo">
     <div class="auth-logo-mark">WC</div>
@@ -389,28 +380,46 @@ button{font-family:inherit}
       <button class="auth-tab" id="tabSignup">Sign Up</button>
     </div>
     <form class="auth-form" id="loginForm">
-      <div class="auth-input-group"><span class="ico">📱</span><input type="tel" id="loginPhone" placeholder="09xxxxxxxxx" autocomplete="username" required></div>
-      <div class="auth-input-group"><span class="ico">🔒</span><input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required></div>
+      <div class="auth-input-group">
+        <span class="ico">📱</span>
+        <input type="tel" id="loginPhone" placeholder="09xxxxxxxxx" autocomplete="username" required>
+      </div>
+      <div class="auth-input-group">
+        <span class="ico">🔒</span>
+        <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required>
+      </div>
       <p class="auth-err" id="loginErr"></p>
       <button type="submit" class="auth-btn" id="loginBtn">Login</button>
     </form>
     <form class="auth-form hidden" id="signupForm">
-      <div class="auth-input-group"><span class="ico">👤</span><input type="text" id="suName" placeholder="Full Name" required></div>
-      <div class="auth-input-group"><span class="ico">📱</span><input type="tel" id="suPhone" placeholder="09xxxxxxxxx" required></div>
-      <div class="auth-input-group"><span class="ico">🔒</span><input type="password" id="suPass" placeholder="Password (6+ chars)" required></div>
+      <div class="auth-input-group">
+        <span class="ico">👤</span>
+        <input type="text" id="suName" placeholder="Full Name" required>
+      </div>
+      <div class="auth-input-group">
+        <span class="ico">📱</span>
+        <input type="tel" id="suPhone" placeholder="09xxxxxxxxx" required>
+      </div>
+      <div class="auth-input-group">
+        <span class="ico">🔒</span>
+        <input type="password" id="suPass" placeholder="Password (6+ chars)" required>
+      </div>
       <p class="auth-err" id="signupErr"></p>
       <button type="submit" class="auth-btn" id="signupBtn">Sign Up</button>
     </form>
-    <div class="auth-footer">WC Wallet · v1.2.1</div>
+    <div class="auth-footer">WC Wallet · v1.3.0</div>
   </div>
 </div>
 
-<!-- APP SHELL -->
+<!-- ===== APP SHELL ===== -->
 <div class="app-shell" id="appShell">
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-mark">WC</div>
-      <div><h1>WC Wallet</h1><p>Wallet + Slot</p></div>
+      <div>
+        <h1>WC Wallet</h1>
+        <p>Wallet + Slot</p>
+      </div>
     </div>
     <div class="nav-section">Menu</div>
     <button class="nav-item active" data-page="dashboard"><span class="ni-icon">🏠</span><span>Dashboard</span></button>
@@ -423,7 +432,10 @@ button{font-family:inherit}
     <div class="nav-wallet" id="sidebarWallets"></div>
     <div class="sb-user" onclick="gotoPage('settings')">
       <div class="sb-avatar" id="sbAvatar">W</div>
-      <div><h5 id="userName">Player</h5><p id="userPhone">-</p></div>
+      <div>
+        <h5 id="userName">Player</h5>
+        <p id="userPhone">-</p>
+      </div>
     </div>
   </aside>
 
@@ -483,10 +495,18 @@ button{font-family:inherit}
       </div>
 
       <div class="action-grid">
-        <button class="action-tile at-play" onclick="gotoPage('play')"><div class="at-icon">🎰</div><h4>Play Slot</h4><p>WCCoin ရယူပါ</p></button>
-        <button class="action-tile at-receive" onclick="gotoPage('transfer')"><div class="at-icon">💸</div><h4>Transfer</h4><p>WCCoin လွှဲပို့</p></button>
-        <button class="action-tile at-history" onclick="gotoPage('buy')"><div class="at-icon">🛒</div><h4>Buy WCCoin</h4><p>ပိုက်ဆံနဲ့ ဝယ်</p></button>
-        <button class="action-tile at-buy" onclick="gotoPage('history')"><div class="at-icon">📜</div><h4>History</h4><p>မှတ်တမ်း</p></button>
+        <button class="action-tile at-play" onclick="gotoPage('play')">
+          <div class="at-icon">🎰</div><h4>Play Slot</h4><p>WCCoin ရယူပါ</p>
+        </button>
+        <button class="action-tile at-receive" onclick="gotoPage('transfer')">
+          <div class="at-icon">💸</div><h4>Transfer</h4><p>WCCoin လွှဲပို့</p>
+        </button>
+        <button class="action-tile at-history" onclick="gotoPage('buy')">
+          <div class="at-icon">🛒</div><h4>Buy WCCoin</h4><p>ပိုက်ဆံနဲ့ ဝယ်</p>
+        </button>
+        <button class="action-tile at-buy" onclick="gotoPage('history')">
+          <div class="at-icon">📜</div><h4>History</h4><p>မှတ်တမ်း</p>
+        </button>
       </div>
 
       <div class="wallets-section">
@@ -501,7 +521,8 @@ button{font-family:inherit}
         <div class="slot-top">
           <div class="slot-credit">
             <div class="coin-icon"><img class="coin-icon-credit" src=""></div>
-            <span class="lbl">WCCoin</span><span class="val" id="slotCredit">0</span>
+            <span class="lbl">WCCoin</span>
+            <span class="val" id="slotCredit">0</span>
           </div>
           <div class="slot-top-right">
             <button class="slot-btn-sm" onclick="refreshSlot()" title="Refresh">🔄</button>
@@ -549,33 +570,48 @@ button{font-family:inherit}
     <div class="page-view" id="page-transfer">
       <div class="section-header"><h3>💸 WCCoin Transfer</h3></div>
       <div class="admin-card">
-        <div class="info-row"><label>လက်ခံမည့်သူ ဖုန်းနံပါတ်</label><input type="tel" id="trPhone" placeholder="09xxxxxxxxx"></div>
-        <div class="info-row"><label>ပမာဏ (WCCoin)</label><input type="number" id="trAmount" placeholder="0" min="1"></div>
-        <div class="info-row"><label>မှတ်ချက် (optional)</label><input type="text" id="trNote" placeholder="မှတ်ချက်"></div>
-        <div style="background:var(--surface-2);border-radius:12px;padding:14px;margin-bottom:18px;display:flex;justify-content:space-between;font-size:15px;font-weight:700">
+        <div class="info-row">
+          <label>လက်ခံမည့်သူ ဖုန်းနံပါတ်</label>
+          <input type="tel" id="trPhone" placeholder="09xxxxxxxxx">
+        </div>
+        <div class="info-row">
+          <label>ပမာဏ (WCCoin)</label>
+          <input type="number" id="trAmount" placeholder="0" min="1">
+        </div>
+        <div class="info-row">
+          <label>မှတ်ချက် (optional)</label>
+          <input type="text" id="trNote" placeholder="မှတ်ချက်">
+        </div>
+        <div style="background:var(--surface-2);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;justify-content:space-between;font-size:16px;font-weight:700">
           <span>သင့်လက်ကျန်:</span>
-          <span style="color:var(--primary);display:flex;align-items:center;gap:5px"><span id="trBalance">0</span> WCCoin</span>
+          <span style="color:var(--wc-blue);display:flex;align-items:center;gap:6px"><span id="trBalance">0</span> WCCoin</span>
         </div>
         <button class="btn btn-primary btn-block" id="doTransferBtn" onclick="doTransfer()">💸 လွှဲပို့မည်</button>
       </div>
     </div>
 
-    <!-- BUY -->
+    <!-- BUY WCCoin -->
     <div class="page-view" id="page-buy">
       <div class="section-header"><h3>🛒 Buy WCCoin</h3></div>
-      <p style="font-size:14px;color:var(--text-2);font-weight:500;margin-bottom:18px">Package ရွေးပြီး request ပို့ပါ။ Admin approve လုပ်ပြီး WCCoin ထည့်ပေးပါမယ်။</p>
+      <p style="font-size:15px;color:var(--text-2);font-weight:600;margin-bottom:20px">Package ရွေးပြီး request ပို့ပါ။ Admin approve လုပ်ပြီး WCCoin ထည့်ပေးပါမယ်။</p>
       <div class="pkg-grid" id="pkgGrid"></div>
       <div class="admin-card">
-        <div class="info-row"><label>ငွေပေးချေမှု Note</label><textarea id="buyNote" placeholder="KBZ Pay ref, Wave Money, screenshot link..."></textarea></div>
+        <div class="info-row">
+          <label>ငွေပေးချေမှု Note</label>
+          <textarea id="buyNote" placeholder="KBZ Pay ref, Wave Money, screenshot link..."></textarea>
+        </div>
         <button class="btn btn-gold btn-block" id="reqBuyBtn" onclick="requestBuyCoins()">🛒 Buy Request ပို့မည်</button>
       </div>
-      <div class="section-header" style="margin-top:26px"><h3>📋 ကျွန်ုပ်၏ Requests</h3></div>
+      <div class="section-header" style="margin-top:30px"><h3>📋 ကျွန်ုပ်၏ Requests</h3></div>
       <div id="myBuyRequests"></div>
     </div>
 
     <!-- HISTORY -->
     <div class="page-view" id="page-history">
-      <div class="section-header"><h3>📜 Transaction History</h3><a onclick="loadHistory()">🔄 Refresh</a></div>
+      <div class="section-header">
+        <h3>📜 Transaction History</h3>
+        <a onclick="loadHistory()">🔄 Refresh</a>
+      </div>
       <div class="history-list" id="historyList"></div>
     </div>
 
@@ -583,27 +619,40 @@ button{font-family:inherit}
     <div class="page-view" id="page-settings">
       <div class="section-header"><h3>⚙️ Settings</h3></div>
       <div class="admin-card">
-        <div class="info-row"><label>Display Name</label><input type="text" id="setName" placeholder="Your name"></div>
-        <div class="info-row"><label>Phone</label><input type="tel" id="setPhone" disabled></div>
-        <div class="info-row"><label>Notification</label>
-          <select id="setNotif"><option value="on">🔔 Enabled</option><option value="off">🔕 Disabled</option></select>
+        <div class="info-row">
+          <label>Display Name</label>
+          <input type="text" id="setName" placeholder="Your name">
+        </div>
+        <div class="info-row">
+          <label>Phone</label>
+          <input type="tel" id="setPhone" disabled>
+        </div>
+        <div class="info-row">
+          <label>Notification</label>
+          <select id="setNotif">
+            <option value="on">🔔 Enabled</option>
+            <option value="off">🔕 Disabled</option>
+          </select>
         </div>
         <button class="btn btn-primary btn-block" onclick="saveSettings()">💾 Save</button>
       </div>
       <div class="admin-card">
-        <div class="info-row"><label>App Version</label><input type="text" id="setVersion" readonly></div>
+        <div class="info-row">
+          <label>App Version</label>
+          <input type="text" id="setVersion" readonly>
+        </div>
         <button class="btn btn-secondary btn-block" onclick="checkUpdateManually()">🔄 Check for Update</button>
-        <button class="btn btn-secondary btn-block" style="margin-top:10px" onclick="openAdminLogin()">👑 Admin Panel</button>
+        <button class="btn btn-secondary btn-block" style="margin-top:12px" onclick="openAdminLogin()">👑 Admin Panel</button>
       </div>
     </div>
   </main>
 </div>
 
-<!-- ADMIN SCREEN -->
+<!-- ===== ADMIN SCREEN ===== -->
 <div id="adminScreen">
   <div class="admin-header">
     <h2>👑 WC Admin</h2>
-    <button class="logout-btn" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);font-size:14px" onclick="closeAdmin()">Close</button>
+    <button class="logout-btn" style="background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3);font-size:16px" onclick="closeAdmin()">Close</button>
   </div>
   <div class="admin-body">
     <div class="admin-tabs">
@@ -617,7 +666,9 @@ button{font-family:inherit}
       <div class="info-row"><input type="text" id="admSearch" placeholder="🔍 Search users..." oninput="renderAdminUsers(this.value)"></div>
       <div id="admUserList"></div>
     </div>
-    <div class="admin-panel" id="admPanel-buyreq"><div id="admBuyReqList"></div></div>
+    <div class="admin-panel" id="admPanel-buyreq">
+      <div id="admBuyReqList"></div>
+    </div>
     <div class="admin-panel" id="admPanel-coin">
       <div class="admin-card">
         <div class="info-row"><label>User ရွေးပါ</label><select id="admCoinUser"></select></div>
@@ -626,42 +677,54 @@ button{font-family:inherit}
         <button class="btn btn-primary btn-block" onclick="adminApplyCoins()">✅ အတည်ပြု</button>
       </div>
     </div>
-    <div class="admin-panel" id="admPanel-packages"><div class="admin-card" id="pkgEditor"></div></div>
+    <div class="admin-panel" id="admPanel-packages">
+      <div class="admin-card" id="pkgEditor">
+        <!-- Packages Editor Rendered by JS -->
+      </div>
+    </div>
     <div class="admin-panel" id="admPanel-version">
       <div class="admin-card">
-        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.2.2"></div>
+        <div class="info-row"><label>Latest Version</label><input type="text" id="admLatest" placeholder="1.3.0"></div>
         <div class="info-row"><label>Release Notes</label><textarea id="admNotes" placeholder="Bug fixes..."></textarea></div>
-        <div class="info-row" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="admForce" style="width:22px;height:22px"><label style="margin:0;font-size:15px;text-transform:none">Force Update</label></div>
+        <div class="info-row" style="display:flex;align-items:center;gap:12px"><input type="checkbox" id="admForce" style="width:24px;height:24px"><label style="margin:0;font-size:16px;text-transform:none">Force Update</label></div>
         <button class="btn btn-primary btn-block" onclick="adminSaveVersion()">🚀 Save Version</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN LOGIN MODAL -->
+<!-- ===== ADMIN LOGIN MODAL ===== -->
 <div class="modal-overlay" id="adminLoginModal">
   <div class="modal">
-    <div class="modal-head"><h3>👑 Admin Login</h3><button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button></div>
+    <div class="modal-head">
+      <h3>👑 Admin Login</h3>
+      <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
+    </div>
     <div class="modal-body">
       <div class="info-row"><label>Admin Phone</label><input type="tel" id="admLoginPhone" placeholder="09xxxxxxxxx"></div>
       <div class="info-row"><label>Password</label><input type="password" id="admLoginPass" placeholder="Admin password"></div>
       <p class="auth-err" id="admLoginErr"></p>
     </div>
-    <div class="modal-foot"><button class="btn btn-primary btn-block" onclick="doAdminLogin()">Login as Admin</button></div>
+    <div class="modal-foot">
+      <button class="btn btn-primary btn-block" onclick="doAdminLogin()">Login as Admin</button>
+    </div>
   </div>
 </div>
 
-<!-- UPDATE MODAL -->
+<!-- ===== UPDATE MODAL ===== -->
 <div class="modal-overlay" id="updateModal">
   <div class="modal">
-    <div class="modal-head"><h3>🚀 Update Available</h3><button class="modal-close" onclick="closeModal('updateModal')">✕</button></div>
+    <div class="modal-head">
+      <h3>🚀 Update Available</h3>
+      <button class="modal-close" onclick="closeModal('updateModal')">✕</button>
+    </div>
     <div class="modal-body" style="text-align:center">
-      <div style="width:90px;height:90px;border-radius:26px;background:var(--grad-primary);display:inline-flex;align-items:center;justify-content:center;font-size:42px;color:#fff;margin-bottom:18px;animation:pulseUpdate 2s infinite">🚀</div>
-      <h2 style="font-size:24px;font-weight:800;margin-bottom:6px">ဗားရှင်းအသစ် ထွက်ပါပြီ</h2>
-      <p style="font-size:14px;color:var(--text-2);margin-bottom:18px">Version <strong id="newVerLabel" style="color:var(--primary)">1.0.0</strong></p>
+      <div style="width:100px;height:100px;border-radius:30px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:48px;color:#fff;margin-bottom:20px;animation:pulseUpdate 2s infinite">🚀</div>
+      <h2 style="font-size:26px;font-weight:900;margin-bottom:8px">ဗားရှင်းအသစ် ထွက်ပါပြီ</h2>
+      <p style="font-size:15px;color:var(--text-2);margin-bottom:20px">Version <strong id="newVerLabel" style="color:var(--wc-blue)">1.0.0</strong></p>
       <div class="info-row" style="text-align:left">
         <label>Release Notes</label>
-        <div id="releaseNotes" style="font-size:14px;line-height:1.7;padding:14px;background:var(--surface-2);border-radius:12px;min-height:70px"></div>
+        <div id="releaseNotes" style="font-size:15px;line-height:1.7;padding:16px;background:var(--surface-2);border-radius:12px;min-height:80px"></div>
       </div>
     </div>
     <div class="modal-foot" style="flex-direction:column">
@@ -671,14 +734,17 @@ button{font-family:inherit}
   </div>
 </div>
 
-<!-- NOTIFICATION PROMPT -->
+<!-- ===== NOTIFICATION PROMPT ===== -->
 <div class="modal-overlay" id="notificationPromptModal">
   <div class="modal">
-    <div class="modal-head"><h3>🔔 Notification</h3><button class="modal-close" onclick="closeModal('notificationPromptModal')">✕</button></div>
+    <div class="modal-head">
+      <h3>🔔 Notification</h3>
+      <button class="modal-close" onclick="closeModal('notificationPromptModal')">✕</button>
+    </div>
     <div class="modal-body" style="text-align:center">
-      <div style="font-size:64px;margin-bottom:18px">🔔</div>
-      <h2 style="font-size:18px;font-weight:800;margin-bottom:8px">WCCoin ရောက်တဲ့အခါ အသိပေးမယ်</h2>
-      <p style="font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:18px">Notification ဖွင့်ထားရင် WCCoin ရတဲ့အခါ ဖုန်းပေါ်မှာ အသိပေးပါမယ်</p>
+      <div style="font-size:72px;margin-bottom:20px">🔔</div>
+      <h2 style="font-size:20px;font-weight:900;margin-bottom:10px">WCCoin ရောက်တဲ့အခါ အသိပေးမယ်</h2>
+      <p style="font-size:15px;color:var(--text-2);line-height:1.6;margin-bottom:20px">Notification ဖွင့်ထားရင် WCCoin ရတဲ့အခါ ဖုန်းပေါ်မှာ အသိပေးပါမယ်</p>
     </div>
     <div class="modal-foot" style="flex-direction:column">
       <button class="btn btn-primary btn-block" onclick="enableNotifications()">🔔 Enable Notifications</button>
@@ -686,8 +752,6 @@ button{font-family:inherit}
     </div>
   </div>
 </div>
-
-<style>@keyframes pulseUpdate{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}</style>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -702,7 +766,7 @@ button{font-family:inherit}
 const COIN_ICON_URL = '';
 const ADMIN_PHONE = '09672124213';
 const ADMIN_PASSWORD = 'admin123';
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.3.0';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQJ4zzAxZ_aSuGBxwegTw_dtfaW8oLJnU",
@@ -736,6 +800,7 @@ function getCoinSrc() {
   const stored = localStorage.getItem('wc_coin_icon');
   return stored || COIN_ICON_URL || FALLBACK_COIN;
 }
+
 function applyCoinIcons() {
   const src = getCoinSrc();
   document.querySelectorAll('img[class*="coin-icon"]').forEach(img => {
@@ -743,6 +808,7 @@ function applyCoinIcons() {
     img.onerror = () => { img.src = FALLBACK_COIN; };
   });
 }
+
 function toEmail(phone) {
   const digits = String(phone || '').replace(/\D/g, '');
   return digits + '@wcwallet.app';
@@ -761,24 +827,100 @@ function displayPhone(p) {
    STATE
    ============================================================ */
 let currentUser = null;
-let coinBalance = 0, todayEarned = 0, totalGamesPlayed = 0, totalWins = 0;
+let coinBalance = 0;
+let todayEarned = 0;
+let totalGamesPlayed = 0;
+let totalWins = 0;
 let txHistory = [];
 let settings = { name: 'Player', notifications: 'on' };
-let userDataRef = null, txRef = null;
+let userDataRef = null;
+let txRef = null;
 let isAdmin = false;
+
 let selectedPkgId = null;
 let allCoinPackages = {};
 
 let slotState = {
   credit: 0, bet: 10, baseBet: 10, spinning: false, auto: false, turbo: false,
-  autoCount: 0, freeSpins: 0, isFreeSpin: false, totalSpins: 0, totalWins: 0
+  autoCount: 0, freeSpins: 0, isFreeSpin: false, totalSpins: 0, totalWins: 0,
+  checkinState: { streak:0, lastCheckin:'', claimed:[] }
 };
 
 let updateCheckInterval = null;
 let _updateVersion = null;
+let _updateDismissedVersion = null;
 
 /* ============================================================
-   TOAST
+   AUDIO (Web Audio API - Slot Sounds)
+   ============================================================ */
+let _audioCtx = null;
+
+function getAudioCtx() {
+  if (!_audioCtx) {
+    try {
+      _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) { return null; }
+  }
+  if (_audioCtx.state === 'suspended') _audioCtx.resume().catch(()=>{});
+  return _audioCtx;
+}
+
+function playTone(freq, duration, type = 'sine', volume = 0.15, when = 0) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + when);
+  gain.gain.setValueAtTime(volume, ctx.currentTime + when);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + when + duration);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime + when);
+  osc.stop(ctx.currentTime + when + duration);
+}
+
+function playSpinSound() {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  for (let i = 0; i < 4; i++) {
+    playTone(600 + i * 100, 0.06, 'square', 0.08, i * 0.06);
+  }
+}
+
+function playReelStopSound(index) {
+  playTone(400 + index * 80, 0.08, 'triangle', 0.12);
+}
+
+function playWinSound() {
+  const notes = [523, 659, 784, 1047];
+  notes.forEach((n, i) => playTone(n, 0.18, 'sine', 0.2, i * 0.1));
+}
+
+function playBigWinSound() {
+  const notes = [523, 659, 784, 1047, 1319, 1568];
+  notes.forEach((n, i) => playTone(n, 0.2, 'sine', 0.25, i * 0.08));
+  setTimeout(() => {
+    notes.reverse().forEach((n, i) => playTone(n, 0.15, 'triangle', 0.2, i * 0.06));
+  }, 500);
+}
+
+function playLoseSound() {
+  playTone(300, 0.15, 'sawtooth', 0.1, 0);
+  playTone(200, 0.2, 'sawtooth', 0.1, 0.12);
+}
+
+function playFreeSpinSound() {
+  const notes = [880, 1108, 1318, 1760];
+  notes.forEach((n, i) => playTone(n, 0.15, 'square', 0.15, i * 0.08));
+}
+
+function playClickSound() {
+  playTone(800, 0.04, 'square', 0.06);
+}
+
+/* ============================================================
+   TOAST / NOTIFICATION
    ============================================================ */
 function toast(msg, type = 'info') {
   const c = $('toastContainer');
@@ -790,35 +932,43 @@ function toast(msg, type = 'info') {
   c.appendChild(el);
   setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3500);
 }
+
 function showCoinReward(amount) {
   const el = $('coinReward'), txt = $('coinRewardText'), icn = $('coinRewardIcon');
   if (!el || !txt) return;
   if (icn) icn.src = getCoinSrc();
   txt.textContent = (amount >= 0 ? '+' : '') + fmt(amount) + ' WCCoin';
-  el.style.background = amount >= 0 ? 'var(--grad-amber)' : 'var(--grad-coral)';
+  el.style.background = amount >= 0 ? 'linear-gradient(135deg,#FFB800,#FF8C00)' : 'linear-gradient(135deg,#FF4757,#FF6B7A)';
   el.classList.add('show');
   clearTimeout(el._t);
   el._t = setTimeout(() => el.classList.remove('show'), 2800);
 }
+
 async function requestNotificationPermission() {
   if (!('Notification' in window)) return false;
   if (Notification.permission === 'granted') return true;
   if (Notification.permission === 'denied') return false;
-  try { const r = await Notification.requestPermission(); return r === 'granted'; } catch(e) { return false; }
+  try { const r = await Notification.requestPermission(); return r === 'granted'; }
+  catch(e) { return false; }
 }
+
 function showPhoneNotification(title, body) {
   if (settings.notifications !== 'on') return;
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   try {
-    const n = new Notification(title, { body, icon: getCoinSrc(), badge: getCoinSrc(), tag: 'wccoin', renotify: true });
+    const n = new Notification(title, { body, icon: getCoinSrc(), badge: getCoinSrc(), tag: 'wccoin', renotify: true, vibrate: [200,100,200] });
     setTimeout(() => { try { n.close(); } catch(e){} }, 6000);
   } catch(e) {}
 }
+
 async function enableNotifications() {
   const ok = await requestNotificationPermission();
   closeModal('notificationPromptModal');
-  if (ok) { toast('🔔 Notifications enabled!', 'success'); settings.notifications = 'on'; saveSettingsLocal(); }
-  else toast('⚠️ Permission denied', 'error');
+  if (ok) {
+    toast('🔔 Notifications enabled!', 'success');
+    settings.notifications = 'on';
+    saveSettingsLocal();
+  } else toast('⚠️ Permission denied', 'error');
 }
 
 /* ============================================================
@@ -839,15 +989,22 @@ function saveSettingsLocal() {
    ============================================================ */
 function showAuthTab(tab) {
   if (tab === 'login') {
-    $('tabLogin').classList.add('active'); $('tabSignup').classList.remove('active');
-    $('loginForm').classList.remove('hidden'); $('signupForm').classList.add('hidden');
-    $('authTitle').textContent = 'Login'; $('authSub').textContent = 'WC Wallet ထဲ ဝင်ရောက်ပါ';
+    $('tabLogin').classList.add('active');
+    $('tabSignup').classList.remove('active');
+    $('loginForm').classList.remove('hidden');
+    $('signupForm').classList.add('hidden');
+    $('authTitle').textContent = 'Login';
+    $('authSub').textContent = 'WC Wallet ထဲ ဝင်ရောက်ပါ';
   } else {
-    $('tabSignup').classList.add('active'); $('tabLogin').classList.remove('active');
-    $('signupForm').classList.remove('hidden'); $('loginForm').classList.add('hidden');
-    $('authTitle').textContent = 'Sign Up'; $('authSub').textContent = 'အကောင့်အသစ် ဖွင့်ပါ';
+    $('tabSignup').classList.add('active');
+    $('tabLogin').classList.remove('active');
+    $('signupForm').classList.remove('hidden');
+    $('loginForm').classList.add('hidden');
+    $('authTitle').textContent = 'Sign Up';
+    $('authSub').textContent = 'အကောင့်အသစ် ဖွင့်ပါ';
   }
 }
+
 async function signup(name, phone, password) {
   const email = toEmail(phone);
   const cred = await auth.createUserWithEmailAndPassword(email, password);
@@ -858,14 +1015,17 @@ async function signup(name, phone, password) {
     createdAt: Date.now(), isAdmin: false
   });
   await db.ref('coin_transactions/' + uid).push({
-    ts: Date.now(), amount: 100, reason: 'signup_bonus', type: 'signup_bonus', desc: '🎉 Welcome bonus'
+    ts: Date.now(), amount: 100, reason: 'signup_bonus', type: 'signup_bonus',
+    desc: '🎉 Welcome bonus'
   });
   return cred.user;
 }
+
 async function login(phone, password) {
   const email = toEmail(phone);
   return await auth.signInWithEmailAndPassword(email, password);
 }
+
 async function logout() {
   if (userDataRef) { try { userDataRef.off(); } catch(e){} userDataRef = null; }
   if (txRef) { try { txRef.off(); } catch(e){} txRef = null; }
@@ -874,8 +1034,9 @@ async function logout() {
   showScreen('auth');
   toast('Logged out', 'info');
 }
+
 function showScreen(name) {
-  document.querySelectorAll('#authScreen, #appShell, #adminScreen').forEach(el => { if (el) el.classList.remove('active'); });
+  document.querySelectorAll('#authScreen, #appShell, #adminScreen').forEach(el => { if (el) { el.classList.remove('active'); } });
   if (name === 'auth') $('authScreen').classList.add('active');
   else if (name === 'app') $('appShell').classList.add('active');
   else if (name === 'admin') $('adminScreen').classList.add('active');
@@ -901,6 +1062,7 @@ function loadUserData() {
     updateAllUI();
   });
 }
+
 function loadHistory() {
   if (!currentUser) return;
   if (txRef) { try { txRef.off(); } catch(e){} }
@@ -911,6 +1073,7 @@ function loadHistory() {
     renderHistoryList();
   });
 }
+
 async function addCoins(amount, reason, meta = {}) {
   if (!currentUser || !amount) return false;
   try {
@@ -920,24 +1083,12 @@ async function addCoins(amount, reason, meta = {}) {
     });
     if (!result.committed) return false;
     await db.ref('coin_transactions/' + currentUser.uid).push({
-      ts: Date.now(), amount, reason, type: reason, desc: meta.desc || reason, ...meta
+      ts: Date.now(), amount, reason, type: reason,
+      desc: meta.desc || reason, ...meta
     });
     if (amount > 0) {
       await db.ref('users/' + currentUser.uid + '/today_earned').transaction(c => (c || 0) + amount).catch(()=>{});
     }
-    return true;
-  } catch(e) { return false; }
-}
-async function addCoinsToUser(uid, amount, reason, meta = {}) {
-  try {
-    const result = await db.ref('users/' + uid + '/coin_balance').transaction(c => {
-      const n = (c || 0) + amount;
-      return n < 0 ? undefined : n;
-    });
-    if (!result.committed) return false;
-    await db.ref('coin_transactions/' + uid).push({
-      ts: Date.now(), amount, reason, type: reason, desc: meta.desc || reason, ...meta
-    });
     return true;
   } catch(e) { return false; }
 }
@@ -972,11 +1123,13 @@ function updateAllUI() {
   renderPkgGrid();
   updateSlotVIP();
 }
+
 function renderSidebarWallets() {
   const wrap = $('sidebarWallets');
   if (!wrap) return;
-  wrap.innerHTML = `<div class="wallet-row" onclick="gotoPage('dashboard')"><div class="wr-dot" style="background:#4F46E5"></div><div class="wr-meta"><h5>WC Wallet</h5><p>${fmt(coinBalance)} WCCoin</p></div></div>`;
+  wrap.innerHTML = `<div class="wallet-row" onclick="gotoPage('dashboard')"><div class="wr-dot" style="background:#00B4D8"></div><div class="wr-meta"><h5>WC Wallet</h5><p>${fmt(coinBalance)} WCCoin</p></div></div>`;
 }
+
 function renderWalletCards() {
   const wrap = $('walletCards');
   if (!wrap) return;
@@ -993,6 +1146,7 @@ function renderWalletCards() {
       <div class="wallet-meta">🎰 Play Slot ကနေ WCCoin ရယူပါ</div>
     </div>`;
 }
+
 function renderHistoryList() {
   const wrap = $('historyList');
   if (!wrap) return;
@@ -1013,12 +1167,13 @@ function renderHistoryList() {
     </div>`;
   }).join('');
 }
+
 function renderPkgGrid() {
   const wrap = $('pkgGrid');
   if (!wrap) return;
   const items = Object.entries(allCoinPackages).sort((a,b) => (a[1].order||0) - (b[1].order||0));
   if (items.length === 0) {
-    wrap.innerHTML = '<p style="color:var(--text-2);font-size:14px;padding:20px 0;grid-column:1/-1;text-align:center">Package မရှိသေးပါ။ (Admin မှ ထည့်သွင်းပါ)</p>';
+    wrap.innerHTML = '<p style="color:var(--text-2);font-size:15px;padding:20px 0;grid-column:1/-1;text-align:center">Package မရှိသေးပါ။ (Admin မှ ထည့်သွင်းပါ)</p>';
     return;
   }
   wrap.innerHTML = items.map(([id, p]) => `
@@ -1029,9 +1184,13 @@ function renderPkgGrid() {
     </div>
   `).join('');
   wrap.querySelectorAll('.pkg-card').forEach(card => {
-    card.onclick = () => { selectedPkgId = card.dataset.pkg; renderPkgGrid(); };
+    card.onclick = () => {
+      selectedPkgId = card.dataset.pkg;
+      renderPkgGrid();
+    };
   });
 }
+
 function updateSlotVIP() {
   const c = coinBalance || 0;
   let icon = '🥉';
@@ -1053,7 +1212,9 @@ const PAGE_TITLES = {
   history: { title: '📜 History', sub: 'WCCoin ရရှိမှု မှတ်တမ်း' },
   settings: { title: '⚙️ Settings', sub: 'ပြင်ဆင်ရန်' }
 };
+
 function gotoPage(page) {
+  playClickSound();
   document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const view = $('page-' + page);
@@ -1068,6 +1229,7 @@ function gotoPage(page) {
   if (page === 'buy') { renderPkgGrid(); loadMyBuyRequests(); }
   closeAllModals();
 }
+
 function closeModal(id) { const el = $(id); if (el) el.classList.remove('show'); }
 function closeAllModals() { document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show')); }
 
@@ -1097,6 +1259,7 @@ async function doTransfer() {
   if (!amt || amt <= 0) return toast('ပမာဏ မှန်ကန်စွာ ထည့်ပါ', 'warn');
   if (amt > coinBalance) return toast('WCCoin မလုံလောက်ပါ', 'warn');
   if (cleanPhone(phoneInput) === cleanPhone(currentUser.phone)) return toast('ကိုယ့်ကိုယ် လွှဲလို့မရ', 'warn');
+
   const btn = $('doTransferBtn');
   btn.disabled = true;
   try {
@@ -1105,22 +1268,42 @@ async function doTransfer() {
     usersSnap.forEach(child => { if (!recipient) recipient = Object.assign({ _key: child.key }, child.val()); });
     if (!recipient) throw new Error('လက်ခံမည့်သူ မတွေ့ပါ');
     if (recipient.uid === currentUser.uid) throw new Error('ကိုယ့်ကိုယ် လွှဲလို့မရ');
+
     const ok = await addCoins(-amt, 'transfer_sent', { desc: '💸 Transfer to ' + recipient.name, to: recipient.uid, toName: recipient.name, note });
     if (!ok) throw new Error('လွှဲမရပါ');
+
     const ok2 = await addCoinsToUser(recipient.uid, amt, 'transfer_received', { desc: '💸 Transfer from ' + currentUser.name, from: currentUser.uid, fromName: currentUser.name, note });
     if (!ok2) {
       await addCoins(amt, 'transfer_refund', { desc: 'Transfer failed - refund' });
       throw new Error('လွှဲမရပါ (rollback)');
     }
+
     toast('✅ ' + fmt(amt) + ' WCCoin လွှဲပြီး', 'success');
     showCoinReward(-amt);
     showPhoneNotification('💸 Transfer sent', '-' + fmt(amt) + ' WCCoin to ' + recipient.name);
-    $('trPhone').value = ''; $('trAmount').value = ''; $('trNote').value = '';
+    $('trPhone').value = '';
+    $('trAmount').value = '';
+    $('trNote').value = '';
   } catch(err) {
     toast('❌ ' + err.message, 'error');
   } finally {
     btn.disabled = false;
   }
+}
+
+async function addCoinsToUser(uid, amount, reason, meta = {}) {
+  try {
+    const result = await db.ref('users/' + uid + '/coin_balance').transaction(c => {
+      const n = (c || 0) + amount;
+      return n < 0 ? undefined : n;
+    });
+    if (!result.committed) return false;
+    await db.ref('coin_transactions/' + uid).push({
+      ts: Date.now(), amount, reason, type: reason,
+      desc: meta.desc || reason, ...meta
+    });
+    return true;
+  } catch(e) { return false; }
 }
 
 /* ============================================================
@@ -1148,6 +1331,7 @@ async function requestBuyCoins() {
     btn.disabled = false;
   }
 }
+
 function loadMyBuyRequests() {
   if (!currentUser) return;
   db.ref('coin_buy_requests').orderByChild('uid').equalTo(currentUser.uid).once('value').then(snap => {
@@ -1155,15 +1339,18 @@ function loadMyBuyRequests() {
     const list = Object.entries(data).sort((a,b) => (b[1].ts||0) - (a[1].ts||0)).slice(0, 10);
     const wrap = $('myBuyRequests');
     if (!wrap) return;
-    if (list.length === 0) { wrap.innerHTML = '<div class="empty-state"><span class="em">🛒</span><h3>Request မရှိသေးပါ</h3></div>'; return; }
+    if (list.length === 0) {
+      wrap.innerHTML = '<div class="empty-state"><span class="em">🛒</span><h3>Request မရှိသေးပါ</h3></div>';
+      return;
+    }
     wrap.innerHTML = list.map(([id, r]) => {
-      const statusColor = r.status === 'approved' ? '#059669' : r.status === 'rejected' ? '#DC2626' : '#F59E0B';
+      const statusColor = r.status === 'approved' ? '#00D9A3' : r.status === 'rejected' ? '#FF4757' : '#FFB800';
       const statusIcon = r.status === 'approved' ? '✅' : r.status === 'rejected' ? '❌' : '⏳';
       return `<div class="req-card">
-        <div style="font-size:24px">${statusIcon}</div>
+        <div style="font-size:28px">${statusIcon}</div>
         <div class="req-body">
           <div class="req-title">${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ' bonus)' : ''} · ${esc(r.price || '')}</div>
-          <div class="req-sub">${new Date(r.ts || Date.now()).toLocaleString()} · <span style="color:${statusColor};font-weight:700">${esc(r.status || 'pending')}</span></div>
+          <div class="req-sub">${new Date(r.ts || Date.now()).toLocaleString()} · <span style="color:${statusColor};font-weight:800">${esc(r.status || 'pending')}</span></div>
         </div>
       </div>`;
     }).join('');
@@ -1183,21 +1370,21 @@ const PAYOUTS = {
   'crown':{3:2,4:100,5:200},'horseshoe':{3:2,4:120,5:250},'clover':{3:2,4:160,5:300}
 };
 const SVG_ICONS = {
-  'cherry':'<svg viewBox="0 0 24 24"><circle cx="8" cy="16" r="4" fill="#EF4444"/><circle cx="16" cy="16" r="4" fill="#EF4444"/><path d="M12 12V4" stroke="#10B981" stroke-width="2"/></svg>',
-  'lemon':'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7" fill="#FDE047" stroke="#CA8A04" stroke-width="1"/></svg>',
-  'orange':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#F97316"/><path d="M12 5V3" stroke="#10B981" stroke-width="2"/></svg>',
-  'plum':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#A855F7"/><path d="M12 5V3" stroke="#10B981" stroke-width="2"/></svg>',
-  'watermelon':'<svg viewBox="0 0 24 24"><path d="M2 12A10 10 0 0 1 22 12z" fill="#F43F5E"/><path d="M6 12h12" stroke="#10B981" stroke-width="1"/></svg>',
-  'bell':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FBBF24" stroke="#B45309" stroke-width="1"/></svg>',
-  'seven':'<svg viewBox="0 0 24 24"><text x="12" y="18" font-size="18" text-anchor="middle" fill="#EF4444" font-weight="bold">7</text></svg>',
-  'diamond':'<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#38BDF8" stroke="#0369A1" stroke-width="1"/></svg>',
-  'BAR':'<svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="2" fill="#FBBF24"/><text x="12" y="15" font-size="8" text-anchor="middle" fill="#78350F" font-weight="bold">BAR</text></svg>',
-  'star':'<svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" fill="#FBBF24" stroke="#B45309" stroke-width="1"/></svg>',
-  'grapes':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#A855F7"/><circle cx="16" cy="8" r="3" fill="#A855F7"/><circle cx="12" cy="12" r="3" fill="#A855F7"/><circle cx="8" cy="16" r="3" fill="#A855F7"/><circle cx="16" cy="16" r="3" fill="#A855F7"/></svg>',
-  'coin':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FBBF24" stroke="#B45309" stroke-width="1"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="#78350F" font-weight="bold">W</text></svg>',
-  'crown':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FBBF24" stroke="#B45309" stroke-width="1"/></svg>',
-  'horseshoe':'<svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 3 2 5 5 6-3 1-5 3-5 6 0 4 3 7 7 7s7-3 7-7c0-3-2-5-5-6 3-1 5-3 5-6 0-4-3-7-7-7z" fill="#FBBF24" stroke="#B45309" stroke-width="1"/></svg>',
-  'clover':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#22C55E"/><circle cx="16" cy="8" r="3" fill="#22C55E"/><circle cx="8" cy="16" r="3" fill="#22C55E"/><circle cx="16" cy="16" r="3" fill="#22C55E"/></svg>',
+  'cherry':'<svg viewBox="0 0 24 24"><circle cx="8" cy="16" r="4" fill="#FF0000"/><circle cx="16" cy="16" r="4" fill="#FF0000"/><path d="M12 12V4" stroke="#00AA00" stroke-width="2"/></svg>',
+  'lemon':'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7" fill="#FFEB3B" stroke="#F9A825" stroke-width="1"/></svg>',
+  'orange':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#FFA500"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>',
+  'plum':'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="#8A2BE2"/><path d="M12 5V3" stroke="#00AA00" stroke-width="2"/></svg>',
+  'watermelon':'<svg viewBox="0 0 24 24"><path d="M2 12A10 10 0 0 1 22 12z" fill="#FF4444"/><path d="M6 12h12" stroke="#00AA00" stroke-width="1"/></svg>',
+  'bell':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'seven':'<svg viewBox="0 0 24 24"><text x="12" y="18" font-size="18" text-anchor="middle" fill="#FF0000" font-weight="bold">7</text></svg>',
+  'diamond':'<svg viewBox="0 0 24 24"><path d="M12 2L2 9l10 13L22 9 12 2z" fill="#00BFFF" stroke="#0066AA" stroke-width="1"/></svg>',
+  'BAR':'<svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="2" fill="#FFD700"/><text x="12" y="15" font-size="8" text-anchor="middle" fill="#8B4513" font-weight="bold">BAR</text></svg>',
+  'star':'<svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'grapes':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#8A2BE2"/><circle cx="16" cy="8" r="3" fill="#8A2BE2"/><circle cx="12" cy="12" r="3" fill="#8A2BE2"/><circle cx="8" cy="16" r="3" fill="#8A2BE2"/><circle cx="16" cy="16" r="3" fill="#8A2BE2"/></svg>',
+  'coin':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD700" stroke="#8B4513" stroke-width="1"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="#8B4513" font-weight="bold">W</text></svg>',
+  'crown':'<svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3H5v2h14v-2z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'horseshoe':'<svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 3 2 5 5 6-3 1-5 3-5 6 0 4 3 7 7 7s7-3 7-7c0-3-2-5-5-6 3-1 5-3 5-6 0-4-3-7-7-7z" fill="#FFD700" stroke="#8B4513" stroke-width="1"/></svg>',
+  'clover':'<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="#00FF00"/><circle cx="16" cy="8" r="3" fill="#00FF00"/><circle cx="8" cy="16" r="3" fill="#00FF00"/><circle cx="16" cy="16" r="3" fill="#00FF00"/></svg>',
   'bomb':'💣'
 };
 
@@ -1208,6 +1395,7 @@ function syncSlotCredit() {
   if($('slotBetDisplay')) $('slotBetDisplay').textContent = fmt(slotState.bet);
   updateSlotVIP();
 }
+
 function generateReels() {
   const tbody = $('reelsBody');
   if (!tbody) return;
@@ -1225,12 +1413,18 @@ function generateReels() {
     tbody.appendChild(tr);
   }
 }
+
 function slotSpin() {
   if (slotState.spinning) return;
   if (!currentUser) return toast('Login လုပ်ပါ', 'warn');
   if (!slotState.isFreeSpin && slotState.bet > slotState.credit) {
-    toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn'); slotStopAuto(); return;
+    toast('⚠️ WCCoin မလုံလောက်ပါ', 'warn');
+    slotStopAuto();
+    return;
   }
+  getAudioCtx(); // resume audio on user gesture
+  playSpinSound();
+
   if (!slotState.isFreeSpin) {
     slotState.credit -= slotState.bet;
     if($('slotCredit')) $('slotCredit').textContent = fmt(slotState.credit);
@@ -1258,9 +1452,11 @@ function slotSpin() {
     }
     cols.push(col);
   }
+
   const results = [];
   let bombCount = 0;
   const winChance = Math.random() * 100 < SLOT_WIN_RATE;
+
   for (let i = 0; i < 5; i++) {
     const colRes = [];
     for (let j = 0; j < 5; j++) {
@@ -1277,14 +1473,18 @@ function slotSpin() {
     }
     results.push(colRes);
   }
+
   if (winChance && !slotState.isFreeSpin) {
     const low = ['cherry','lemon','orange','plum','watermelon'];
     const rs = low[Math.floor(Math.random() * low.length)];
     const row = Math.floor(Math.random() * 5);
     results[0][row] = rs; results[1][row] = rs; results[2][row] = rs;
   }
-  const spinDur = slotState.turbo ? 200 : 700;
-  const stopDelay = slotState.turbo ? 50 : 150;
+
+  // ✅ ပိုမြန်သော Spin Duration
+  const spinDur = slotState.turbo ? 120 : 350;
+  const stopDelay = slotState.turbo ? 30 : 80;
+
   for (let c = 0; c < 5; c++) {
     setTimeout(() => {
       for (let r = 0; r < 5; r++) {
@@ -1295,6 +1495,7 @@ function slotSpin() {
         if (key === SCATTER_SYMBOL) { s.innerHTML = SVG_ICONS['bomb']; s.classList.add('bomb'); }
         else { s.innerHTML = SVG_ICONS[key] || SVG_ICONS['cherry']; s.classList.remove('bomb'); }
       }
+      playReelStopSound(c);
       if (c === 4) {
         setTimeout(() => {
           slotCheckWin(results);
@@ -1303,45 +1504,52 @@ function slotSpin() {
           if($('slotAutoBtn')) $('slotAutoBtn').disabled = false;
           if (slotState.isFreeSpin) {
             slotState.freeSpins--;
-            if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1000);
+            if (slotState.freeSpins > 0) setTimeout(() => slotSpin(), slotState.turbo ? 200 : 600);
             else { slotState.isFreeSpin = false; if($('slotFreeSpin')) $('slotFreeSpin').classList.remove('show'); }
           }
           if (slotState.auto && slotState.autoCount > 0) {
             slotState.autoCount--;
             if($('slotAutoBtn')) $('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`;
-            if (slotState.autoCount > 0) setTimeout(() => slotSpin(), slotState.turbo ? 400 : 1000);
+            if (slotState.autoCount > 0) setTimeout(() => slotSpin(), slotState.turbo ? 200 : 600);
             else slotStopAuto();
           }
-        }, 100);
+        }, 80);
       }
     }, spinDur + (c * stopDelay));
   }
 }
+
 function slotStopAuto() {
   slotState.auto = false;
   slotState.autoCount = 0;
-  if($('slotAutoBtn')) { $('slotAutoBtn').innerHTML = '🔄<br>AUTO'; $('slotAutoBtn').style.background = 'var(--grad-coral)'; }
+  if($('slotAutoBtn')) { $('slotAutoBtn').innerHTML = '🔄<br>AUTO'; $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff00ff,#c400c4)'; }
 }
+
 function slotToggleAuto() {
   if (slotState.spinning) return;
+  playClickSound();
   slotState.auto = !slotState.auto;
   if (slotState.auto) {
     slotState.autoCount = 10;
-    if($('slotAutoBtn')) { $('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`; $('slotAutoBtn').style.background = 'linear-gradient(180deg,#DC2626,#991B1B)'; }
+    if($('slotAutoBtn')) { $('slotAutoBtn').innerHTML = `🔄<br>(${slotState.autoCount})`; $('slotAutoBtn').style.background = 'linear-gradient(180deg,#ff0000,#cc0000)'; }
     if($('slotMessage')) $('slotMessage').textContent = '🔄 Auto Spin!';
-    setTimeout(() => { if (!slotState.spinning && slotState.auto) slotSpin(); }, 300);
+    setTimeout(() => { if (!slotState.spinning && slotState.auto) slotSpin(); }, 200);
   } else {
     slotStopAuto();
     if($('slotMessage')) $('slotMessage').textContent = 'Auto ရပ်';
   }
 }
+
 function slotToggleTurbo() {
+  playClickSound();
   slotState.turbo = !slotState.turbo;
-  if($('slotTurboBtn')) $('slotTurboBtn').style.background = slotState.turbo ? 'linear-gradient(180deg,#DC2626,#991B1B)' : 'var(--grad-amber)';
+  if($('slotTurboBtn')) $('slotTurboBtn').style.background = slotState.turbo ? 'linear-gradient(180deg,#ff0000,#cc0000)' : 'linear-gradient(180deg,#ffaa00,#cc8800)';
   if($('slotMessage')) $('slotMessage').textContent = slotState.turbo ? '⚡ Turbo ON!' : 'Turbo OFF';
 }
+
 function slotChangeBet(delta) {
   if (slotState.spinning) return;
+  playClickSound();
   let nb = slotState.bet + delta;
   if (nb < SLOT_MIN_BET) nb = SLOT_MIN_BET;
   if (nb > SLOT_MAX_BET) nb = SLOT_MAX_BET;
@@ -1350,8 +1558,10 @@ function slotChangeBet(delta) {
   slotState.baseBet = nb;
   syncSlotCredit();
 }
+
 function slotQuickBet(mult) {
   if (slotState.spinning) return;
+  playClickSound();
   const nb = slotState.baseBet * mult;
   if (nb > SLOT_MAX_BET) return;
   if (nb > coinBalance) { if($('slotMessage')) $('slotMessage').textContent = '⚠️ WCCoin မလုံလောက်'; return; }
@@ -1359,6 +1569,7 @@ function slotQuickBet(mult) {
   syncSlotCredit();
   if($('slotMessage')) $('slotMessage').textContent = `💰 ${fmt(nb)} WCCoin (${mult}×)`;
 }
+
 function slotCheckWin(results) {
   let totalWin = 0;
   const winPositions = [];
@@ -1423,14 +1634,19 @@ function slotCheckWin(results) {
       }
     });
     db.ref('users/' + currentUser.uid + '/total_wins').set(totalWins).catch(()=>{});
-    let winText = '🎉 WIN!', color = '#22D3EE';
-    if (hasJackpot) { winText = '🎰 JACKPOT!'; color = '#F472B6'; }
-    else if (totalWin >= slotState.bet * 100) { winText = '💎 SUPER!'; color = '#FBBF24'; }
-    else if (totalWin >= slotState.bet * 30) { winText = '🌟 MEGA!'; color = '#22D3EE'; }
+    let winText = '🎉 WIN!', color = '#00ffcc';
+    if (hasJackpot) { winText = '🎰 JACKPOT!'; color = '#ff00ff'; }
+    else if (totalWin >= slotState.bet * 100) { winText = '💎 SUPER!'; color = '#ffcc00'; }
+    else if (totalWin >= slotState.bet * 30) { winText = '🌟 MEGA!'; color = '#00ffcc'; }
+
+    // ✅ Win အသံ
+    if (hasJackpot || totalWin >= slotState.bet * 30) playBigWinSound();
+    else playWinSound();
+
     const eff = $('slotEffect');
     if (eff) { eff.textContent = winText; eff.style.color = color; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
     const linesHtml = winLines.map(l => `<span class="win-line">${l.dir} ${l.matchCount}×${fmt(l.winAmount)} WCCoin</span>`).join('');
-    if($('slotMessage')) $('slotMessage').innerHTML = `<div style="width:100%;text-align:center;margin-bottom:3px">${winText} = <span style="color:#FBBF24">${fmt(totalWin)} WCCoin</span></div><div style="width:100%;text-align:center">${linesHtml}</div>`;
+    if($('slotMessage')) $('slotMessage').innerHTML = `<div style="width:100%;text-align:center;margin-bottom:4px">${winText} = <span style="color:#ffcc00">${fmt(totalWin)} WCCoin</span></div><div style="width:100%;text-align:center">${linesHtml}</div>`;
     winPositions.forEach(p => {
       const td = document.querySelectorAll('#reelsBody tr')[p.row].querySelectorAll('td')[p.col];
       if (td) { const s = td.querySelector('.sym'); if (s && !s.classList.contains('scatter')) s.classList.add('win'); }
@@ -1438,27 +1654,34 @@ function slotCheckWin(results) {
     coinBalance = slotState.credit;
     updateAllUI();
   }
+
   if (bombFreeSpins > 0) {
+    playFreeSpinSound();
     const eff = $('slotEffect');
-    if (eff) { eff.textContent = '💣 FREE SPIN!'; eff.style.color = '#F472B6'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
-    const bombMsg = `💣 <span style="color:#F472B6">BOMB ${scatterPos.length}!</span> Free Spin ${bombFreeSpins} ခါ!`;
+    if (eff) { eff.textContent = '💣 FREE SPIN!'; eff.style.color = '#ff00ff'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 2500); }
+    const bombMsg = `💣 <span style="color:#ff00ff">BOMB ${scatterPos.length}!</span> Free Spin ${bombFreeSpins} ခါ!`;
     if ($('slotMessage')) {
-      if (totalWin > 0) $('slotMessage').innerHTML += `<div style="width:100%;text-align:center;margin-top:2px">${bombMsg}</div>`;
+      if (totalWin > 0) $('slotMessage').innerHTML += `<div style="width:100%;text-align:center;margin-top:3px">${bombMsg}</div>`;
       else $('slotMessage').innerHTML = bombMsg;
     }
   } else if (totalWin === 0) {
+    playLoseSound();
     const eff = $('slotEffect');
-    if (eff) { eff.textContent = 'LOSE'; eff.style.color = '#EF4444'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 1500); }
-    if($('slotMessage')) $('slotMessage').innerHTML = '😢 <span style="color:#EF4444">LOSE!</span> ထပ်ကြိုးစားပါ';
+    if (eff) { eff.textContent = 'LOSE'; eff.style.color = '#ff4444'; eff.classList.add('show'); setTimeout(() => eff.classList.remove('show'), 1500); }
+    if($('slotMessage')) $('slotMessage').innerHTML = '😢 <span style="color:#ff4444">LOSE!</span> ထပ်ကြိုးစားပါ';
   }
 }
+
 function slotDailyBonus() {
+  playClickSound();
   const today = new Date().toDateString();
-  const st = slotState.checkinState || { streak:0, lastCheckin:'' };
-  slotState.checkinState = st;
+  const st = slotState.checkinState;
   if (st.lastCheckin === today) { toast('⚠️ ဒီနေ့ ယူပြီးပါပြီ', 'warn'); return; }
   const dayIdx = new Date().getDate() % 4;
   const reward = DAILY_REWARDS[dayIdx] || 10;
+  const yest = new Date(); yest.setDate(yest.getDate() - 1);
+  if (st.lastCheckin === yest.toDateString()) st.streak = (st.streak || 0) + 1;
+  else st.streak = 1;
   st.lastCheckin = today;
   addCoins(reward, 'daily_bonus', { desc: '🎁 Daily Bonus' }).then(ok => {
     if (ok) {
@@ -1468,7 +1691,8 @@ function slotDailyBonus() {
     }
   });
 }
-function refreshSlot() { syncSlotCredit(); updateSlotVIP(); toast('🔄 Refreshed', 'success'); }
+
+function refreshSlot() { playClickSound(); syncSlotCredit(); updateSlotVIP(); toast('🔄 Refreshed', 'success'); }
 
 /* ============================================================
    ADMIN
@@ -1479,7 +1703,8 @@ function doAdminLogin() {
   const pass = $('admLoginPass').value;
   $('admLoginErr').textContent = '';
   if (cleanPhone(phone) !== cleanPhone(ADMIN_PHONE) || pass !== ADMIN_PASSWORD) {
-    $('admLoginErr').textContent = '⚠️ Invalid credentials'; return;
+    $('admLoginErr').textContent = '⚠️ Invalid credentials';
+    return;
   }
   isAdmin = true;
   closeModal('adminLoginModal');
@@ -1488,10 +1713,14 @@ function doAdminLogin() {
 }
 function closeAdmin() {
   isAdmin = false;
-  if (currentUser) showScreen('app'); else showScreen('auth');
+  if (currentUser) showScreen('app');
+  else showScreen('auth');
 }
 function loadAdminData() {
-  loadAdminUsers(); loadAdminBuyRequests(); loadAdminPackages(); loadAdminVersion();
+  loadAdminUsers();
+  loadAdminBuyRequests();
+  loadAdminPackages();
+  loadAdminVersion();
 }
 function loadAdminUsers() {
   db.ref('users').on('value', snap => {
@@ -1518,7 +1747,8 @@ function renderAdminUsers(filter) {
         <div class="ur-name">${esc(u.name || 'User')}</div>
         <div class="ur-sub">${esc(u.phone || '')} · 🪙 ${fmt(u.coin_balance || 0)} WCCoin</div>
       </div>
-    </div>`).join('');
+    </div>
+  `).join('');
 }
 function loadAdminBuyRequests() {
   db.ref('coin_buy_requests').on('value', snap => {
@@ -1529,19 +1759,21 @@ function loadAdminBuyRequests() {
     if (list.length === 0) { wrap.innerHTML = '<div class="empty-state"><span class="em">🛒</span><h3>No requests</h3></div>'; return; }
     wrap.innerHTML = list.map(([id, r]) => {
       const status = r.status || 'pending';
-      const color = status === 'approved' ? '#059669' : status === 'rejected' ? '#DC2626' : '#F59E0B';
+      const color = status === 'approved' ? '#00D9A3' : status === 'rejected' ? '#FF4757' : '#FFB800';
       const showBtns = status === 'pending';
       return `<div class="admin-card">
         <div style="display:flex;justify-content:space-between;margin-bottom:8px">
           <div><strong>${esc(r.userName || 'User')}</strong> · ${esc(r.phone || '')}</div>
-          <div style="color:${color};font-weight:700">${esc(status)}</div>
+          <div style="color:${color};font-weight:800">${esc(status)}</div>
         </div>
-        <div style="font-size:14px;color:var(--text-2);margin-bottom:8px">${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ')' : ''} · ${esc(r.price || '')}</div>
-        ${r.note ? `<div style="font-size:13px;padding:8px;background:var(--surface-2);border-radius:8px;margin-bottom:8px">${esc(r.note)}</div>` : ''}
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:10px">${new Date(r.ts || Date.now()).toLocaleString()}</div>
-        ${showBtns ? `<div style="display:flex;gap:10px">
-          <button class="btn btn-primary" style="flex:1;padding:10px" onclick="approveBuyReq('${id}','${r.uid}',${(r.coins||0)+(r.bonus||0)})">✅ Approve</button>
-          <button class="btn btn-danger" style="flex:1;padding:10px" onclick="rejectBuyReq('${id}')">❌ Reject</button>
+        <div style="font-size:15px;color:var(--text-2);margin-bottom:10px">
+          ${fmt(r.coins || 0)} WCCoin${r.bonus ? ' (+' + r.bonus + ')' : ''} · ${esc(r.price || '')}
+        </div>
+        ${r.note ? `<div style="font-size:14px;padding:10px;background:var(--surface-2);border-radius:8px;margin-bottom:10px">${esc(r.note)}</div>` : ''}
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:12px">${new Date(r.ts || Date.now()).toLocaleString()}</div>
+        ${showBtns ? `<div style="display:flex;gap:12px">
+          <button class="btn btn-primary" style="flex:1;padding:12px" onclick="approveBuyReq('${id}','${r.uid}',${(r.coins||0)+(r.bonus||0)})">✅ Approve</button>
+          <button class="btn btn-danger" style="flex:1;padding:12px" onclick="rejectBuyReq('${id}')">❌ Reject</button>
         </div>` : ''}
       </div>`;
     }).join('');
@@ -1571,6 +1803,7 @@ async function adminApplyCoins() {
   if (ok) { toast('✅ Done', 'success'); $('admCoinAmt').value = ''; $('admCoinReason').value = ''; }
   else toast('❌ Failed', 'error');
 }
+
 function loadAdminPackages() {
   db.ref('app_config/coin_packages').on('value', snap => {
     allCoinPackages = snap.val() || {};
@@ -1582,28 +1815,30 @@ function renderAdminPackages() {
   const wrap = $('pkgEditor');
   if (!wrap) return;
   const items = Object.entries(allCoinPackages).sort((a,b) => (a[1].order||0) - (b[1].order||0));
-  wrap.innerHTML = `<h4 style="font-size:16px;margin-bottom:14px">Add New Package</h4>
-    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-      <input type="number" id="pkgCoins" placeholder="Coins (e.g. 100)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px">
-      <input type="text" id="pkgPrice" placeholder="Price (e.g. 1,000 Ks)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px">
+  wrap.innerHTML = `<h4 style="font-size:18px;margin-bottom:16px">Add New Package</h4>
+    <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+      <input type="number" id="pkgCoins" placeholder="Coins (e.g. 100)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
+      <input type="text" id="pkgPrice" placeholder="Price (e.g. 1,000 Ks)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <input type="number" id="pkgBonus" placeholder="Bonus (optional)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px">
-      <input type="number" id="pkgOrder" placeholder="Order (1,2,3)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--border);font-size:15px">
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <input type="number" id="pkgBonus" placeholder="Bonus (optional)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
+      <input type="number" id="pkgOrder" placeholder="Order (1,2,3)" style="flex:1;padding:12px;border-radius:10px;border:2px solid var(--border);font-size:16px">
     </div>
-    <button class="btn btn-primary" style="width:100%;margin-bottom:18px" onclick="adminAddPkg()">➕ Add Package</button>
-    <h4 style="font-size:16px;margin-bottom:14px">Existing Packages</h4>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:20px" onclick="adminAddPkg()">➕ Add Package</button>
+    <h4 style="font-size:18px;margin-bottom:16px">Existing Packages</h4>
     <div id="pkgList"></div>`;
+
   const list = $('pkgList');
-  if (items.length === 0) { list.innerHTML = '<p style="color:var(--text-2);font-size:14px">No packages</p>'; return; }
+  if (items.length === 0) { list.innerHTML = '<p style="color:var(--text-2)">No packages</p>'; return; }
   list.innerHTML = items.map(([id, p]) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:14px;background:var(--surface-2);border-radius:12px;margin-bottom:8px">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px;background:var(--surface-2);border-radius:12px;margin-bottom:10px">
       <div style="flex:1">
-        <div style="font-weight:700;font-size:15px">${fmt(p.coins)} WCCoin ${p.bonus ? `(+${p.bonus})` : ''}</div>
-        <div style="font-size:13px;color:var(--text-2)">Price: ${esc(p.price)} · Order: ${p.order||0}</div>
+        <div style="font-weight:800;font-size:16px">${fmt(p.coins)} WCCoin ${p.bonus ? `(+${p.bonus})` : ''}</div>
+        <div style="font-size:14px;color:var(--text-2)">Price: ${esc(p.price)} · Order: ${p.order||0}</div>
       </div>
-      <button class="btn btn-danger" style="padding:8px" onclick="adminDelPkg('${id}')">🗑</button>
-    </div>`).join('');
+      <button class="btn btn-danger" style="padding:10px" onclick="adminDelPkg('${id}')">🗑</button>
+    </div>
+  `).join('');
 }
 async function adminAddPkg() {
   const coins = parseInt($('pkgCoins').value, 10);
@@ -1620,6 +1855,7 @@ async function adminDelPkg(id) {
   await db.ref('app_config/coin_packages/' + id).remove();
   toast('Deleted', 'info');
 }
+
 function loadAdminVersion() {
   db.ref('app_config/version').once('value').then(snap => {
     const v = snap.val() || {};
@@ -1641,15 +1877,35 @@ async function adminSaveVersion() {
 }
 
 /* ============================================================
-   ✅ FIXED: AUTO UPDATE — ခဏခဏ update now မပေါ်တော့အောင်
+   AUTO UPDATE (FIXED - ခဏခဏမပေါ်အောင်)
    ============================================================ */
+function checkUpdate() {
+  if (!db) return;
+  db.ref('app_config/version').once('value').then(snap => {
+    const v = snap.val();
+    if (!v || !v.latest) return;
+    const cmp = compareVersion(APP_VERSION, v.latest);
+    if (cmp >= 0) {
+      // Latest ဖြစ်နေရင် ဘာမှမလုပ်
+      return;
+    }
 
-/* လက်ရှိ installed version ကို localStorage ကနေ ဖတ် (default = APP_VERSION) */
-function getInstalledVersion() {
-  return localStorage.getItem('wc_installed_version') || APP_VERSION;
+    // ဒီ version ကို နှိပ်ပြီးသား / ပိတ်ပြီးသားဆိုရင် ပြန်မပြ
+    const dismissed = localStorage.getItem('wc_version_dismissed');
+    _updateDismissedVersion = dismissed;
+
+    if (dismissed === v.latest) {
+      // Force update ဖြစ်ရင်တောင် ပြန်မပြ - user ကို စိတ်အနှောက်အယှက်မဖြစ်စေရန်
+      return;
+    }
+
+    // ဒီ session မှာ ပြပြီးသားဆိုရင် ထပ်မပြ
+    if (_updateVersion && _updateVersion.latest === v.latest) return;
+
+    showUpdateModal(v);
+  }).catch(err => console.warn('[Update]', err.message));
 }
 
-/* နှစ်ခုကို နှိုင်းယှဉ်: a > b → 1, a < b → -1, a == b → 0 */
 function compareVersion(a, b) {
   const pa = String(a || '0').split('.').map(n => parseInt(n, 10) || 0);
   const pb = String(b || '0').split('.').map(n => parseInt(n, 10) || 0);
@@ -1662,24 +1918,6 @@ function compareVersion(a, b) {
   return 0;
 }
 
-function checkUpdate() {
-  if (!db) return;
-  db.ref('app_config/version').once('value').then(snap => {
-    const v = snap.val();
-    if (!v || !v.latest) return;
-
-    const installed = getInstalledVersion();  // ✅ localStorage မှ တကယ် install လုပ်ထားတဲ့ version
-    const cmp = compareVersion(installed, v.latest);
-    if (cmp >= 0) return;  // installed ≥ latest → update မလိုဘူး
-
-    // ✅ Bug Fix: ဒီ version ကို dismiss လုပ်ပြီးသားဆိုရင် ထပ်မပြ
-    const dismissed = localStorage.getItem('wc_version_dismissed');
-    if (dismissed === v.latest && !v.forceUpdate) return;
-
-    showUpdateModal(v);
-  }).catch(err => console.warn('[Update]', err.message));
-}
-
 function showUpdateModal(v) {
   _updateVersion = v;
   if($('newVerLabel')) $('newVerLabel').textContent = v.latest;
@@ -1687,34 +1925,27 @@ function showUpdateModal(v) {
   $('updateModal').classList.add('show');
 }
 
-/* ✅ FIXED applyUpdate: installed version ကို localStorage မှာ သိမ်းပြီး
-   update modal ပြန်မပေါ်အောင် ကာကွယ် */
 function applyUpdate() {
-  if (!_updateVersion) return;
-
-  // 1. Database က latest version ကို installed အဖြစ် သတ်မှတ်
-  localStorage.setItem('wc_installed_version', _updateVersion.latest);
+  if (!_updateVersion) { closeModal('updateModal'); return; }
+  // 1. ဒီ version ကို ပိတ်ပြီးသားအဖြစ် သတ်မှတ် (ပြန်မပေါ်စေရန်)
   localStorage.setItem('wc_version_dismissed', _updateVersion.latest);
+  _updateDismissedVersion = _updateVersion.latest;
+  _updateVersion = null;
 
-  toast('🔄 Updating App...', 'info');
+  // 2. Modal ကို ချက်ချင်းပိတ်
+  closeModal('updateModal');
 
-  // 2. Cache အကုန်ရှင်း
+  // 3. Cache တွေအကုန်ရှင်းမယ်
   if ('caches' in window) {
     caches.keys().then(names => {
-      names.forEach(name => caches.delete(name));
+      for (let name of names) caches.delete(name);
     }).catch(()=>{});
   }
 
-  // 3. Hard reload
+  // 4. Toast ပြပြီး Hard Reload
+  toast('🔄 Updating App...', 'info');
   setTimeout(() => {
-    try {
-      const url = new URL(window.location.href);
-      url.searchParams.set('v', _updateVersion.latest);
-      url.searchParams.set('t', Date.now());
-      window.location.replace(url.toString());
-    } catch(e) {
-      window.location.reload(true);
-    }
+    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
   }, 600);
 }
 
@@ -1723,9 +1954,9 @@ function checkUpdateManually() {
   db.ref('app_config/version').once('value').then(snap => {
     const v = snap.val();
     if (!v || !v.latest) return toast('Version info မရှိပါ', 'warn');
-    const installed = getInstalledVersion();
-    const cmp = compareVersion(installed, v.latest);
+    const cmp = compareVersion(APP_VERSION, v.latest);
     if (cmp >= 0) return toast('✅ Latest Version ဖြစ်ပါတယ်', 'success');
+    // Manual check ဆိုတော့ dismissed ကို မစစ်ဘဲ ပြမယ်
     showUpdateModal(v);
   }).catch(err => toast('Failed: ' + err.message, 'error'));
 }
@@ -1734,27 +1965,18 @@ function checkUpdateManually() {
    INIT
    ============================================================ */
 function init() {
-  // ✅ Page load တိုင်း query param ကို စစ်ပြီး installed version ကို update လုပ်
-  try {
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlVer = urlParams.get('v');
-    if (urlVer) {
-      localStorage.setItem('wc_installed_version', urlVer);
-      localStorage.setItem('wc_version_dismissed', urlVer);
-    }
-  } catch(e) {}
-
   loadSettingsLocal();
   applyCoinIcons();
   generateReels();
 
+  // Real-time Coin Packages
   db.ref('app_config/coin_packages').on('value', snap => {
     allCoinPackages = snap.val() || {};
     renderPkgGrid();
   });
 
-  $('tabLogin') && ($('tabLogin').onclick = () => showAuthTab('login'));
-  $('tabSignup') && ($('tabSignup').onclick = () => showAuthTab('signup'));
+  $('tabLogin') && ($('tabLogin').onclick = () => { playClickSound(); showAuthTab('login'); });
+  $('tabSignup') && ($('tabSignup').onclick = () => { playClickSound(); showAuthTab('signup'); });
 
   $('loginForm') && ($('loginForm').onsubmit = async e => {
     e.preventDefault();
@@ -1766,9 +1988,13 @@ function init() {
     if (!phone) { errEl.textContent = '⚠️ ဖုန်းနံပါတ် ထည့်ပါ'; return; }
     if (pass.length < 6) { errEl.textContent = '⚠️ Password ၆ လုံး'; return; }
     btn.disabled = true; btn.textContent = 'Logging in...';
-    try { await login(phone, pass); toast('✅ Welcome back!', 'success'); }
-    catch(err) { errEl.textContent = '⚠️ ' + (err.message || 'Login failed'); }
-    finally { btn.disabled = false; btn.textContent = 'Login'; }
+    try {
+      getAudioCtx();
+      await login(phone, pass);
+      toast('✅ Welcome back!', 'success');
+    } catch(err) {
+      errEl.textContent = '⚠️ ' + (err.message || 'Login failed');
+    } finally { btn.disabled = false; btn.textContent = 'Login'; }
   });
 
   $('signupForm') && ($('signupForm').onsubmit = async e => {
@@ -1783,9 +2009,13 @@ function init() {
     if (!phone || phone.replace(/\D/g,'').length < 7) { errEl.textContent = '⚠️ ဖုန်းနံပါတ် မှန်ကန်စွာ ထည့်ပါ'; return; }
     if (pass.length < 6) { errEl.textContent = '⚠️ Password ၆ လုံး'; return; }
     btn.disabled = true; btn.textContent = 'Creating...';
-    try { await signup(name, phone, pass); toast('🎉 Account created! +100 WCCoin bonus', 'success'); }
-    catch(err) { errEl.textContent = '⚠️ ' + (err.message || 'Signup failed'); }
-    finally { btn.disabled = false; btn.textContent = 'Sign Up'; }
+    try {
+      getAudioCtx();
+      await signup(name, phone, pass);
+      toast('🎉 Account created! +100 WCCoin bonus', 'success');
+    } catch(err) {
+      errEl.textContent = '⚠️ ' + (err.message || 'Signup failed');
+    } finally { btn.disabled = false; btn.textContent = 'Sign Up'; }
   });
 
   document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
@@ -1823,6 +2053,7 @@ function init() {
       loadHistory();
       updateAllUI();
 
+      // Coin Packages Listener
       db.ref('app_config/coin_packages').on('value', snap => { allCoinPackages = snap.val() || {}; });
 
       if (!localStorage.getItem('wc_notif_prompted_v2') && Notification.permission !== 'granted') {
@@ -1833,9 +2064,10 @@ function init() {
     }
   });
 
-  setTimeout(checkUpdate, 2500);
+  // ✅ Update check ကို တစ်ခါပဲ ခေါ်မယ် (10 မိနစ်တစ်ခါ)
+  setTimeout(checkUpdate, 3000);
   if (updateCheckInterval) clearInterval(updateCheckInterval);
-  updateCheckInterval = setInterval(checkUpdate, 15 * 60 * 1000);
+  updateCheckInterval = setInterval(checkUpdate, 10 * 60 * 1000);
 
   console.log('✅ WC Wallet + Slot v' + APP_VERSION + ' initialized');
 }
